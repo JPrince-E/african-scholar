@@ -70,7 +70,7 @@ export const fetchUniversitiesByCountry = async (countryName) => {
 
   // 1. Try our backend proxy endpoint (handles CORS, timeout, and response normalization)
   try {
-    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const apiBase = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://african-scholar-api.onrender.com/api' : 'http://localhost:5000/api');
     const proxyRes = await fetch(`${apiBase}/profiles/external-universities?country=${encodeURIComponent(countryName)}`);
     if (proxyRes.ok) {
       const json = await proxyRes.json();

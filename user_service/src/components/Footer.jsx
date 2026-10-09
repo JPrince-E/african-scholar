@@ -79,7 +79,7 @@ export default function Footer({ setActiveTab }) {
               Accredited institutional reviewer or committee member? Access the administrative station to review submitted indices.
             </p>
             <a
-              href={import.meta.env.VITE_ADMIN_URL || "http://localhost:3001"}
+              href={import.meta.env.VITE_ADMIN_URL || (import.meta.env.PROD ? "https://african-scholar-admin.vercel.app" : "http://localhost:3001")}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center space-x-2 text-sm font-semibold text-azure-400 hover:text-azure-300 bg-azure-950/60 hover:bg-azure-900/60 border border-azure-800/60 px-4 py-2 rounded-xl transition"
