@@ -1,8 +1,8 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-// Support DB_URI, Railway's default MYSQL_URL, DATABASE_URL, or individual credentials
-let dbUri = process.env.DB_URI || process.env.MYSQL_URL || process.env.DATABASE_URL;
+// Support Supabase / Postgres (SUPABASE_DB_URL, DATABASE_URL), DB_URI, or MySQL vars
+let dbUri = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL || process.env.DB_URI || process.env.MYSQL_URL;
 
 if (!dbUri && process.env.MYSQLHOST) {
   const user = encodeURIComponent(process.env.MYSQLUSER || 'root');
@@ -17,8 +17,12 @@ if (!dbUri) {
   dbUri = 'mysql://root:@localhost:3306/africanscholar';
 }
 
+const isPostgres = dbUri.startsWith('postgres://') || dbUri.startsWith('postgresql://') || process.env.DB_DIALECT === 'postgres';
+const dialect = isPostgres ? 'postgres' : 'mysql';
+
 const dialectOptions = {};
-if (process.env.DB_SSL === 'true' || process.env.MYSQL_SSL === 'true') {
+// Cloud Postgres (Supabase, Neon, Render) and cloud MySQL require SSL
+if (isPostgres || process.env.DB_SSL === 'true' || process.env.MYSQL_SSL === 'true') {
   dialectOptions.ssl = {
     require: true,
     rejectUnauthorized: false
@@ -26,7 +30,7 @@ if (process.env.DB_SSL === 'true' || process.env.MYSQL_SSL === 'true') {
 }
 
 const sequelize = new Sequelize(dbUri, {
-  dialect: 'mysql',
+  dialect,
   dialectOptions,
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
   pool: {

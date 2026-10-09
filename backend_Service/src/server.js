@@ -90,7 +90,7 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ Connected to MySQL database (africanscholar).');
+    console.log(`✅ Connected to ${sequelize.getDialect()} database.`);
 
     // Sync database schema (alter ensures columns and tables are created without dropping)
     await sequelize.sync({ alter: false });
