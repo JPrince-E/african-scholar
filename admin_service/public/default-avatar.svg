@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#090d16" />
+    </linearGradient>
+    <linearGradient id="accentRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="silhouetteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Circular Base -->
+  <circle cx="100" cy="100" r="100" fill="url(#bgGrad)" />
+
+  <!-- Subtle Inner Border / Ring -->
+  <circle cx="100" cy="100" r="95" fill="none" stroke="url(#accentRing)" stroke-width="2.5" opacity="0.6" />
+
+  <!-- Academic Cap / Mortarboard Accent -->
+  <path d="M100 32 L142 50 L100 68 L58 50 Z" fill="url(#accentRing)" opacity="0.9" />
+  <path d="M142 50 L146 72" stroke="url(#accentRing)" stroke-width="2.5" stroke-linecap="round" opacity="0.8" />
+  <circle cx="146" cy="74" r="3" fill="#38bdf8" />
+  <path d="M74 58 L74 72 C74 84 126 84 126 72 L126 58" fill="none" stroke="url(#accentRing)" stroke-width="2" opacity="0.7" />
+
+  <!-- Head -->
+  <circle cx="100" cy="92" r="28" fill="url(#silhouetteGrad)" />
+
+  <!-- Shoulders / Torso -->
+  <path d="M42 176 C42 136 70 126 100 126 C130 126 158 136 158 176 Z" fill="url(#silhouetteGrad)" />
+</svg>
