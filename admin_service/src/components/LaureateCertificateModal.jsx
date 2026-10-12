@@ -19,7 +19,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
 
   const awardTitle = data.awardTitle || award.title || 'Academic Scholar of the Year';
   const awardTier = data.tier || award.tier || 'Continental';
-  const certId = data.certificateCode || `AS-2026-${String(winner?.id || 1).padStart(4, '0')}`;
+  const certId = data.certificateCode || `AS-2027-${String(winner?.id || 1).padStart(4, '0')}`;
   const citation = data.citation || winner?.admin_comments || 'Conferred in recognition of superior scholarly impact, peer-reviewed excellence, doctoral human capacity building, and profound advancement of science across the African Continent.';
 
   const userClientUrl = import.meta.env.VITE_USER_CLIENT_URL || 'http://localhost:3000';
@@ -36,12 +36,12 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
   };
 
   const handleAddToLinkedIn = () => {
-    const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(awardTitle)}&organizationName=African+Scholar+Initiative&issueYear=2026&issueMonth=9&certUrl=${encodeURIComponent(verifyUrl)}&certId=${encodeURIComponent(certId)}`;
+    const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(awardTitle)}&organizationName=African+Scholar+Initiative&issueYear=2027&issueMonth=9&certUrl=${encodeURIComponent(verifyUrl)}&certId=${encodeURIComponent(certId)}`;
     window.open(linkedInUrl, '_blank');
   };
 
   const handleShareOnX = () => {
-    const text = `Announcing 2026 African Academic Laureate: ${fullName} (${awardTitle}). Verify credential: ${verifyUrl} #AfricanScholar #AcademicExcellence`;
+    const text = `Announcing 2027 African Academic Laureate: ${fullName} (${awardTitle}). Verify credential: ${verifyUrl} #AfricanScholar #AcademicExcellence`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     window.open(twitterUrl, '_blank');
   };
@@ -158,7 +158,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
                     {awardTitle}
                   </h3>
                   <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-amber-800">
-                    {awardTier} Tier • Academic Class of 2026
+                    {awardTier} Tier • Academic Class of 2027
                   </span>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
                       <span className="text-[7px] sm:text-[8px] font-black uppercase tracking-tighter leading-tight">
                         OFFICIAL LAUREATE SEAL
                       </span>
-                      <span className="text-[6px] font-bold text-amber-950">★ 2026 ★</span>
+                      <span className="text-[6px] font-bold text-amber-950">★ 2027 ★</span>
                     </div>
                   </div>
                 </div>

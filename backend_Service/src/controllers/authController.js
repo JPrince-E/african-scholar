@@ -6,7 +6,7 @@ const emailService = require('../services/emailService');
 const generateToken = (user) => {
   return jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    process.env.JWT_SECRET || 'super_secret_jwt_key_african_scholar_2026',
+    process.env.JWT_SECRET || 'super_secret_jwt_key_african_scholar_2027',
     { expiresIn: '30d' }
   );
 };

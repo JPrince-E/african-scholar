@@ -20,7 +20,30 @@ import { useAuth } from '../context/AuthContext';
 import SponsorBanner from '../components/SponsorBanner';
 import AfricanExcellenceMap from '../components/AfricanExcellenceMap';
 import UniversityLeaderboard from '../components/UniversityLeaderboard';
+import AdvertisementShowcase from '../components/AdvertisementShowcase';
 
+const LAUREATE_IMAGES = [
+  {
+    url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80",
+    title: "Celebrating African Scholar, Ph.D. & Professor of the Year",
+    subtitle: "Rewarding scientific breakthrough & youth mentorship"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=80",
+    title: "Honouring Doctoral Researchers & Pioneering Faculty",
+    subtitle: "Groundbreaking biomedical, energy & climate discovery"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop&q=80",
+    title: "Continental Academic Keynotes & Symposia",
+    subtitle: "Connecting scholars across all 54 African nations"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=800&auto=format&fit=crop&q=80",
+    title: "Nurturing the Next Generation of African Ph.D.s",
+    subtitle: "Post-graduate supervision, publishing & international fellowships"
+  }
+];
 
 const parseJsonArray = (val) => {
   if (!val) return [];
@@ -53,6 +76,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
   const { user, openAuth } = useAuth();
   const [topScholars, setTopScholars] = useState([]);
   const [awards, setAwards] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [stats, setStats] = useState({
     totalProfessors: 5,
     totalUniversities: 5,
@@ -60,6 +84,14 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
     totalPublications: 517
   });
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Periodically cycle through laureate images (every 4 seconds)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % LAUREATE_IMAGES.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,10 +144,10 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
 
               {/* Subtitle */}
               <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-                The premier registry tracking professors, citations, and high-impact research output. From national recognition to continental and global laureates.
+                The premier registry tracking professors, doctoral scholars (Ph.D. / Dr.), citations, and high-impact research output. From national recognition to continental and global laureates.
               </p>
 
-              {/* Action Buttons Pair (Bluespectrum Primary Orange & Translucent Navy Secondary) */}
+              {/* Action Buttons Pair */}
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                 <button
                   onClick={() => {
@@ -127,7 +159,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
                   }}
                   className="px-7 py-3.5 rounded-xl btn-coral text-white font-bold text-sm shadow-md transition flex items-center space-x-2"
                 >
-                  <span>Register Professor Metrics</span>
+                  <span>Register Scholar Metrics (Ph.D. & Prof.)</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
@@ -135,7 +167,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
                   onClick={() => setActiveTab('awards')}
                   className="px-7 py-3.5 rounded-xl btn-azure text-white font-bold text-sm shadow-sm transition"
                 >
-                  View 2026 Award Criteria
+                  View 2027 Award Criteria
                 </button>
               </div>
 
@@ -150,7 +182,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by Professor, University, or Discipline..."
+                    placeholder="Search by Scholar (Ph.D. / Professor), University, or Discipline..."
                     className="w-full py-2 bg-transparent text-sm text-slate-900 placeholder:text-slate-450 focus:outline-hidden"
                   />
                 </div>
@@ -176,37 +208,56 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
               </div>
             </div>
 
-            {/* Right Hero Visual */}
+            {/* Right Hero Visual with Periodically Changing Laureate Image (Requirement 14) */}
             <div className="lg:col-span-5 relative">
               <div className="relative mx-auto max-w-md lg:max-w-none">
                 {/* Main Hero Card */}
                 <div className="rounded-3xl overflow-hidden border border-white/20 bg-slate-900/90 backdrop-blur-xl p-6 shadow-2xl space-y-6">
                   <div className="relative h-64 rounded-2xl overflow-hidden group">
                     <img
-                      src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80"
-                      alt="African Scholars Excellence"
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                      key={currentImageIndex}
+                      src={LAUREATE_IMAGES[currentImageIndex].url}
+                      alt={LAUREATE_IMAGES[currentImageIndex].title}
+                      className="w-full h-full object-cover transition-all duration-700 ease-in-out transform scale-100 animate-fadeIn"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/30 to-transparent"></div>
+                    
+                    {/* Slide Indicator Dots */}
+                    <div className="absolute top-3 right-3 flex items-center space-x-1.5 bg-slate-950/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+                      {LAUREATE_IMAGES.map((_, dotIdx) => (
+                        <button
+                          key={dotIdx}
+                          onClick={() => setCurrentImageIndex(dotIdx)}
+                          className={`w-1.5 h-1.5 rounded-full transition-all ${
+                            dotIdx === currentImageIndex ? 'w-4 bg-coral-400' : 'bg-white/40'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
                     <div className="absolute bottom-4 left-4 right-4">
                       <span className="px-2.5 py-1 rounded-full bg-coral-500 text-white font-bold text-[11px] uppercase tracking-wider shadow-sm">
                         Continental Laureate
                       </span>
-                      <h4 className="text-lg font-bold text-white mt-1">Celebrating African Professor of the Year</h4>
-                      <p className="text-xs text-slate-200">Rewarding scientific breakthrough & youth mentorship</p>
+                      <h4 className="text-lg font-bold text-white mt-1 leading-snug">
+                        {LAUREATE_IMAGES[currentImageIndex].title}
+                      </h4>
+                      <p className="text-xs text-slate-200 mt-0.5">
+                        {LAUREATE_IMAGES[currentImageIndex].subtitle}
+                      </p>
                     </div>
                   </div>
 
-                  {/* Stat widgets on card */}
+                  {/* Stat widgets on card (Requirements 2 & 3) */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md">
                       <span className="text-[11px] text-slate-300 block">Total Citations Recorded</span>
-                      <span className="text-xl font-black text-amber-300 mt-0.5 block">80,000+</span>
+                      <span className="text-xl font-black text-amber-300 mt-0.5 block">1M +</span>
                       <span className="text-[10px] text-emerald-400 font-medium">Verified Scopus / Google Scholar</span>
                     </div>
                     <div className="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md">
                       <span className="text-[11px] text-slate-300 block">African Universities</span>
-                      <span className="text-xl font-black text-white mt-0.5 block">100+ Schools</span>
+                      <span className="text-xl font-black text-white mt-0.5 block">1300+</span>
                       <span className="text-[10px] text-azure-300 font-medium">Pan-African Spread</span>
                     </div>
                   </div>
@@ -244,81 +295,102 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
         <SponsorBanner placement="HERO_BANNER" />
       </div>
 
-      {/* 3. PLATFORM KPI COUNTERS */}
+      {/* 3. PLATFORM KPI COUNTERS - Distinct Rich Background Containers (Requirements 4, 5, 6, 17) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl p-8 shadow-soft-xl border border-slate-200/80">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
-            <div className="text-center px-4">
-              <div className="inline-flex p-3 rounded-2xl bg-azure-50 text-azure-600 mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Container 1: Azure / Indigo Background */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-100/90 border-2 border-blue-200/90 rounded-3xl p-7 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-center flex flex-col justify-between">
+            <div>
+              <div className="inline-flex p-3 rounded-2xl bg-blue-600 text-white mb-3 shadow-md shadow-blue-500/30">
                 <Users className="w-6 h-6" />
               </div>
-              <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">1,200+</div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mt-1">Professors Mapped</div>
-              <p className="text-xs text-slate-500 mt-1">Nigeria, Kenya, Ghana, S.A.</p>
+              <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">1.5 M +</div>
+              <div className="text-xs font-black uppercase tracking-wider text-blue-900 mt-1">Professors & Ph.D. Scholars Mapped</div>
             </div>
+            <p className="text-xs text-slate-600 font-semibold mt-3 pt-3 border-t border-blue-200/60">Nigeria, Kenya, Ghana, S.A.</p>
+          </div>
 
-            <div className="text-center px-4 pt-6 lg:pt-0">
-              <div className="inline-flex p-3 rounded-2xl bg-emerald-50 text-emerald-600 mb-3">
+          {/* Container 2: Emerald / Mint Background */}
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-100/90 border-2 border-emerald-200/90 rounded-3xl p-7 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-center flex flex-col justify-between">
+            <div>
+              <div className="inline-flex p-3 rounded-2xl bg-emerald-600 text-white mb-3 shadow-md shadow-emerald-500/30">
                 <Building2 className="w-6 h-6" />
               </div>
-              <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">85+</div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mt-1">Universities Covered</div>
-              <p className="text-xs text-slate-500 mt-1">Institutions of higher learning</p>
+              <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">1000+</div>
+              <div className="text-xs font-black uppercase tracking-wider text-emerald-900 mt-1">Universities Covered</div>
             </div>
+            <p className="text-xs text-slate-600 font-semibold mt-3 pt-3 border-t border-emerald-200/60">Institutions of higher learning</p>
+          </div>
 
-            <div className="text-center px-4 pt-6 lg:pt-0">
-              <div className="inline-flex p-3 rounded-2xl bg-amber-50 text-amber-600 mb-3">
+          {/* Container 3: Amber / Warm Gold Background */}
+          <div className="bg-gradient-to-br from-amber-50 to-orange-100/90 border-2 border-amber-200/90 rounded-3xl p-7 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-center flex flex-col justify-between">
+            <div>
+              <div className="inline-flex p-3 rounded-2xl bg-amber-600 text-white mb-3 shadow-md shadow-amber-500/30">
                 <BookOpen className="w-6 h-6" />
               </div>
               <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">12,500+</div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mt-1">Indexed Publications</div>
-              <p className="text-xs text-slate-500 mt-1">Q1 & Q2 Scientific Journals</p>
+              <div className="text-xs font-black uppercase tracking-wider text-amber-900 mt-1">Indexed Publications</div>
             </div>
+            <p className="text-xs text-slate-600 font-semibold mt-3 pt-3 border-t border-amber-200/60">Q1 & Q2 Scientific Journals</p>
+          </div>
 
-            <div className="text-center px-4 pt-6 lg:pt-0">
-              <div className="inline-flex p-3 rounded-2xl bg-indigo-50 text-indigo-600 mb-3">
+          {/* Container 4: Purple / Violet Background */}
+          <div className="bg-gradient-to-br from-purple-50 to-pink-100/90 border-2 border-purple-200/90 rounded-3xl p-7 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-center flex flex-col justify-between">
+            <div>
+              <div className="inline-flex p-3 rounded-2xl bg-purple-600 text-white mb-3 shadow-md shadow-purple-500/30">
                 <Award className="w-6 h-6" />
               </div>
               <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">$50,000+</div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mt-1">Annual Award Pool</div>
-              <p className="text-xs text-slate-500 mt-1">Monetary, Plaques & Media</p>
+              <div className="text-xs font-black uppercase tracking-wider text-purple-900 mt-1">Annual Award Pool</div>
             </div>
+            <p className="text-xs text-slate-600 font-semibold mt-3 pt-3 border-t border-purple-200/60">Monetary, Plaques & Media</p>
           </div>
         </div>
       </section>
 
-      {/* 4. FEATURED UNIVERSITIES STRIP */}
+      {/* 4. FEATURED UNIVERSITIES STRIP (Requirement 7: Big & Bold Heading) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-        <span className="text-xs font-extrabold uppercase tracking-widest text-slate-400">
-          Faculty Networked from Leading African Universities
-        </span>
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 bg-brand-50 border border-brand-200 text-brand-700 text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full">
+            <GraduationCap className="w-4 h-4 text-brand-600" />
+            <span>Continental Academic Network</span>
+          </div>
+          <h3 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+            Faculty Networked from Leading African Universities
+          </h3>
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto font-medium">
+            Active doctoral researchers (Ph.D.), deans, and professors collaborating across premier African tertiary institutions.
+          </p>
+        </div>
+
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
           {[
-            'University of Ibadan (Nigeria)',
-            'University of Lagos (Nigeria)',
-            'University of Nairobi (Kenya)',
-            'University of Ghana (Ghana)',
             'University of Cape Town (South Africa)',
-            'Ahmadu Bello University (Nigeria)',
-            'Cairo University (Egypt)'
+            'Cairo University (Egypt)',
+            'University of Ibadan (Nigeria)',
+            'University of the Witwatersrand (South Africa)',
+            'Makerere University (Uganda)',
+            'Kwame Nkrumah University of Science & Technology (Ghana)',
+            'University of Nairobi (Kenya)',
+            'Stellenbosch University (South Africa)'
           ].map((uni, idx) => (
             <div
               key={idx}
-              className="px-4 py-2 rounded-xl bg-white border border-slate-200/90 shadow-xs text-xs font-bold text-slate-700 hover:border-brand-300 hover:text-brand-600 transition cursor-default flex items-center space-x-2"
+              className="px-5 py-3 rounded-2xl bg-white border border-slate-200/90 shadow-sm text-xs sm:text-sm font-bold text-slate-800 hover:border-brand-400 hover:text-brand-600 hover:shadow-md transition cursor-default flex items-center space-x-2.5"
             >
-              <Building2 className="w-3.5 h-3.5 text-brand-500" />
+              <Building2 className="w-4 h-4 text-brand-500" />
               <span>{uni}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* 5. 2026 ACADEMIC AWARD TIERS */}
+      {/* 5. 2027 ACADEMIC AWARD TIERS (Requirement 1) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="eyebrow-accent-dark inline-flex w-fit mx-auto">
             <Award className="w-3.5 h-3.5 text-coral-500" />
-            <span>2026 Honours Cycle & Criteria</span>
+            <span>2027 Honours Cycle & Criteria</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Academic Excellence Awards
@@ -500,6 +572,11 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* 7. ADVERTISE WITH US / BUSINESS & SPONSOR SHOWCASE (Requirement 16) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AdvertisementShowcase />
       </section>
     </div>
   );

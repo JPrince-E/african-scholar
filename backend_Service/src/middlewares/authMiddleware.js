@@ -9,7 +9,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_jwt_key_african_scholar_2026');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_jwt_key_african_scholar_2027');
 
     const user = await User.findByPk(decoded.id, {
       attributes: ['id', 'email', 'role', 'avatar_url', 'is_verified'],

@@ -36,6 +36,22 @@ const AwardApplication = sequelize.define('AwardApplication', {
   submitted_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
+  },
+  payment_status: {
+    type: DataTypes.ENUM('FREE_FIRST_YEAR', 'PAID', 'PENDING'),
+    defaultValue: 'FREE_FIRST_YEAR'
+  },
+  payment_reference: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  application_fee_usd: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0.00
+  },
+  is_first_year: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   }
 }, {
   timestamps: true,

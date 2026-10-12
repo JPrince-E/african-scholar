@@ -16,7 +16,7 @@ import LaureateCertificateModal from '../components/LaureateCertificateModal';
 const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://african-scholar-api.onrender.com/api' : 'http://localhost:5000/api');
 
 const VerifyCertificatePage = ({ setActiveTab }) => {
-  // Extract code from URL if present (e.g. /verify/AS-2026-0001)
+  // Extract code from URL if present (e.g. /verify/AS-2027-0001)
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const pathParts = pathname.split('/').filter(Boolean);
   const codeFromPath = pathParts[0] === 'verify' && pathParts[1] ? decodeURIComponent(pathParts[1]) : '';
@@ -52,7 +52,7 @@ const VerifyCertificatePage = ({ setActiveTab }) => {
     if (codeFromPath) {
       fetchVerification(codeFromPath);
     } else {
-      fetchVerification('AS-2026-0001');
+      fetchVerification('AS-2027-0001');
     }
   }, [codeFromPath]);
 
@@ -90,7 +90,7 @@ const VerifyCertificatePage = ({ setActiveTab }) => {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Enter Credential Code (e.g. AS-2026-0001)"
+                placeholder="Enter Credential Code (e.g. AS-2027-0001)"
                 className="w-full pl-11 pr-4 py-3.5 bg-slate-900/90 border border-slate-700 rounded-xl text-white placeholder-slate-400 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-azure-500/30 focus:border-azure-500 transition shadow-sm"
               />
             </div>
@@ -246,7 +246,7 @@ const VerifyCertificatePage = ({ setActiveTab }) => {
                     Cryptographic Ledger Hash
                   </div>
                   <div className="text-xs font-mono text-emerald-700 font-semibold truncate" title={certificateData.blockchainStamp}>
-                    {certificateData.blockchainStamp || '0x41532d32303236...'}
+                    {certificateData.blockchainStamp || '0x41532d32303237...'}
                   </div>
                 </div>
               </div>
@@ -270,7 +270,7 @@ const VerifyCertificatePage = ({ setActiveTab }) => {
                   onClick={() => setActiveTab ? setActiveTab('awards') : window.location.assign('/awards')}
                   className="text-xs text-amber-700 hover:text-amber-800 font-bold flex items-center gap-1.5 transition"
                 >
-                  <span>Explore 2026 Laureates Directory</span>
+                  <span>Explore 2027 Laureates Directory</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

@@ -60,7 +60,7 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center space-x-2 text-xs font-bold text-coral-700 bg-coral-50 border border-coral-200 px-3.5 py-1.5 rounded-full">
           <Award className="w-4 h-4 text-coral-600" />
-          <span>African Scholar 2026 Honors & Laureate Series</span>
+          <span>African Scholar 2027 Honors & Laureate Series</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
           Pan-African Academic Awards
@@ -166,28 +166,51 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
                     </div>
                   </div>
 
-                  {/* Comprehensive Evaluation Index Checklist */}
-                  <div className="space-y-4 pt-2">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider flex items-center space-x-2">
-                        <Layers className="w-4 h-4 text-azure-600" />
-                        <span>Official Evaluation Index & Benchmark Rules</span>
-                      </h4>
-                      <span className="text-xs text-slate-500 font-medium">
-                        {award.evaluation_index?.length || 0} Strict Verification Milestones
-                      </span>
+                  {/* Comprehensive Evaluation Index Checklist (Requirement 13: Catchy & Prominent Redesign) */}
+                  <div className="space-y-4 pt-4">
+                    <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-navy-900 to-slate-900 text-white p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg border border-slate-800">
+                      <div className="flex items-center space-x-3.5">
+                        <div className="w-11 h-11 rounded-2xl bg-coral-500/20 border border-coral-500/40 text-coral-400 flex items-center justify-center font-black shrink-0">
+                          <Layers className="w-6 h-6 text-coral-400" />
+                        </div>
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                              Continental Benchmark Matrix
+                            </span>
+                            <span className="text-xs text-slate-400 font-medium">Peer-Reviewed Verification</span>
+                          </div>
+                          <h4 className="text-lg sm:text-xl font-black text-white tracking-tight mt-0.5">
+                            Official Evaluation Index & Benchmark Rules
+                          </h4>
+                        </div>
+                      </div>
+                      <div className="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-xs text-amber-300 font-extrabold shrink-0 text-center shadow-xs">
+                        ★ {parseJsonArray(award.evaluation_index).length} Mandatory Verification Milestones
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {parseJsonArray(award.evaluation_index).map((item, idx) => (
                         <div
                           key={idx}
-                          className="p-3.5 rounded-xl bg-slate-50 hover:bg-azure-50/50 border border-slate-200/80 transition flex items-start space-x-3 text-xs"
+                          className="p-5 rounded-2xl bg-gradient-to-br from-white via-slate-50 to-azure-50/40 hover:to-azure-100/60 border-2 border-slate-200/90 hover:border-azure-400/80 shadow-md hover:shadow-xl transition-all duration-300 flex items-start space-x-4 group"
                         >
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                          <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                            <CheckCircle2 className="w-5 h-5" />
+                          </div>
                           <div className="flex-1 min-w-0">
-                            <span className="font-bold text-slate-900 block">{item.benchmark}</span>
-                            <p className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">{item.rule}</p>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-[10px] uppercase font-black tracking-wider text-azure-700 bg-azure-50 px-2 py-0.5 rounded-md border border-azure-200">
+                                Milestone #{idx + 1}
+                              </span>
+                              <span className="font-black text-slate-900 text-sm group-hover:text-azure-700 transition">
+                                {item.benchmark}
+                              </span>
+                            </div>
+                            <p className="text-slate-700 text-xs sm:text-sm mt-1.5 leading-relaxed font-medium">
+                              {item.rule}
+                            </p>
                           </div>
                         </div>
                       ))}

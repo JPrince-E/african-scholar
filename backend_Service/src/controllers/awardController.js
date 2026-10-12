@@ -89,16 +89,40 @@ exports.applyForAward = async (req, res) => {
       });
     }
 
+    // Requirement 15: Users registered > 1 year must pay $1 USD per application. First year is completely free.
+    const user = await User.findByPk(userId);
+    const registeredAt = new Date(user?.createdAt || user?.created_at || (profile && profile.created_at) || Date.now());
+    const now = new Date();
+    const ONE_YEAR_MS = 365.25 * 24 * 60 * 60 * 1000;
+    const isFirstYear = (now.getTime() - registeredAt.getTime()) < ONE_YEAR_MS;
+
+    const { payment_reference } = req.body;
+
+    if (!isFirstYear) {
+      if (!payment_reference) {
+        return res.status(402).json({
+          success: false,
+          requires_payment: true,
+          is_first_year: false,
+          fee_amount_usd: 1.00,
+          message: 'Your complimentary 1-year award application window has elapsed. An administrative verification fee of $1 USD is required to submit this nomination.'
+        });
+      }
+    }
+
     const application = await AwardApplication.create({
       user_id: userId,
       award_id,
       supporting_evidence,
       status: 'SUBMITTED',
-      submitted_at: new Date()
+      submitted_at: new Date(),
+      is_first_year: isFirstYear,
+      payment_status: isFirstYear ? 'FREE_FIRST_YEAR' : 'PAID',
+      payment_reference: isFirstYear ? 'FREE_FIRST_YEAR_WAIVER' : (payment_reference || 'PAID_1_USD'),
+      application_fee_usd: isFirstYear ? 0.00 : 1.00
     });
 
     // Send confirmation email asynchronously
-    const user = await User.findByPk(userId);
     if (user) {
       emailService.sendApplicationSubmittedEmail({
         email: user.email,
@@ -116,6 +140,36 @@ exports.applyForAward = async (req, res) => {
     });
   } catch (error) {
     console.error('Application submission error:', error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Check if user is within their first year (free) or requires $1 payment
+exports.checkApplicationEligibility = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const registeredAt = new Date(user.createdAt || user.created_at || Date.now());
+    const now = new Date();
+    const ONE_YEAR_MS = 365.25 * 24 * 60 * 60 * 1000;
+    const isFirstYear = (now.getTime() - registeredAt.getTime()) < ONE_YEAR_MS;
+    const oneYearAnniversary = new Date(registeredAt.getTime() + ONE_YEAR_MS);
+
+    return res.json({
+      success: true,
+      registered_at: registeredAt,
+      is_first_year: isFirstYear,
+      one_year_anniversary: oneYearAnniversary,
+      fee_amount_usd: isFirstYear ? 0.00 : 1.00,
+      message: isFirstYear
+        ? 'First year privilege active: Award nominations are completely free.'
+        : 'Complimentary 1-year window elapsed: $1 USD processing fee applies.'
+    });
+  } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -174,7 +228,7 @@ exports.createAward = async (req, res) => {
       description: description || '',
       award_value: award_value || { prize_amount: '$5,000', plaque: 'Official Plaque', podcast_interview: 'Yes', icon_items: 'Yes' },
       evaluation_index: evaluation_index || [],
-      year: year || 2026,
+      year: year || 2027,
       is_active: is_active !== undefined ? is_active : true
     });
 

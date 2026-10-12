@@ -78,7 +78,7 @@ export default function AdminWinnersPage() {
                       />
                       <div>
                         <span className="text-[10px] uppercase font-black px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-900">
-                          {award?.tier} LAUREATE 2026
+                          {award?.tier} LAUREATE {award?.year || 2027}
                         </span>
                         <h3 className="text-lg font-black text-slate-900 mt-1">
                           {profile?.title} {profile?.first_name} {profile?.surname}

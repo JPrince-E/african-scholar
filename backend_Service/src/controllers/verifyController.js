@@ -3,7 +3,7 @@ const { AwardApplication, User, ScholarProfile, Award } = require('../models');
 // Helper to generate a verification code from ID/name
 const formatVerificationCode = (id, hash = '') => {
   const codeNum = String(id).padStart(4, '0');
-  return `AS-2026-${codeNum}${hash ? '-' + hash.slice(0, 4).toUpperCase() : ''}`;
+  return `AS-2027-${codeNum}${hash ? '-' + hash.slice(0, 4).toUpperCase() : ''}`;
 };
 
 exports.verifyCertificate = async (req, res) => {
@@ -15,9 +15,9 @@ exports.verifyCertificate = async (req, res) => {
 
     const cleanCode = code.trim().toUpperCase();
 
-    // Check if code contains ID e.g. AS-2026-0001 or AS-2026-1 or just a number
+    // Check if code contains ID e.g. AS-2027-0001, AS-2026-0001 or just a number
     let targetId = null;
-    const match = cleanCode.match(/AS-2026-(\d+)/i) || cleanCode.match(/^(\d+)$/);
+    const match = cleanCode.match(/AS-(?:2026|2027)-(\d+)/i) || cleanCode.match(/^(\d+)$/);
     if (match) {
       targetId = parseInt(match[1], 10);
     }
@@ -54,13 +54,14 @@ exports.verifyCertificate = async (req, res) => {
 
       // Match by partial code or hash
       app = allApproved.find(a => {
-        const genCode = `AS-2026-${String(a.id).padStart(4, '0')}`;
-        return cleanCode.includes(String(a.id)) || cleanCode === genCode;
+        const genCode = `AS-2027-${String(a.id).padStart(4, '0')}`;
+        const legacyCode = `AS-2026-${String(a.id).padStart(4, '0')}`;
+        return cleanCode.includes(String(a.id)) || cleanCode === genCode || cleanCode === legacyCode;
       });
 
       if (!app && allApproved.length > 0) {
-        // If query looks like AS-2026-*, fallback to the first approved laureate for demonstration
-        if (cleanCode.startsWith('AS-2026')) {
+        // If query looks like AS-2027-* or AS-2026-*, fallback to the first approved laureate for demonstration
+        if (cleanCode.startsWith('AS-2027') || cleanCode.startsWith('AS-2026')) {
           app = allApproved[0];
         }
       }
@@ -74,7 +75,7 @@ exports.verifyCertificate = async (req, res) => {
         data: {
           verificationCode: cleanCode,
           status: 'AUTHENTIC & VERIFIED',
-          edition: '2026 Continental Edition',
+          edition: '2027 Continental Edition',
           recipientName: 'Prof. Malik El-Sayed, PhD',
           institution: 'Cairo University',
           country: 'Egypt',
@@ -82,7 +83,7 @@ exports.verifyCertificate = async (req, res) => {
           tier: 'Honorary Continental Laureate',
           category: 'Physical & Mathematical Sciences',
           citation: 'For groundbreaking contributions to quantum photonic computing across African scientific institutions and transformative leadership in continental research capacity building.',
-          dateConferred: 'September 5, 2026',
+          dateConferred: 'September 5, 2027',
           conferredBy: 'African Scholar Academic Council & Board of Trustees',
           signatories: [
             { name: 'Prof. Adebayo Ogunlesi', role: 'Continental Jury Chair' },
@@ -113,7 +114,7 @@ exports.verifyCertificate = async (req, res) => {
       data: {
         verificationCode: cleanCode,
         status: app.status === 'REJECTED' ? 'REVOKED' : 'AUTHENTIC & VERIFIED',
-        edition: '2026 Continental Edition',
+        edition: '2027 Continental Edition',
         recipientName: scholarName,
         institution,
         country,
@@ -121,7 +122,7 @@ exports.verifyCertificate = async (req, res) => {
         tier: 'Distinguished Academic Laureate',
         category,
         citation,
-        dateConferred: app.updatedAt ? new Date(app.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'September 5, 2026',
+        dateConferred: app.updatedAt ? new Date(app.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'September 5, 2027',
         conferredBy: 'African Scholar Academic Council & Board of Trustees',
         signatories: [
           { name: 'Prof. Adebayo Ogunlesi', role: 'Continental Jury Chair' },

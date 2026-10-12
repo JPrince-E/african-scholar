@@ -252,7 +252,7 @@ exports.declareWinner = async (req, res) => {
     if (application.applicant?.email) {
       const profile = application.applicant.profile;
       const scholarName = profile ? `${profile.title} ${profile.first_name} ${profile.surname}` : application.applicant.email;
-      const certCode = `AS-2026-${String(application.id).padStart(4, '0')}`;
+      const certCode = `AS-2027-${String(application.id).padStart(4, '0')}`;
 
       let prizeAmount = '$5,000';
       if (application.award?.award_value) {

@@ -13,6 +13,14 @@ import AdminAwardsPage from './pages/AdminAwardsPage';
 function AdminMainContent() {
   const { admin, loading } = useAdminAuth();
   const [activeTab, setActiveTab] = useState('analytics');
+  const mainRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0;
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [activeTab]);
 
   if (loading) {
     return (
@@ -50,7 +58,7 @@ function AdminMainContent() {
   return (
     <div className="min-h-screen flex bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
       <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main className="flex-1 bg-slate-100/60 min-h-screen overflow-y-auto">
+      <main ref={mainRef} className="flex-1 bg-slate-100/60 min-h-screen overflow-y-auto">
         {renderTab()}
       </main>
     </div>

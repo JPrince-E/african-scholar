@@ -72,7 +72,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
     // Community impact
     community_impact_activities: [''],
     fee_paid: true,
-    paystack_reference: 'PROMO-2026-WAIVED'
+    paystack_reference: 'PROMO-2027-WAIVED'
   });
 
   // Pre-load existing profile if logged in
@@ -117,7 +117,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
         patents_count: p.patents_count || 0,
         community_impact_activities: Array.isArray(p.community_impact_activities) && p.community_impact_activities.length ? p.community_impact_activities : [''],
         fee_paid: true,
-        paystack_reference: p.paystack_reference || 'PROMO-2026-WAIVED'
+        paystack_reference: p.paystack_reference || 'PROMO-2027-WAIVED'
       });
     } else if (user) {
       setFormData(prev => ({
@@ -224,7 +224,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
 
       const res = await api.post('/profiles/me/profile', cleanedData);
       if (res.data.success) {
-        setSuccessMessage('Professor registration saved successfully!');
+        setSuccessMessage('Scholar registration (Ph.D. & Professor) saved successfully!');
         await fetchCurrentUser();
         setTimeout(() => {
           setActiveTab('dashboard');
@@ -244,7 +244,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
           <BookOpen className="w-8 h-8" />
         </div>
         <div>
-          <h2 className="text-2xl font-extrabold text-slate-900">Professor Registration Portal</h2>
+          <h2 className="text-2xl font-extrabold text-slate-900">Scholar Registration Portal (Ph.D. & Professors)</h2>
           <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
             Please log in or create an account with your university email address to register your academic achievements and nomination portfolio.
           </p>
@@ -276,7 +276,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
           <span>African Scholar Registration Wizard</span>
         </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-          Professor Metrics & Profile Registration
+          Scholar Metrics & Profile Registration (Ph.D. & Professors)
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Complete the official fields specified for the African Scholar faculty registry and annual academic awards.
@@ -1038,7 +1038,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
               <div className="flex items-start space-x-3 text-xs text-slate-300 pt-1">
                 <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                 <p className="leading-relaxed">
-                  The African Scholar board has waived all registration fees for the inaugural 2026 academic cycle. Your profile verification is instantly processed without credit card charges.
+                  The African Scholar board has waived all registration fees for the inaugural 2027 academic cycle. Your profile verification is instantly processed without credit card charges.
                 </p>
               </div>
             </div>
@@ -1073,7 +1073,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
               disabled={submitting}
               className="px-8 py-3 rounded-xl btn-coral text-white font-bold text-sm shadow-md flex items-center space-x-2 transition disabled:opacity-50"
             >
-              <span>{submitting ? 'Saving Registration...' : 'Complete Professor Registration'}</span>
+              <span>{submitting ? 'Saving Registration...' : 'Complete Scholar Registration (Ph.D. / Prof.)'}</span>
               <CheckCircle2 className="w-4 h-4" />
             </button>
           )}

@@ -44,7 +44,7 @@ const seedDatabase = async () => {
           { rule: 'At least 1 local/national research collaboration within the last 5 years', benchmark: '>= 1 Collaboration', key: 'national_collaboration' },
           { rule: 'At least 1 research grant within the last 5 years', benchmark: '>= 1 Grant', key: 'research_grants' }
         ],
-        year: 2026,
+        year: 2027,
         is_active: true
       },
       {
@@ -69,7 +69,7 @@ const seedDatabase = async () => {
           { rule: 'At least 1 research grant (national/continental/international) in last 3 years', benchmark: '>= 1 Grant (3 yrs)', key: 'research_grants' },
           { rule: 'At least 1 continental or international collaboration in last 3 years', benchmark: '>= 1 Continental Collab', key: 'continental_collaboration' }
         ],
-        year: 2026,
+        year: 2027,
         is_active: true
       },
       {
@@ -95,7 +95,7 @@ const seedDatabase = async () => {
           { rule: 'At least 1 international collaboration in last 3 years', benchmark: '>= 1 Global Collab', key: 'international_collaboration' },
           { rule: 'At least 2 research grants (national/continental/international) in last 3 years', benchmark: '>= 2 Major Grants', key: 'research_grants' }
         ],
-        year: 2026,
+        year: 2027,
         is_active: true
       }
     ];
@@ -394,7 +394,7 @@ const seedDatabase = async () => {
         patents_count: scholar.patents_count,
         community_impact_activities: scholar.community_impact_activities,
         fee_paid: true,
-        paystack_reference: 'PROMO-2026-WAIVED'
+        paystack_reference: 'PROMO-2027-WAIVED'
       });
 
       createdUsers.push(user);
@@ -419,7 +419,7 @@ const seedDatabase = async () => {
         ],
         grants_and_collaborations: [
           'TETFund National Research Fund (NRF) Grant ($80,000, 2024)',
-          'National Collaboration with Federal University of Technology Minna (2023-2026)'
+          'National Collaboration with Federal University of Technology Minna (2023-2027)'
         ],
         supervision_graduates: '14 PhDs & 32 MSc graduates documented and confirmed by UI Postgraduate College'
       },
@@ -488,7 +488,7 @@ const seedDatabase = async () => {
         supervision_graduates: '18 PhDs and 35 MScs graduated across 8 nationalities'
       },
       status: 'AWARDED',
-      admin_comments: 'Unanimously selected as Global Scholar of the Year 2026. Breakthrough astrophysical leadership and transformative impact for African science globally.',
+      admin_comments: 'Unanimously selected as Global Scholar of the Year 2027. Breakthrough astrophysical leadership and transformative impact for African science globally.',
       score_details: {
         global_continents: true,
         impact_factor_gt10: true,
@@ -501,10 +501,14 @@ const seedDatabase = async () => {
     console.log('🌱 Seeding Sponsor Banners and Partners...');
     const sponsorsData = [
       {
-        sponsor_name: 'African Development Bank (AfDB) Research Fund',
+        sponsor_name: 'Research Fund',
         banner_image_url: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1200&auto=format&fit=crop&q=80',
         redirect_url: 'https://www.afdb.org',
         placement: 'HERO_BANNER',
+        pricing_tier: 'YEARLY',
+        pricing_rate: '$2,400/yr',
+        duration_details: '1 Year Continental Partnership',
+        business_description: 'Pan-African research endowment funding grants for high-impact STEM and social development projects.',
         is_active: true
       },
       {
@@ -512,6 +516,10 @@ const seedDatabase = async () => {
         banner_image_url: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&auto=format&fit=crop&q=80',
         redirect_url: 'https://www.mtn.ng',
         placement: 'SIDEBAR',
+        pricing_tier: 'MONTHLY',
+        pricing_rate: '$250/mo',
+        duration_details: '1 Month Featured Placement',
+        business_description: 'Empowering African doctoral candidates with laboratory infrastructure and computing grants.',
         is_active: true
       },
       {
@@ -519,6 +527,10 @@ const seedDatabase = async () => {
         banner_image_url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop&q=80',
         redirect_url: 'https://www.elsevier.com',
         placement: 'FOOTER',
+        pricing_tier: 'WEEKLY',
+        pricing_rate: '$80/wk',
+        duration_details: '1 Week Academic Showcase',
+        business_description: 'Connecting African scholars with Q1 index publication resources and global peer review.',
         is_active: true
       }
     ];

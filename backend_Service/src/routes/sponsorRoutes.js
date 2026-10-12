@@ -6,6 +6,7 @@ const roleGuard = require('../middlewares/roleMiddleware');
 
 // Public
 router.get('/', sponsorController.getActiveSponsors);
+router.post('/inquire', sponsorController.submitAdInquiry);
 
 // Admin
 router.get('/all', authMiddleware, roleGuard(['SUPER_ADMIN']), sponsorController.getAllSponsors);

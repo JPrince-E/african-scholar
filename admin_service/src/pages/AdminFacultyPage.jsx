@@ -35,7 +35,7 @@ export default function AdminFacultyPage() {
     <div className="space-y-8 pb-12">
       <AdminHeader
         title="Pan-African Faculty Registry"
-        subtitle="Complete database of verified professors, citations, publication volumes, and institutional affiliations."
+        subtitle="Complete database of verified doctoral scholars (PhD/Dr.) and professors, citations, publication volumes, and institutional affiliations."
         onRefresh={fetchFaculty}
       />
 
@@ -61,7 +61,7 @@ export default function AdminFacultyPage() {
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-bold text-[10px] tracking-wider">
                   <tr>
-                    <th className="py-4 px-6">Professor Name</th>
+                    <th className="py-4 px-6">Scholar / Professor Name</th>
                     <th className="py-4 px-6">University</th>
                     <th className="py-4 px-6">Country</th>
                     <th className="py-4 px-6">Discipline</th>

@@ -15,7 +15,7 @@ export default function Footer({ setActiveTab }) {
               <span className="text-xl font-bold text-white tracking-tight">African Scholar</span>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">
-              The premier pan-African platform celebrating academic excellence, tracking research citations, and awarding university professors across Africa.
+              The premier pan-African platform celebrating academic excellence, tracking research citations, and awarding university professors and doctoral scholars (Ph.D. / Dr.) across Africa.
             </p>
             <div className="flex items-center space-x-2 text-xs text-emerald-400 font-medium bg-emerald-950/40 border border-emerald-800/50 px-3 py-1.5 rounded-full w-fit">
               <ShieldCheck className="w-4 h-4" />
@@ -39,7 +39,7 @@ export default function Footer({ setActiveTab }) {
               </li>
               <li>
                 <button onClick={() => setActiveTab('register_scholar')} className="hover:text-white transition">
-                  Professor Metric Registration
+                  Academic Metric Registration (Ph.D. & Prof.)
                 </button>
               </li>
               <li>
@@ -91,7 +91,7 @@ export default function Footer({ setActiveTab }) {
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-          <p>© 2026 African Scholar Initiative. All rights reserved.</p>
+          <p>© 2027 African Scholar Initiative. All rights reserved.</p>
           <div className="flex items-center space-x-4 mt-4 sm:mt-0">
             <span>Nigeria • Kenya • Ghana • South Africa • Pan-Africa</span>
           </div>

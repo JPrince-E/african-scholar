@@ -26,6 +26,12 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  // Requirement 15: Payment eligibility state (Free for 1st year, $1 thereafter)
+  const [eligibility, setEligibility] = useState(null);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [paymentReference, setPaymentReference] = useState('');
+  const [paying, setPaying] = useState(false);
+
   // Evidence inputs
   const [evidence, setEvidence] = useState({
     conferences_list: '',
@@ -54,6 +60,35 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
     { name: '', email: '', institution: '', title: 'Dean / Senior Professor' },
     { name: '', email: '', institution: '', title: 'International Research Collaborator' }
   ]);
+
+  useEffect(() => {
+    if (user) {
+      api.get('/awards/eligibility/check')
+        .then(res => {
+          if (res.data.success) {
+            setEligibility(res.data);
+          }
+        })
+        .catch(() => {
+          const regDate = new Date(user.createdAt || user.created_at || (user.profile && user.profile.created_at) || Date.now());
+          const isFirstYear = (Date.now() - regDate.getTime()) < (365.25 * 24 * 60 * 60 * 1000);
+          setEligibility({
+            is_first_year: isFirstYear,
+            fee_amount_usd: isFirstYear ? 0.00 : 1.00
+          });
+        });
+    }
+  }, [user]);
+
+  const handleSimulatePayment = () => {
+    setPaying(true);
+    setTimeout(() => {
+      const generatedRef = `PAYSTACK-APP-${Date.now()}`;
+      setPaymentReference(generatedRef);
+      setPaying(false);
+      setPaymentModalOpen(false);
+    }, 1200);
+  };
 
   const handleVerifyDoi = async () => {
     if (!doiInput.trim()) return;
@@ -167,7 +202,13 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
     }
 
     if (!user.profile) {
-      setError('Please complete your Professor Metrics Profile before submitting an award application.');
+      setError('Please complete your Academic Metrics Profile (Ph.D. / Professor) before submitting an award application.');
+      return;
+    }
+
+    // Requirement 15: If beyond 1 year of registration and fee not yet authorized, prompt payment modal
+    if (eligibility && !eligibility.is_first_year && !paymentReference) {
+      setPaymentModalOpen(true);
       return;
     }
 
@@ -179,6 +220,7 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
 
       const payload = {
         award_id: selectedAward.id,
+        payment_reference: paymentReference || (eligibility?.is_first_year ? 'FREE_FIRST_YEAR_WAIVER' : null),
         supporting_evidence: {
           conferences_list: evidence.conferences_list.split('\n').filter(Boolean),
           regional_citations_spread: evidence.regional_citations_spread,
@@ -212,6 +254,9 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
         }, 2000);
       }
     } catch (err) {
+      if (err.response?.status === 402) {
+        setPaymentModalOpen(true);
+      }
       setError(err.response?.data?.message || err.message || 'Submission failed');
     } finally {
       setSubmitting(false);
@@ -251,6 +296,68 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
           Submit verifiable evidence matching the Evaluation Index for your chosen award tier.
         </p>
       </div>
+
+      {/* Requirement 15: Payment Eligibility Notification Banner */}
+      {eligibility && (
+        <div className={`p-5 rounded-3xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm ${
+          eligibility.is_first_year
+            ? 'bg-gradient-to-r from-emerald-50 to-teal-50/70 border-emerald-200 text-emerald-950'
+            : 'bg-gradient-to-r from-amber-50 to-orange-50/70 border-amber-300 text-amber-950'
+        }`}>
+          <div className="flex items-start space-x-3.5">
+            {eligibility.is_first_year ? (
+              <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+            ) : (
+              <div className="w-10 h-10 rounded-2xl bg-amber-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                <AlertCircle className="w-5 h-5" />
+              </div>
+            )}
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${
+                  eligibility.is_first_year ? 'bg-emerald-200/60 text-emerald-900' : 'bg-amber-200/80 text-amber-900'
+                }`}>
+                  {eligibility.is_first_year ? 'First-Year Privilege Active' : 'Post 1-Year Application Window'}
+                </span>
+                <span className="text-xs font-semibold text-slate-500">
+                  Registered: {new Date(eligibility.registered_at || user?.createdAt || user?.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                </span>
+              </div>
+              <h4 className="text-sm sm:text-base font-bold mt-1 text-slate-900">
+                {eligibility.is_first_year
+                  ? 'Complimentary Award Nomination ($0 USD)'
+                  : 'Administrative Verification Fee: $1.00 USD'}
+              </h4>
+              <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                {eligibility.is_first_year
+                  ? 'Scholars are entitled to apply for awards completely free during their first year after registration.'
+                  : 'Scholars registered over 1 year ago require a nominal $1 USD application fee to support international referee verification.'}
+              </p>
+            </div>
+          </div>
+          <div className="shrink-0 text-right">
+            {eligibility.is_first_year ? (
+              <span className="inline-block px-4 py-2 rounded-xl bg-emerald-600 text-white font-extrabold text-xs shadow-sm">
+                FREE ($0.00)
+              </span>
+            ) : paymentReference ? (
+              <span className="inline-block px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-sm">
+                ✓ Fee Paid ($1.00)
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setPaymentModalOpen(true)}
+                className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-md transition"
+              >
+                Pay $1.00 Fee
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Select Award Tier */}
       <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-soft-xl space-y-4">
@@ -654,6 +761,59 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
             </button>
           </div>
         </form>
+      )}
+
+      {/* Requirement 15: Payment Modal for $1 Application Fee */}
+      {paymentModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+            <div className="text-center space-y-2">
+              <div className="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center font-black">
+                <Award className="w-7 h-7 text-amber-600" />
+              </div>
+              <h3 className="text-xl font-black text-slate-900">
+                Award Application Processing Fee
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Each scholar can apply for awards for free during the first year after registration. Since your account is over 1 year old, a nominal verification charge of $1 USD (~₦1,500) applies.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+              <div className="flex justify-between text-slate-600">
+                <span>Award Category</span>
+                <span className="font-bold text-slate-900">{selectedAward?.title}</span>
+              </div>
+              <div className="flex justify-between text-slate-600">
+                <span>Application Fee</span>
+                <span className="font-black text-emerald-600 text-sm">$1.00 USD</span>
+              </div>
+              <div className="flex justify-between text-slate-600 border-t border-slate-200 pt-2">
+                <span>Payment Gateway</span>
+                <span className="font-bold text-brand-600">Paystack Secure Checkout</span>
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              <button
+                type="button"
+                disabled={paying}
+                onClick={handleSimulatePayment}
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/20 transition flex items-center justify-center space-x-2"
+              >
+                <span>{paying ? 'Authorizing Paystack Gateway...' : 'Pay $1.00 USD & Authorize'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPaymentModalOpen(false)}
+                className="w-full py-2.5 rounded-xl bg-slate-100 text-slate-600 font-bold text-xs hover:bg-slate-200 transition"
+              >
+                Cancel & Review Application
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

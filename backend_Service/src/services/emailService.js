@@ -210,7 +210,7 @@ exports.sendLaureateAwardEmail = async ({ email, name, awardTitle, tier, prizeAm
           <span style="color: #fef3c7; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">★ OFFICIAL LAUREATE DECLARATION ★</span>
         </div>
         <h1 style="font-size: 26px; font-weight: 900; margin: 0; letter-spacing: -0.5px;">Congratulations, Laureate!</h1>
-        <p style="font-size: 14px; color: #fef3c7; margin: 8px 0 0;">Official Laureate of the Year 2026</p>
+        <p style="font-size: 14px; color: #fef3c7; margin: 8px 0 0;">Official Laureate of the Year 2027</p>
       </div>
 
       <div style="padding: 32px 28px; color: #1e293b; line-height: 1.6;">
@@ -240,7 +240,7 @@ exports.sendLaureateAwardEmail = async ({ email, name, awardTitle, tier, prizeAm
         </div>
 
         <div style="border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 24px; text-align: center; font-size: 12px; color: #64748b;">
-          Certificate Verification Code: <strong style="color: #0f172a; font-family: monospace; font-size: 13px;">${certificateCode || 'AS-2026-LAUR'}</strong>
+          Certificate Verification Code: <strong style="color: #0f172a; font-family: monospace; font-size: 13px;">${certificateCode || 'AS-2027-LAUR'}</strong>
         </div>
 
         <div style="text-align: center; margin: 28px 0;">
@@ -255,7 +255,7 @@ exports.sendLaureateAwardEmail = async ({ email, name, awardTitle, tier, prizeAm
 
   return sendMail({
     to: email,
-    subject: `★ Official Laureate Announcement ★: ${awardTitle} — African Scholar 2026`,
+    subject: `★ Official Laureate Announcement ★: ${awardTitle} — African Scholar 2027`,
     html
   });
 };
@@ -306,7 +306,7 @@ exports.sendRefereeInvitationEmail = async ({
 
   return sendMail({
     to: refereeEmail,
-    subject: `Confidential Academic Endorsement Request: ${candidateName} — African Scholar 2026`,
+    subject: `Confidential Academic Endorsement Request: ${candidateName} — African Scholar 2027`,
     html
   });
 };

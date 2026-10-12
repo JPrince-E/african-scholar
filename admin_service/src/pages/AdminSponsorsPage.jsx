@@ -25,6 +25,12 @@ export default function AdminSponsorsPage() {
     banner_image_url: '',
     redirect_url: '',
     placement: 'HERO_BANNER',
+    pricing_tier: 'MONTHLY',
+    pricing_rate: '$250/mo',
+    duration_details: '30 Days Priority Showcase',
+    business_description: '',
+    category: 'Corporate & Academic Service',
+    contact_email: '',
     is_active: true
   });
 
@@ -158,13 +164,30 @@ export default function AdminSponsorsPage() {
                   </div>
 
                   <div className="p-5 space-y-2">
-                    <h4 className="text-base font-bold text-slate-900">{sponsor.sponsor_name}</h4>
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="text-base font-bold text-slate-900">{sponsor.sponsor_name}</h4>
+                      {sponsor.pricing_tier && (
+                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-200">
+                          {sponsor.pricing_tier}: {sponsor.pricing_rate || '$250/mo'}
+                        </span>
+                      )}
+                    </div>
+                    {sponsor.duration_details && (
+                      <p className="text-[11px] text-slate-500 font-medium">
+                        ⏱ {sponsor.duration_details}
+                      </p>
+                    )}
+                    {sponsor.business_description && (
+                      <p className="text-xs text-slate-600 line-clamp-2">
+                        {sponsor.business_description}
+                      </p>
+                    )}
                     {sponsor.redirect_url && (
                       <a
                         href={sponsor.redirect_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs text-brand-600 hover:text-brand-700 truncate flex items-center space-x-1"
+                        className="text-xs text-brand-600 hover:text-brand-700 truncate flex items-center space-x-1 pt-1"
                       >
                         <span className="truncate">{sponsor.redirect_url}</span>
                         <ExternalLink className="w-3 h-3 shrink-0" />
@@ -193,11 +216,11 @@ export default function AdminSponsorsPage() {
       {/* Add Sponsor Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl space-y-6">
+          <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center border-b border-slate-200 pb-4">
               <h3 className="text-base font-bold text-slate-900 flex items-center space-x-2">
                 <Megaphone className="w-5 h-5 text-brand-600" />
-                <span>Add Sponsor Ad Campaign</span>
+                <span>Add Business Ad / Sponsor Campaign</span>
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
@@ -210,15 +233,88 @@ export default function AdminSponsorsPage() {
             <form onSubmit={handleCreateSponsor} className="space-y-4 text-xs">
               <div>
                 <label className="block font-bold text-slate-600 uppercase tracking-wider mb-1.5">
-                  Sponsor Organization Name *
+                  Business / Sponsor Organization Name *
                 </label>
                 <input
                   type="text"
                   required
                   value={formData.sponsor_name}
                   onChange={(e) => setFormData({ ...formData, sponsor_name: e.target.value })}
-                  placeholder="e.g. African Development Bank Research Fund"
+                  placeholder="e.g. Research Fund"
                   className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-hidden focus:border-brand-500 placeholder:text-slate-400"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                    Ad Pricing Tier *
+                  </label>
+                  <select
+                    value={formData.pricing_tier}
+                    onChange={(e) => {
+                      const tier = e.target.value;
+                      const defaults = {
+                        'HOURLY': { rate: '$2/hr', dur: '4-8 Hours Per Day' },
+                        'DAILY': { rate: '$15/day', dur: '24 Hours Full Day' },
+                        'WEEKLY': { rate: '$80/wk', dur: '7 Days Campaign' },
+                        'MONTHLY': { rate: '$250/mo', dur: '30 Days Full Portal' },
+                        'YEARLY': { rate: '$2,400/yr', dur: '365 Days Strategic Partner' }
+                      };
+                      setFormData({
+                        ...formData,
+                        pricing_tier: tier,
+                        pricing_rate: defaults[tier]?.rate || '$250/mo',
+                        duration_details: defaults[tier]?.dur || '30 Days'
+                      });
+                    }}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-hidden"
+                  >
+                    <option value="HOURLY">Hourly ($2 / hr - Hours per day)</option>
+                    <option value="DAILY">Daily ($15 / day - 24 hrs)</option>
+                    <option value="WEEKLY">Weekly ($80 / week - 7 days)</option>
+                    <option value="MONTHLY">Monthly ($250 / month - 30 days)</option>
+                    <option value="YEARLY">Yearly ($2,400 / year - 365 days)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                    Pricing Rate Display
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.pricing_rate}
+                    onChange={(e) => setFormData({ ...formData, pricing_rate: e.target.value })}
+                    placeholder="e.g. $15/day"
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-hidden"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                  Duration & Schedule Details
+                </label>
+                <input
+                  type="text"
+                  value={formData.duration_details}
+                  onChange={(e) => setFormData({ ...formData, duration_details: e.target.value })}
+                  placeholder="e.g. 6 Hours Daily (9am - 3pm) or 1 Month Continuous"
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-hidden"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                  Business / Campaign Description
+                </label>
+                <textarea
+                  rows={2}
+                  value={formData.business_description}
+                  onChange={(e) => setFormData({ ...formData, business_description: e.target.value })}
+                  placeholder="Brief description of the product, service, or grant advertised..."
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-hidden"
                 />
               </div>
 
@@ -250,7 +346,7 @@ export default function AdminSponsorsPage() {
                   type="url"
                   value={formData.redirect_url}
                   onChange={(e) => setFormData({ ...formData, redirect_url: e.target.value })}
-                  placeholder="https://sponsor.org/grant"
+                  placeholder="https://yourbusiness.com"
                   className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-hidden focus:border-brand-500 placeholder:text-slate-400"
                 />
               </div>

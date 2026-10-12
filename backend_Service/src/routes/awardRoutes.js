@@ -16,6 +16,7 @@ router.delete('/admin/:id', authMiddleware, roleGuard(['SUPER_ADMIN']), awardCon
 router.get('/:id', awardController.getAwardById);
 
 // Protected user application submissions
+router.get('/eligibility/check', authMiddleware, awardController.checkApplicationEligibility);
 router.post('/apply', authMiddleware, awardController.applyForAward);
 router.get('/user/my-applications', authMiddleware, awardController.getMyApplications);
 

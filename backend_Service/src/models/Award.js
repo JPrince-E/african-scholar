@@ -37,7 +37,7 @@ const Award = sequelize.define('Award', {
   year: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 2026
+    defaultValue: 2027
   },
   is_active: {
     type: DataTypes.BOOLEAN,

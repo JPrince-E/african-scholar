@@ -15,8 +15,8 @@ exports.getNotifications = async (req, res) => {
       const initialAlerts = [
         {
           user_id: userId,
-          title: 'Nomination Cycle 2026 Open',
-          message: 'The Continental Academic Jury is now accepting nominations for the 2026 African Academic Laureate Honors.',
+          title: 'Nomination Cycle 2027 Open',
+          message: 'The Continental Academic Jury is now accepting nominations for the 2027 African Academic Laureate Honors.',
           type: 'AWARD',
           link: '/awards',
           is_read: false

@@ -92,13 +92,13 @@ export default function AdminAnalyticsDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-soft-xl space-y-2">
             <div className="flex items-center justify-between text-slate-500">
-              <span className="text-xs font-bold uppercase tracking-wider">Professors Mapped</span>
+              <span className="text-xs font-bold uppercase tracking-wider">Scholars & Professors Mapped</span>
               <div className="p-2 rounded-xl bg-brand-50 text-brand-600">
                 <Users className="w-5 h-5" />
               </div>
             </div>
             <div className="text-3xl font-black text-slate-900">{analytics?.totalProfessors || 0}</div>
-            <p className="text-[11px] text-emerald-700 font-semibold">↑ Verified African Faculty</p>
+            <p className="text-[11px] text-emerald-700 font-semibold">↑ Verified African Scholars (PhD & Prof)</p>
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-soft-xl space-y-2">
@@ -145,9 +145,9 @@ export default function AdminAnalyticsDashboard() {
               <div>
                 <h3 className="text-base font-bold text-slate-900 flex items-center space-x-2">
                   <Globe2 className="w-4 h-4 text-brand-600" />
-                  <span>Professors by African Country</span>
+                  <span>Scholars & Professors by African Country</span>
                 </h3>
-                <p className="text-xs text-slate-500">Verified scholar headcount distribution across nations</p>
+                <p className="text-xs text-slate-500">Verified scholar headcount distribution across nations (PhD & Prof)</p>
               </div>
             </div>
 
@@ -212,9 +212,9 @@ export default function AdminAnalyticsDashboard() {
             <div>
               <h3 className="text-base font-bold text-slate-900 flex items-center space-x-2">
                 <Building2 className="w-4 h-4 text-blue-600" />
-                <span>Professors by University / School</span>
+                <span>Scholars & Professors by University / School</span>
               </h3>
-              <p className="text-xs text-slate-500">Top African institutions ranked by registered faculty</p>
+              <p className="text-xs text-slate-500">Top African institutions ranked by registered faculty & doctoral scholars</p>
             </div>
           </div>
 

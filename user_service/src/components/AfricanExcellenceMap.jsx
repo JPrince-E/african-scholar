@@ -67,11 +67,11 @@ const AfricanExcellenceMap = () => {
           <div className="text-xs text-slate-400 font-medium mt-0.5">African Nations</div>
         </div>
         <div className="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400">2,450+</div>
+          <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400">1 M+</div>
           <div className="text-xs text-slate-400 font-medium mt-0.5">Enrolled Scholars</div>
         </div>
         <div className="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-extrabold text-blue-400">105</div>
+          <div className="text-2xl sm:text-3xl font-extrabold text-blue-400">25+</div>
           <div className="text-xs text-slate-400 font-medium mt-0.5">Laureates Honored</div>
         </div>
         <div className="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-4 text-center">

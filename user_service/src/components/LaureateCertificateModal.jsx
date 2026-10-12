@@ -19,7 +19,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
 
   const awardTitle = data.awardTitle || award.title || 'Academic Scholar of the Year';
   const awardTier = data.tier || award.tier || 'Continental';
-  const certId = data.certificateCode || `AS-2026-${String(winner?.id || 1).padStart(4, '0')}`;
+  const certId = data.certificateCode || `AS-2027-${String(winner?.id || 1).padStart(4, '0')}`;
   const citation = data.citation || winner?.admin_comments || 'Conferred in recognition of superior scholarly impact, peer-reviewed excellence, doctoral human capacity building, and profound advancement of science across the African Continent.';
 
   const verifyUrl = `${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'}/verify/${certId}`;
@@ -35,12 +35,12 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
   };
 
   const handleAddToLinkedIn = () => {
-    const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(awardTitle)}&organizationName=African+Scholar+Initiative&issueYear=2026&issueMonth=9&certUrl=${encodeURIComponent(verifyUrl)}&certId=${encodeURIComponent(certId)}`;
+    const linkedInUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(awardTitle)}&organizationName=African+Scholar+Initiative&issueYear=2027&issueMonth=9&certUrl=${encodeURIComponent(verifyUrl)}&certId=${encodeURIComponent(certId)}`;
     window.open(linkedInUrl, '_blank');
   };
 
   const handleShareOnX = () => {
-    const text = `I am deeply honored to be named an African Academic Laureate for 2026 by the African Scholar Initiative! Verify my credential: ${verifyUrl} #AfricanScholar #AcademicExcellence`;
+    const text = `I am deeply honored to be named an African Academic Laureate for 2027 by the African Scholar Initiative! Verify my credential: ${verifyUrl} #AfricanScholar #AcademicExcellence`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     window.open(twitterUrl, '_blank');
   };
@@ -137,10 +137,10 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
                   This Certificate of Honor is Proudly Awarded to
                 </span>
                 <h2 className="text-2xl sm:text-4xl font-bold text-amber-900 font-serif tracking-tight pt-1">
-                  {laureateName}
+                  {fullName}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                  {institutionName} ({countryName})
+                  {university}
                 </p>
               </div>
 
@@ -150,14 +150,14 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
                   {awardTitle}
                 </span>
                 <span className="text-[10px] font-semibold text-amber-900">
-                  {awardTier} Tier • Academic Class of 2026
+                  {awardTier} Tier • Academic Class of 2027
                 </span>
               </div>
 
               {/* Citation Body */}
               <div className="max-w-2xl mx-auto px-4">
                 <p className="text-xs sm:text-sm text-slate-700 italic leading-relaxed font-serif">
-                  "{citationText}"
+                  "{citation}"
                 </p>
               </div>
 
@@ -180,7 +180,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
                       <span className="text-[7px] sm:text-[8px] font-black uppercase tracking-tighter leading-tight">
                         OFFICIAL LAUREATE SEAL
                       </span>
-                      <span className="text-[6px] font-bold text-amber-950">2026</span>
+                      <span className="text-[6px] font-bold text-amber-950">2027</span>
                     </div>
                   </div>
                 </div>

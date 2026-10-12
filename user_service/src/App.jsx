@@ -32,6 +32,11 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  // Ensure every newly opened page starts at the top
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [activeTab]);
+
   const renderActivePage = () => {
     switch (activeTab) {
       case 'landing':

@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
             Administrative Station Subdomain
           </span>
           <p className="text-xs text-slate-500 max-w-xs mx-auto pt-1">
-            Access analytics, professor registries, index benchmark reviews, and sponsor controls.
+            Access analytics, doctoral scholar (PhD) & professor registries, index benchmark reviews, and sponsor controls.
           </p>
         </div>
 

@@ -113,10 +113,10 @@ export default function DirectoryPage() {
             <span>Pan-African Academic Faculty</span>
           </div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            Scholars & Professors Directory
+            Scholars, Ph.D. (Dr.) & Professors Directory
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Browse verified academic researchers across Nigeria, Kenya, Ghana, South Africa, and all African universities.
+            Browse verified academic researchers (Ph.D. & Professors) across Nigeria, Kenya, Ghana, South Africa, and all African universities.
           </p>
         </div>
 
@@ -215,7 +215,7 @@ export default function DirectoryPage() {
               <Users className="w-12 h-12 text-slate-300 mx-auto" />
               <h3 className="text-lg font-bold text-slate-800">No Scholars Found</h3>
               <p className="text-xs text-slate-500 max-w-md mx-auto">
-                No professors matched your search criteria. Try removing filters or searching by a broader term.
+                No doctoral scholars or professors matched your search criteria. Try removing filters or searching by a broader term.
               </p>
               <button
                 onClick={handleResetFilters}

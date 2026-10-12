@@ -161,7 +161,7 @@ export default function AdminNotificationsPage() {
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. 2026 Laureate Selection Phase Open"
+                placeholder="e.g. 2027 Laureate Selection Phase Open"
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white transition"
               />
             </div>
@@ -175,7 +175,7 @@ export default function AdminNotificationsPage() {
                 required
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="e.g. The Continental Jury has finalized the 2026 evaluation benchmarks. Review your nomination status on the dashboard."
+                placeholder="e.g. The Continental Jury has finalized the 2027 evaluation benchmarks. Review your nomination status on the dashboard."
                 className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white transition leading-relaxed"
               />
             </div>

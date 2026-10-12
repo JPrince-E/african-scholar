@@ -142,7 +142,7 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
             onClick={() => setActiveTab('register_scholar')}
             className="px-5 py-2.5 rounded-xl bg-azure-50 hover:bg-azure-100 text-azure-700 font-bold text-xs border border-azure-200/80 transition"
           >
-            Update Professor Metrics
+            Update Scholar Metrics (Ph.D. / Prof.)
           </button>
           <button
             onClick={() => setActiveTab('awards')}
@@ -277,13 +277,13 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
             <Award className="w-10 h-10 text-slate-300 mx-auto" />
             <h4 className="text-base font-bold text-slate-700">No Award Nominations Submitted Yet</h4>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Explore the 2026 Academic Award categories and nominate your research achievements for national and continental honours.
+              Explore the 2027 Academic Award categories and nominate your research achievements for national and continental honours.
             </p>
             <button
               onClick={() => setActiveTab('awards')}
               className="px-5 py-2.5 rounded-xl btn-coral text-white font-bold text-xs shadow-xs"
             >
-              Browse 2026 Awards
+              Browse 2027 Awards
             </button>
           </div>
         ) : (
