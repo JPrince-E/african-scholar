@@ -80,14 +80,53 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
     }
   }, [user]);
 
-  const handleSimulatePayment = () => {
+  const handleSimulatePayment = async () => {
     setPaying(true);
+    try {
+      const email = user?.email || 'scholar@africanscholar.org';
+      const initRes = await api.post('/payments/initialize', {
+        email,
+        amount: 1.00,
+        currency: 'USD',
+        purpose: 'AWARD_APP',
+        metadata: {
+          award_id: selectedAward?.id,
+          award_title: selectedAward?.title
+        }
+      });
+
+      if (initRes.data && initRes.data.success && window.PaystackPop && initRes.data.publicKey) {
+        const { reference, publicKey, amount_ngn } = initRes.data;
+        const handler = window.PaystackPop.setup({
+          key: publicKey,
+          email,
+          amount: Math.round((amount_ngn || 1500) * 100),
+          currency: 'NGN',
+          ref: reference,
+          callback: function(response) {
+            const finalRef = (response && response.reference) ? response.reference : reference;
+            setPaymentReference(finalRef);
+            setPaying(false);
+            setPaymentModalOpen(false);
+          },
+          onClose: function() {
+            setPaying(false);
+          }
+        });
+        handler.openIframe();
+        return;
+      }
+    } catch (err) {
+      console.warn('Live Paystack init error, falling back to simulated authorization:', err.message);
+    }
+
+    // Fallback simulation
     setTimeout(() => {
       const generatedRef = `PAYSTACK-APP-${Date.now()}`;
       setPaymentReference(generatedRef);
       setPaying(false);
       setPaymentModalOpen(false);
-    }, 1200);
+    }, 800);
   };
 
   const handleVerifyDoi = async () => {

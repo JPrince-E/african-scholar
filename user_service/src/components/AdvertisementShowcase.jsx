@@ -262,11 +262,12 @@ export default function AdvertisementShowcase() {
               { display_name: 'USD Amount', variable_name: 'usd', value: `$${amount}` }
             ]
           },
-          callback: async (response) => {
-            // Payment verified by popup
-            await completeAdSubmission(response.reference || reference, 'PAID');
+          callback: function(response) {
+            // Payment verified by Paystack popup
+            const paidRef = (response && response.reference) ? response.reference : reference;
+            completeAdSubmission(paidRef, 'PAID');
           },
-          onClose: () => {
+          onClose: function() {
             setProcessingPayment(false);
           }
         });
