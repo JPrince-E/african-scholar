@@ -4,6 +4,7 @@ const ScholarProfile = require('./ScholarProfile');
 const Award = require('./Award');
 const AwardApplication = require('./AwardApplication');
 const Sponsor = require('./Sponsor');
+const Advertisement = require('./Advertisement');
 const RefereeEndorsement = require('./RefereeEndorsement');
 const JuryReview = require('./JuryReview');
 const Notification = require('./Notification');
@@ -27,6 +28,9 @@ JuryReview.belongsTo(AwardApplication, { foreignKey: 'application_id', as: 'appl
 User.hasMany(Notification, { foreignKey: 'user_id', as: 'notifications', onDelete: 'CASCADE' });
 Notification.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
+User.hasMany(Advertisement, { foreignKey: 'user_id', as: 'advertisements', onDelete: 'SET NULL' });
+Advertisement.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
 module.exports = {
   sequelize,
   User,
@@ -34,6 +38,7 @@ module.exports = {
   Award,
   AwardApplication,
   Sponsor,
+  Advertisement,
   RefereeEndorsement,
   JuryReview,
   Notification

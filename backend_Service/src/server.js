@@ -18,6 +18,8 @@ const refereeRoutes = require('./routes/refereeRoutes');
 const juryRoutes = require('./routes/juryRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const advertisementRoutes = require('./routes/advertisementRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -75,6 +77,8 @@ app.use('/api/referees', refereeRoutes);
 app.use('/api/jury', juryRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/advertisements', advertisementRoutes);
+app.use('/api/payments', paymentRoutes);
 
 
 // Error handling middleware

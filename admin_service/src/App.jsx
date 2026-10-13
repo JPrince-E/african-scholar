@@ -6,6 +6,7 @@ import AdminAnalyticsDashboard from './pages/AdminAnalyticsDashboard';
 import AdminApplicationsPage from './pages/AdminApplicationsPage';
 import AdminWinnersPage from './pages/AdminWinnersPage';
 import AdminSponsorsPage from './pages/AdminSponsorsPage';
+import AdminAdvertisementsPage from './pages/AdminAdvertisementsPage';
 import AdminFacultyPage from './pages/AdminFacultyPage';
 import AdminNotificationsPage from './pages/AdminNotificationsPage';
 import AdminAwardsPage from './pages/AdminAwardsPage';
@@ -44,6 +45,8 @@ function AdminMainContent() {
         return <AdminWinnersPage />;
       case 'awards':
         return <AdminAwardsPage />;
+      case 'advertisements':
+        return <AdminAdvertisementsPage />;
       case 'sponsors':
         return <AdminSponsorsPage />;
       case 'faculty':

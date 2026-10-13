@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   BarChart3,
   FileCheck,
@@ -9,7 +8,8 @@ import {
   ShieldAlert,
   LogOut,
   ExternalLink,
-  Award
+  Award,
+  Building
 } from 'lucide-react';
 import { useAdminAuth } from '../context/AdminAuthContext';
 
@@ -21,7 +21,8 @@ export default function AdminSidebar({ activeTab, setActiveTab }) {
     { id: 'applications', label: 'Review Nominations', icon: FileCheck },
     { id: 'winners', label: 'Award Winners Manager', icon: Trophy },
     { id: 'awards', label: 'Award Categories', icon: Award },
-    { id: 'sponsors', label: 'Sponsor Ads Manager', icon: Megaphone },
+    { id: 'advertisements', label: 'Ad Approvals & Ads', icon: Megaphone },
+    { id: 'sponsors', label: 'Platform Sponsors', icon: Building },
     { id: 'notifications', label: 'Broadcast Notifications', icon: Bell },
     { id: 'faculty', label: 'Faculty Directory', icon: Users },
   ];
