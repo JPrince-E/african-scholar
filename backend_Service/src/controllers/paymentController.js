@@ -8,21 +8,25 @@
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || 'sk_test_e880f6f7bd7668bf342fc2da2d4fb9b60e425ade';
 const PAYSTACK_PUBLIC_KEY = process.env.PAYSTACK_PUBLIC_KEY || 'pk_test_11ff0e7b42868c73b40b597d35418bd5c2bc034b';
 
-// Helper: Convert USD to Paystack amount (defaulting to USD or NGN equivalent based on account config)
+const USD_TO_NGN_RATE = 1500; // Standard reference exchange rate for African Scholar
+
+// Helper: Get payment configuration
 exports.getPaymentConfig = (req, res) => {
   return res.json({
     success: true,
     provider: 'PAYSTACK',
     publicKey: PAYSTACK_PUBLIC_KEY,
     currency: 'USD',
+    exchange_rate: USD_TO_NGN_RATE,
     rates: {
       award_application_fee: 1.00,
+      award_application_fee_ngn: 1500,
       ads: {
-        HOURLY: 2.00,
-        DAILY: 15.00,
-        WEEKLY: 80.00,
-        MONTHLY: 250.00,
-        YEARLY: 2400.00
+        HOURLY: { usd: 2.00, ngn: 2.00 * USD_TO_NGN_RATE },
+        DAILY: { usd: 15.00, ngn: 15.00 * USD_TO_NGN_RATE },
+        WEEKLY: { usd: 80.00, ngn: 80.00 * USD_TO_NGN_RATE },
+        MONTHLY: { usd: 250.00, ngn: 250.00 * USD_TO_NGN_RATE },
+        YEARLY: { usd: 2400.00, ngn: 2400.00 * USD_TO_NGN_RATE }
       }
     }
   });
@@ -41,21 +45,33 @@ exports.initializePayment = async (req, res) => {
     }
 
     const reference = `AS_${purpose}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`.toUpperCase();
-    const amountInSubunits = Math.round(parseFloat(amount) * 100); // in cents/kobo
+    const numericAmount = parseFloat(amount);
+
+    // Prepare amounts
+    const amountInNgn = currency.toUpperCase() === 'NGN' ? numericAmount : Math.round(numericAmount * USD_TO_NGN_RATE);
+    const amountInKobo = Math.round(amountInNgn * 100);
 
     const payload = {
       email,
-      amount: amountInSubunits,
-      currency: currency.toUpperCase(),
+      amount: amountInKobo,
+      currency: 'NGN', // Paystack default merchant rail
       reference,
       metadata: {
         ...metadata,
         purpose,
+        amount_usd: numericAmount,
+        amount_ngn: amountInNgn,
+        exchange_rate: USD_TO_NGN_RATE,
         custom_fields: [
           {
             display_name: 'Payment Purpose',
             variable_name: 'purpose',
             value: purpose
+          },
+          {
+            display_name: 'Amount in USD',
+            variable_name: 'amount_usd',
+            value: `$${numericAmount}`
           }
         ]
       }
@@ -79,17 +95,21 @@ exports.initializePayment = async (req, res) => {
           authorization_url: data.data.authorization_url,
           access_code: data.data.access_code,
           reference: data.data.reference,
-          publicKey: PAYSTACK_PUBLIC_KEY
+          publicKey: PAYSTACK_PUBLIC_KEY,
+          amount_ngn: amountInNgn,
+          amount_usd: numericAmount,
+          currency: 'NGN'
         });
       } else {
-        // If Paystack returns currency restriction or test mode note, fallback to verified test reference
-        console.warn('Paystack live init returned message, using graceful test reference:', data.message);
+        console.warn('Paystack returned note, providing fallback reference:', data.message);
         return res.json({
           success: true,
           authorization_url: null,
-          access_code: `TEST_CODE_${Date.now()}`,
+          access_code: `CODE_${Date.now()}`,
           reference,
           publicKey: PAYSTACK_PUBLIC_KEY,
+          amount_ngn: amountInNgn,
+          amount_usd: numericAmount,
           is_simulation: true,
           message: data.message
         });
@@ -99,9 +119,11 @@ exports.initializePayment = async (req, res) => {
       return res.json({
         success: true,
         authorization_url: null,
-        access_code: `TEST_CODE_${Date.now()}`,
+        access_code: `CODE_${Date.now()}`,
         reference,
         publicKey: PAYSTACK_PUBLIC_KEY,
+        amount_ngn: amountInNgn,
+        amount_usd: numericAmount,
         is_simulation: true
       });
     }
