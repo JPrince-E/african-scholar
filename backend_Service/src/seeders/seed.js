@@ -503,7 +503,7 @@ const seedDatabase = async () => {
       {
         sponsor_name: 'Research Fund',
         banner_image_url: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1200&auto=format&fit=crop&q=80',
-        redirect_url: 'https://www.afdb.org',
+        redirect_url: 'https://africanscholar.org/research-fund',
         placement: 'HERO_BANNER',
         pricing_tier: 'YEARLY',
         pricing_rate: '$2,400/yr',
