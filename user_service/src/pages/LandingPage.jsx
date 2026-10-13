@@ -249,16 +249,16 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
                   </div>
 
                   {/* Stat widgets on card (Requirements 2 & 3) */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md">
-                      <span className="text-[11px] text-slate-300 block">Total Citations Recorded</span>
-                      <span className="text-xl font-black text-amber-300 mt-0.5 block">1M +</span>
-                      <span className="text-[10px] text-emerald-400 font-medium">Verified Scopus / Google Scholar</span>
+                  <div className="grid grid-cols-2 gap-3 text-center">
+                    <div className="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md flex flex-col items-center justify-center text-center">
+                      <span className="text-[11px] text-slate-300 block text-center">Total Citations Recorded</span>
+                      <span className="text-xl font-black text-amber-300 mt-0.5 block text-center">1M +</span>
+                      <span className="text-[10px] text-emerald-400 font-medium block text-center">Verified Scopus / Google Scholar</span>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md">
-                      <span className="text-[11px] text-slate-300 block">African Universities</span>
-                      <span className="text-xl font-black text-white mt-0.5 block">1300+</span>
-                      <span className="text-[10px] text-azure-300 font-medium">Pan-African Spread</span>
+                    <div className="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md flex flex-col items-center justify-center text-center">
+                      <span className="text-[11px] text-slate-300 block text-center">African Universities</span>
+                      <span className="text-xl font-black text-white mt-0.5 block text-center">1300+</span>
+                      <span className="text-[10px] text-azure-300 font-medium block text-center">Pan-African Spread</span>
                     </div>
                   </div>
                 </div>

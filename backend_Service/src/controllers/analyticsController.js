@@ -39,25 +39,25 @@ exports.getContinentalStats = async (req, res) => {
       },
       {
         rank: 4,
-        name: 'University of Johannesburg',
-        country: 'South Africa',
-        countryCode: 'ZA',
-        laureatesCount: 19,
-        scholarsCount: '3,400+',
-        impactScore: 95.2,
-        topDiscipline: 'Applied AI, Nanotechnology & Social Sciences',
-        citationsEvaluated: '125,000+'
-      },
-      {
-        rank: 5,
         name: 'Cairo University',
         country: 'Egypt',
         countryCode: 'EG',
         laureatesCount: 21,
         scholarsCount: '7,800+',
-        impactScore: 94.8,
+        impactScore: 95.8,
         topDiscipline: 'Pharmacology, Veterinary & Physical Sciences',
         citationsEvaluated: '155,000+'
+      },
+      {
+        rank: 5,
+        name: 'Mohammed VI Polytechnic University',
+        country: 'Morocco',
+        countryCode: 'MA',
+        laureatesCount: 19,
+        scholarsCount: '1,800+',
+        impactScore: 94.7,
+        topDiscipline: 'Artificial Intelligence, Green Mining & Agritech',
+        citationsEvaluated: '115,000+'
       },
       {
         rank: 6,
@@ -83,25 +83,25 @@ exports.getContinentalStats = async (req, res) => {
       },
       {
         rank: 8,
-        name: 'Mansoura University',
-        country: 'Egypt',
-        countryCode: 'EG',
-        laureatesCount: 15,
-        scholarsCount: '4,500+',
-        impactScore: 91.4,
-        topDiscipline: 'Medical Sciences, Nephrology & Gastroenterology',
-        citationsEvaluated: '89,000+'
-      },
-      {
-        rank: 9,
         name: 'Makerere University',
         country: 'Uganda',
         countryCode: 'UG',
-        laureatesCount: 14,
+        laureatesCount: 15,
         scholarsCount: '2,800+',
-        impactScore: 90.3,
+        impactScore: 91.5,
         topDiscipline: 'Tropical Medicine, Food Security & Epidemiology',
-        citationsEvaluated: '82,000+'
+        citationsEvaluated: '86,000+'
+      },
+      {
+        rank: 9,
+        name: 'American University in Cairo',
+        country: 'Egypt',
+        countryCode: 'EG',
+        laureatesCount: 14,
+        scholarsCount: '1,200+',
+        impactScore: 90.8,
+        topDiscipline: 'Global Governance, Economics, Business & Humanities',
+        citationsEvaluated: '88,000+'
       },
       {
         rank: 10,

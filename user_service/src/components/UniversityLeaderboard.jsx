@@ -39,17 +39,6 @@ const TOP_10_AFRICAN_UNIVERSITIES = [
   },
   {
     rank: 4,
-    name: 'University of Johannesburg',
-    country: 'South Africa',
-    countryCode: 'ZA',
-    laureatesCount: 19,
-    scholarsCount: '3,400+',
-    citationsEvaluated: '125,000+',
-    topDiscipline: 'Applied AI, Nanotechnology & Social Sciences',
-    impactScore: 95.2
-  },
-  {
-    rank: 5,
     name: 'Cairo University',
     country: 'Egypt',
     countryCode: 'EG',
@@ -57,7 +46,18 @@ const TOP_10_AFRICAN_UNIVERSITIES = [
     scholarsCount: '7,800+',
     citationsEvaluated: '155,000+',
     topDiscipline: 'Pharmacology, Veterinary & Physical Sciences',
-    impactScore: 94.8
+    impactScore: 95.8
+  },
+  {
+    rank: 5,
+    name: 'Mohammed VI Polytechnic University',
+    country: 'Morocco',
+    countryCode: 'MA',
+    laureatesCount: 19,
+    scholarsCount: '1,800+',
+    citationsEvaluated: '115,000+',
+    topDiscipline: 'Artificial Intelligence, Green Mining & Agritech',
+    impactScore: 94.7
   },
   {
     rank: 6,
@@ -83,25 +83,25 @@ const TOP_10_AFRICAN_UNIVERSITIES = [
   },
   {
     rank: 8,
-    name: 'Mansoura University',
-    country: 'Egypt',
-    countryCode: 'EG',
-    laureatesCount: 15,
-    scholarsCount: '4,500+',
-    citationsEvaluated: '89,000+',
-    topDiscipline: 'Medical Sciences, Nephrology & Gastroenterology',
-    impactScore: 91.4
-  },
-  {
-    rank: 9,
     name: 'Makerere University',
     country: 'Uganda',
     countryCode: 'UG',
-    laureatesCount: 14,
+    laureatesCount: 15,
     scholarsCount: '2,800+',
-    citationsEvaluated: '82,000+',
+    citationsEvaluated: '86,000+',
     topDiscipline: 'Tropical Medicine, Food Security & Epidemiology',
-    impactScore: 90.3
+    impactScore: 91.5
+  },
+  {
+    rank: 9,
+    name: 'American University in Cairo',
+    country: 'Egypt',
+    countryCode: 'EG',
+    laureatesCount: 14,
+    scholarsCount: '1,200+',
+    citationsEvaluated: '88,000+',
+    topDiscipline: 'Global Governance, Economics, Business & Humanities',
+    impactScore: 90.8
   },
   {
     rank: 10,
