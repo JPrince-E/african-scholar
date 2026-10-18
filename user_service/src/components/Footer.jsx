@@ -28,22 +28,22 @@ export default function Footer({ setActiveTab }) {
             <h4 className="eyebrow-accent">Platform Services</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <button onClick={() => setActiveTab('directory')} className="hover:text-white transition">
+                <button onClick={() => setActiveTab('directory')} className="text-left block hover:text-white transition">
                   Scholars Directory
                 </button>
               </li>
               <li>
-                <button onClick={() => setActiveTab('awards')} className="hover:text-white transition">
+                <button onClick={() => setActiveTab('awards')} className="text-left block hover:text-white transition">
                   Academic Award Categories
                 </button>
               </li>
               <li>
-                <button onClick={() => setActiveTab('register_scholar')} className="hover:text-white transition">
+                <button onClick={() => setActiveTab('register_scholar')} className="text-left block hover:text-white transition">
                   Academic Metric Registration (Ph.D. & Prof.)
                 </button>
               </li>
               <li>
-                <button onClick={() => setActiveTab('awards')} className="hover:text-white transition">
+                <button onClick={() => setActiveTab('awards')} className="text-left block hover:text-white transition">
                   Benchmark Evaluation Index
                 </button>
               </li>
@@ -92,8 +92,8 @@ export default function Footer({ setActiveTab }) {
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
           <p>© 2027 African Scholar Initiative. All rights reserved.</p>
-          <div className="flex items-center space-x-4 mt-4 sm:mt-0">
-            <span>Nigeria • Kenya • Ghana • South Africa • Pan-Africa</span>
+          <div className="flex items-center space-x-4 mt-4 sm:mt-0 font-medium text-slate-400">
+            <span>Powered by Bluespectrum Innovative Ltd</span>
           </div>
         </div>
       </div>

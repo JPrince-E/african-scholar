@@ -387,15 +387,19 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
 
       {/* 5. 2027 ACADEMIC AWARD TIERS (Requirement 1) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
+        <div className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-4">
           <div className="eyebrow-accent-dark inline-flex w-fit mx-auto">
             <Award className="w-3.5 h-3.5 text-coral-500" />
             <span>2027 Honours Cycle & Criteria</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Academic Excellence Awards
-          </h2>
-          <p className="text-slate-600 text-sm sm:text-base">
+          <div>
+            <div className="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-2xl bg-gradient-to-r from-coral-50 via-amber-50/70 to-coral-50 border-2 border-coral-500 shadow-md shadow-coral-500/10">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                Academic Excellence Awards
+              </h2>
+            </div>
+          </div>
+          <p className="text-slate-600 text-sm sm:text-base lg:whitespace-nowrap">
             Benchmarked against verified publication indices, international citation spread, and youth mentorship.
           </p>
         </div>
@@ -498,11 +502,11 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
       {/* 6. FEATURED SCHOLARS SHOWCASE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
-          <div>
-            <span className="text-xs font-extrabold uppercase tracking-widest text-brand-600">
+          <div className="inline-block px-5 py-3 rounded-2xl bg-gradient-to-r from-slate-50 via-azure-50/60 to-slate-50 border-2 border-azure-300 shadow-xs">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-azure-700 block">
               Leading Researchers
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-0.5">
               Top Ranked African Faculty
             </h2>
           </div>
@@ -575,7 +579,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
       </section>
 
       {/* 7. ADVERTISE WITH US / BUSINESS & SPONSOR SHOWCASE (Requirement 16) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 !mt-6">
         <AdvertisementShowcase />
       </section>
     </div>

@@ -326,7 +326,7 @@ export default function AdvertisementShowcase() {
   };
 
   return (
-    <section className="space-y-12 py-10" id="advertisements-section">
+    <section className="space-y-12 pt-2 pb-10" id="advertisements-section">
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
         <div className="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/30 text-brand-600 text-xs font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full">
@@ -371,7 +371,7 @@ export default function AdvertisementShowcase() {
             >
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  <span className="px-3.5 py-1 rounded-full bg-brand-600 text-white font-black text-[10px] uppercase tracking-wider shadow-md">
+                  <span className="px-3.5 py-1 rounded-full bg-brand-600 text-white font-black text-[10px] uppercase tracking-wider shadow-md whitespace-nowrap inline-block">
                     ★ Most Popular
                   </span>
                 </div>

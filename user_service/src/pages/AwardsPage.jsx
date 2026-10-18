@@ -57,15 +57,15 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex items-center space-x-2 text-xs font-bold text-coral-700 bg-coral-50 border border-coral-200 px-3.5 py-1.5 rounded-full">
+      <div className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-3">
+        <div className="inline-flex items-center space-x-2 text-xs font-extrabold text-coral-900 bg-coral-100 border-2 border-coral-300 px-4 py-2 rounded-full shadow-xs">
           <Award className="w-4 h-4 text-coral-600" />
           <span>African Scholar 2027 Honors & Laureate Series</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
           Pan-African Academic Awards
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-600 leading-relaxed lg:whitespace-nowrap">
           Rewarding academic integrity, high citation density, international peer esteem, and impactful doctoral mentorship across Africa.
         </p>
       </div>
@@ -135,33 +135,33 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
                 {/* Award Inclusions & Details */}
                 <div className="p-6 sm:p-8 space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start space-x-3">
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start space-x-3 shadow-xs">
                       <div className="p-2 rounded-xl bg-amber-100 text-amber-800 shrink-0">
                         <Award className="w-5 h-5" />
                       </div>
                       <div>
-                        <span className="text-xs font-bold text-slate-900 block">Physical Award Plaque</span>
-                        <span className="text-xs text-slate-500">{award.award_value?.plaque}</span>
+                        <span className="text-xs font-extrabold text-slate-900 block tracking-tight">Physical Award Plaque</span>
+                        <span className="text-xs font-bold text-slate-800 mt-0.5 block">{award.award_value?.plaque}</span>
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start space-x-3">
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start space-x-3 shadow-xs">
                       <div className="p-2 rounded-xl bg-azure-100 text-azure-800 shrink-0">
                         <Mic className="w-5 h-5" />
                       </div>
                       <div>
-                        <span className="text-xs font-bold text-slate-900 block">Podcast / Media Session</span>
-                        <span className="text-xs text-slate-500">{award.award_value?.podcast_interview}</span>
+                        <span className="text-xs font-extrabold text-slate-900 block tracking-tight">Podcast / Media Session</span>
+                        <span className="text-xs font-bold text-slate-800 mt-0.5 block">{award.award_value?.podcast_interview}</span>
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start space-x-3">
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start space-x-3 shadow-xs">
                       <div className="p-2 rounded-xl bg-emerald-100 text-emerald-800 shrink-0">
                         <Sparkles className="w-5 h-5" />
                       </div>
                       <div>
-                        <span className="text-xs font-bold text-slate-900 block">Icon Item</span>
-                        <span className="text-xs text-slate-500">{award.award_value?.icon_items}</span>
+                        <span className="text-xs font-extrabold text-slate-900 block tracking-tight">Icon Item</span>
+                        <span className="text-xs font-bold text-slate-800 mt-0.5 block">{award.award_value?.icon_items}</span>
                       </div>
                     </div>
                   </div>
@@ -194,17 +194,17 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
                       {parseJsonArray(award.evaluation_index).map((item, idx) => (
                         <div
                           key={idx}
-                          className="p-5 rounded-2xl bg-gradient-to-br from-white via-slate-50 to-azure-50/40 hover:to-azure-100/60 border-2 border-slate-200/90 hover:border-azure-400/80 shadow-md hover:shadow-xl transition-all duration-300 flex items-start space-x-4 group"
+                          className="p-5 rounded-2xl bg-white hover:bg-slate-50/80 border-2 border-slate-200 hover:border-slate-300 shadow-md hover:shadow-lg transition-all duration-300 flex items-start space-x-4 group"
                         >
                           <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
                             <CheckCircle2 className="w-5 h-5" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-[10px] uppercase font-black tracking-wider text-azure-700 bg-azure-50 px-2 py-0.5 rounded-md border border-azure-200">
+                              <span className="text-[10px] uppercase font-black tracking-wider text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
                                 Milestone #{idx + 1}
                               </span>
-                              <span className="font-black text-slate-900 text-sm group-hover:text-azure-700 transition">
+                              <span className="font-black text-slate-900 text-sm group-hover:text-coral-600 transition">
                                 {item.benchmark}
                               </span>
                             </div>

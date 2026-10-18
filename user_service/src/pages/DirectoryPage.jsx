@@ -108,15 +108,15 @@ export default function DirectoryPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <div className="inline-flex items-center space-x-2 text-xs font-bold text-azure-700 bg-azure-50 px-3 py-1 rounded-full mb-2 border border-azure-200/80">
-            <Users className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center space-x-2 text-xs font-extrabold text-azure-900 bg-azure-100 px-4 py-1.5 rounded-full mb-2 border-2 border-azure-300 shadow-xs">
+            <Users className="w-3.5 h-3.5 text-azure-700" />
             <span>Pan-African Academic Faculty</span>
           </div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             Scholars, Ph.D. (Dr.) & Professors Directory
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Browse verified academic researchers (Ph.D. & Professors) across Nigeria, Kenya, Ghana, South Africa, and all African universities.
+          <p className="text-sm font-semibold text-slate-700 mt-1.5 leading-relaxed">
+            Browse verified top academic researchers (Ph.D. & Professors) across Nigeria, Kenya, Ghana, South Africa, and all African universities.
           </p>
         </div>
 
