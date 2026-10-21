@@ -31,6 +31,8 @@ export default function RegisterScholarPage({ setActiveTab }) {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [showTrialNotificationModal, setShowTrialNotificationModal] = useState(false);
 
+  const isEditMode = Boolean(user && user.profile && (user.profile.id || user.profile.first_name));
+
   // Form State
   const [formData, setFormData] = useState({
     title: 'Full Prof',
@@ -245,12 +247,21 @@ export default function RegisterScholarPage({ setActiveTab }) {
         community_impact_activities: formData.community_impact_activities.filter(a => a.trim() !== '')
       };
 
+      const isExistingProfile = Boolean(user && user.profile && (user.profile.id || user.profile.first_name));
       const res = await api.post('/profiles/me/profile', cleanedData);
       if (res.data.success) {
-        setSuccessMessage('Scholar registration (Ph.D. & Professor) saved successfully!');
         await fetchCurrentUser();
-        // Show 1-Year Free Trial notification modal which stays until the user clicks OK
-        setShowTrialNotificationModal(true);
+        if (isExistingProfile || !res.data.is_new_registration) {
+          // When updating profile, DO NOT reset trial, DO NOT pop up first-time modal
+          setSuccessMessage('Scholar profile & metrics updated successfully! Your 1-Year Free Trial countdown remains active and unaffected.');
+          setTimeout(() => {
+            setActiveTab('dashboard');
+          }, 1500);
+        } else {
+          // Brand new registration: Show 1-Year Free Trial notification modal which stays until the user clicks OK
+          setSuccessMessage('Scholar registration saved successfully!');
+          setShowTrialNotificationModal(true);
+        }
       }
     } catch (err) {
       setErrorMessage(err.response?.data?.message || err.message || 'Failed to save profile');
@@ -295,14 +306,37 @@ export default function RegisterScholarPage({ setActiveTab }) {
       <div className="mb-8">
         <div className="flex items-center space-x-2 text-xs font-bold text-azure-700 bg-azure-50 border border-azure-200/80 px-3 py-1 rounded-full w-fit mb-2">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>African Scholar Registration Wizard</span>
+          <span>{isEditMode ? 'Faculty Profile & Metrics Editor' : 'African Scholar Registration Wizard'}</span>
         </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-          Scholar Metrics & Profile Registration (Ph.D. & Professors)
+          {isEditMode ? 'Update Scholar Metrics & Faculty Profile' : 'Scholar Metrics & Profile Registration (Ph.D. & Professors)'}
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          Complete the official fields specified for the African Scholar faculty registry and annual academic awards.
+          {isEditMode
+            ? 'Update your academic milestones, publications, and supervised degrees. (Your 1-year free trial countdown remains active and is never reset by profile updates).'
+            : 'Complete the official fields specified for the African Scholar faculty registry and annual academic awards.'}
         </p>
+
+        {/* Active Free Trial Status for Existing Profile */}
+        {isEditMode && user?.profile && (
+          <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-azure-50 border border-emerald-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-emerald-950 text-xs shadow-xs">
+            <div className="flex items-center space-x-2.5">
+              <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+              <span>
+                <strong>1-Year Free Trial Active:</strong> Started at registration on{' '}
+                {new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                . Expires on{' '}
+                <strong>
+                  {new Date(user.profile.trial_expires_at || (new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).getTime() + 365*24*60*60*1000)).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </strong>
+                . Saving updates will <span className="font-bold underline decoration-coral-500">not</span> reset your trial date.
+              </span>
+            </div>
+            <span className="shrink-0 font-extrabold px-3 py-1 rounded-xl bg-emerald-600 text-white shadow-xs">
+              {user.profile.trial_days_remaining != null ? user.profile.trial_days_remaining : 365} Days Remaining
+            </span>
+          </div>
+        )}
 
         {/* Step indicator pills */}
         <div className="grid grid-cols-4 gap-2 sm:gap-4 mt-6">
@@ -1089,9 +1123,20 @@ export default function RegisterScholarPage({ setActiveTab }) {
 
               <div className="flex items-start space-x-3 text-xs text-slate-300 pt-1">
                 <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                <p className="leading-relaxed">
-                  The African Scholar board has waived all registration fees for the inaugural 2027 academic cycle. Your profile verification is instantly processed without credit card charges.
-                </p>
+                {isEditMode && user?.profile ? (
+                  <div>
+                    <p className="leading-relaxed text-emerald-300 font-bold">
+                      1-Year Free Trial Active: {user.profile.trial_days_remaining != null ? user.profile.trial_days_remaining : 365} Days Remaining
+                    </p>
+                    <p className="text-slate-400 mt-1">
+                      Your trial began on {new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} and remains valid until {new Date(user.profile.trial_expires_at || (new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).getTime() + 365*24*60*60*1000)).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}. Saving profile updates will not reset or reduce your remaining days.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="leading-relaxed">
+                    The African Scholar board has waived all registration fees for the inaugural 2027 academic cycle. Your 1-Year Free Trial starts immediately upon registration and will remain active for 365 days regardless of future profile updates.
+                  </p>
+                )}
               </div>
             </div>
 
@@ -1152,7 +1197,11 @@ export default function RegisterScholarPage({ setActiveTab }) {
               disabled={submitting}
               className="px-8 py-3 rounded-xl btn-coral text-white font-bold text-sm shadow-md flex items-center space-x-2 transition disabled:opacity-50"
             >
-              <span>{submitting ? 'Saving Registration...' : 'Complete Scholar Registration (Ph.D. / Prof.)'}</span>
+              <span>
+                {submitting
+                  ? (isEditMode ? 'Saving Updates...' : 'Saving Registration...')
+                  : (isEditMode ? 'Save Updated Scholar Metrics (Ph.D. / Prof.)' : 'Complete Scholar Registration (Ph.D. / Prof.)')}
+              </span>
               <CheckCircle2 className="w-4 h-4" />
             </button>
           )}
@@ -1179,16 +1228,32 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-left space-y-2.5 text-xs text-slate-700">
+            {/* Trial Expiry Details Box */}
+            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-left space-y-2 text-xs">
+              <div className="flex items-center justify-between border-b border-emerald-200/60 pb-2">
+                <span className="text-slate-600 font-semibold">Trial Duration:</span>
+                <span className="font-extrabold text-emerald-800">365 Days (1 Full Year)</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-emerald-200/60 pb-2">
+                <span className="text-slate-600 font-semibold">Start Date:</span>
+                <span className="font-bold text-slate-900">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-600 font-semibold">Expiry Date:</span>
+                <span className="font-bold text-emerald-700">{new Date(Date.now() + 365*24*60*60*1000).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-left space-y-2 text-xs text-slate-700">
               <div className="flex items-center space-x-2 font-bold text-slate-900">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>What's unlocked for you:</span>
+                <span>Important Trial Information:</span>
               </div>
               <ul className="space-y-1.5 pl-6 list-disc text-slate-600">
-                <li>Official scholar profile listed in the continental Directory</li>
-                <li>Automated academic evaluation for National, African & Global awards</li>
-                <li>Inclusion in the African Scholar of the Year ranking</li>
-                <li>No payment or credit card required for the entire year</li>
+                <li>Your trial begins today upon registration and will <strong>never reset</strong> when you update your profile.</li>
+                <li>You can track how many days you have left on your Scholar Dashboard at any time.</li>
+                <li>Automated academic evaluation for National, African & Global awards is active.</li>
+                <li>No payment, credit card, or renewal fee is required during this 1-year period.</li>
               </ul>
             </div>
 

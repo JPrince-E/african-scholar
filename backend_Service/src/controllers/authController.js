@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { User, ScholarProfile } = require('../models');
 const emailService = require('../services/emailService');
+const { formatProfile } = require('./profileController');
 
 const generateToken = (user) => {
   return jwt.sign(
@@ -97,7 +98,7 @@ exports.login = async (req, res) => {
         email: user.email,
         role: user.role,
         avatar_url: user.avatar_url,
-        profile: user.profile
+        profile: formatProfile(user.profile)
       }
     });
   } catch (error) {
@@ -113,9 +114,16 @@ exports.getMe = async (req, res) => {
       include: [{ model: ScholarProfile, as: 'profile' }]
     });
 
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
+    const userData = user.toJSON();
+    userData.profile = formatProfile(user.profile);
+
     return res.json({
       success: true,
-      user
+      user: userData
     });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });

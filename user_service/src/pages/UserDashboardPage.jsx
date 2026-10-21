@@ -14,7 +14,8 @@ import {
   MessageSquare,
   Bell,
   Megaphone,
-  FileText
+  FileText,
+  Sparkles
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -163,6 +164,79 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
           </button>
         </div>
       </div>
+
+      {/* 1-Year Free Trial Status & Expiry Countdown Banner */}
+      {profile && (
+        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-6 sm:p-7 border border-slate-700/80 shadow-xl text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative z-10">
+            <div className="space-y-3 max-w-2xl">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <ShieldCheck className="w-3.5 h-3.5 mr-1 text-emerald-400" />
+                  1-Year Free Trial Active
+                </span>
+                <span className="text-xs font-semibold text-slate-400">
+                  Inaugural Faculty Registry • $0.00 Annual Fee Waived
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-black text-white flex items-center gap-2">
+                  <span>Scholar Trial Countdown</span>
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed mt-1">
+                  Your complimentary 1-year free trial started at registration on{' '}
+                  <strong className="text-white">
+                    {new Date(profile.trial_started_at || profile.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                  </strong>{' '}
+                  and remains active until{' '}
+                  <strong className="text-emerald-300">
+                    {new Date(profile.trial_expires_at || (new Date(profile.trial_started_at || profile.created_at || Date.now()).getTime() + 365*24*60*60*1000)).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                  </strong>
+                  . Updating your academic profile or publications does <span className="underline decoration-coral-500 underline-offset-2 font-bold text-slate-100">not</span> reset this countdown.
+                </p>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="space-y-1.5 pt-1">
+                <div className="flex justify-between text-[11px] font-bold text-slate-400">
+                  <span>Registration Day</span>
+                  <span className="text-emerald-400 font-extrabold">
+                    {profile.trial_percentage_elapsed || 0}% Year Elapsed
+                  </span>
+                  <span>Day 365 Expiry</span>
+                </div>
+                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700/60 p-0.5">
+                  <div
+                    className="bg-gradient-to-r from-emerald-500 via-teal-400 to-coral-500 h-full rounded-full transition-all duration-1000"
+                    style={{ width: `${Math.min(100, Math.max(3, profile.trial_percentage_elapsed || 3))}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Countdown Stat Block */}
+            <div className="bg-slate-800/80 backdrop-blur-md rounded-2xl p-5 border border-slate-700 text-center sm:text-right shrink-0 w-full lg:w-auto min-w-[240px] shadow-lg">
+              <span className="text-[11px] uppercase font-bold text-slate-400 block tracking-wider">
+                Time Remaining Until Expiry
+              </span>
+              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight mt-1">
+                {profile.trial_days_remaining != null ? profile.trial_days_remaining : 365}
+                <span className="text-sm font-semibold text-slate-400 ml-1.5">days</span>
+              </div>
+              <div className="text-xs font-bold text-slate-300 mt-1 flex items-center justify-center sm:justify-end gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>{profile.trial_time_remaining || `${profile.trial_days_remaining || 365} days remaining`}</span>
+              </div>
+              <span className="inline-block mt-2.5 text-[10px] text-slate-400 border-t border-slate-700/60 pt-2 w-full">
+                Full directory & awards nominations unlocked
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Metrics Row */}
       {profile && (

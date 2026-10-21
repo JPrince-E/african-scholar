@@ -183,6 +183,18 @@ const ScholarProfile = sequelize.define('ScholarProfile', {
   paystack_reference: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+
+  // 1-Year Free Trial Tracking
+  trial_started_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'Timestamp when scholar trial started; never resets on profile update'
+  },
+  trial_expires_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'Timestamp when scholar 1-year free trial expires'
   }
 }, {
   timestamps: true,

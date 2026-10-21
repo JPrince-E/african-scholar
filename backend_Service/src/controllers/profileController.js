@@ -13,8 +13,42 @@ const formatProfile = (profile) => {
   if (typeof p.community_impact_activities === 'string') {
     try { p.community_impact_activities = JSON.parse(p.community_impact_activities); } catch (_) { p.community_impact_activities = []; }
   }
+
+  // 1-Year Free Trial Tracking (Starts at registration, never resets on profile update)
+  const startDate = p.trial_started_at ? new Date(p.trial_started_at) : (p.created_at ? new Date(p.created_at) : new Date());
+  const expiryDate = p.trial_expires_at ? new Date(p.trial_expires_at) : new Date(startDate.getTime() + 365 * 24 * 60 * 60 * 1000);
+  const now = new Date();
+
+  const totalDurationMs = Math.max(1, expiryDate.getTime() - startDate.getTime());
+  const elapsedMs = Math.max(0, now.getTime() - startDate.getTime());
+  const remainingMs = Math.max(0, expiryDate.getTime() - now.getTime());
+
+  const daysRemaining = Math.max(0, Math.ceil(remainingMs / (1000 * 60 * 60 * 24)));
+  const isTrialActive = remainingMs > 0;
+  const percentElapsed = Math.min(100, Math.max(0, Math.round((elapsedMs / totalDurationMs) * 100)));
+
+  const monthsRemaining = Math.floor(daysRemaining / 30);
+  const leftoverDays = daysRemaining % 30;
+  let timeRemainingFormatted = '';
+  if (daysRemaining <= 0) {
+    timeRemainingFormatted = 'Trial expired';
+  } else if (monthsRemaining >= 1) {
+    timeRemainingFormatted = `${monthsRemaining} month${monthsRemaining > 1 ? 's' : ''}${leftoverDays > 0 ? `, ${leftoverDays} day${leftoverDays > 1 ? 's' : ''}` : ''}`;
+  } else {
+    timeRemainingFormatted = `${daysRemaining} day${daysRemaining > 1 ? 's' : ''}`;
+  }
+
+  p.trial_started_at = startDate.toISOString();
+  p.trial_expires_at = expiryDate.toISOString();
+  p.trial_days_remaining = daysRemaining;
+  p.trial_time_remaining = timeRemainingFormatted;
+  p.trial_percentage_elapsed = percentElapsed;
+  p.is_trial_active = isTrialActive;
+
   return p;
 };
+
+exports.formatProfile = formatProfile;
 
 // Create or update the logged in scholar's profile
 exports.upsertProfile = async (req, res) => {
@@ -28,10 +62,28 @@ exports.upsertProfile = async (req, res) => {
     }
 
     let profile = await ScholarProfile.findOne({ where: { user_id: userId } });
+    const isNewRegistration = !profile;
 
     if (profile) {
+      // PREVENT RESETTING TRIAL:
+      // When updating an existing profile, trial dates must NEVER be overwritten or pushed forward
+      delete profileData.trial_started_at;
+      delete profileData.trial_expires_at;
+
+      // If existing profile was missing trial dates, seed from created_at
+      if (!profile.trial_started_at) {
+        const start = profile.created_at || new Date();
+        profile.trial_started_at = start;
+        profile.trial_expires_at = new Date(new Date(start).getTime() + 365 * 24 * 60 * 60 * 1000);
+      }
+
       await profile.update(profileData);
     } else {
+      // BRAND NEW REGISTRATION:
+      // Start 1-Year Free Trial counting from this registration moment
+      const now = new Date();
+      profileData.trial_started_at = now;
+      profileData.trial_expires_at = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
       profile = await ScholarProfile.create(profileData);
     }
 
@@ -47,7 +99,8 @@ exports.upsertProfile = async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'Profile saved successfully.',
+      message: isNewRegistration ? 'Scholar profile registered successfully!' : 'Scholar profile updated successfully.',
+      is_new_registration: isNewRegistration,
       profile: formatProfile(updatedProfile)
     });
   } catch (error) {
