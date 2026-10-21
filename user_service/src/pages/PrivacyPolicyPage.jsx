@@ -15,7 +15,6 @@ import {
   HelpCircle,
   Share2,
   Clock,
-  Printer,
   ChevronRight,
   UserCheck,
   Trash2,
@@ -25,10 +24,6 @@ import {
 
 export default function PrivacyPolicyPage({ setActiveTab }) {
   const [searchQuery, setSearchQuery] = useState('');
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   const sections = [
     { id: 'summary', title: 'I. Summary of Our Processing Activities' },
@@ -71,15 +66,8 @@ export default function PrivacyPolicyPage({ setActiveTab }) {
 
         <div className="flex items-center space-x-3 print:hidden shrink-0">
           <button
-            onClick={handlePrint}
-            className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition shadow-xs"
-          >
-            <Printer className="w-3.5 h-3.5 text-slate-500" />
-            <span>Print Policy</span>
-          </button>
-          <button
             onClick={() => setActiveTab('terms')}
-            className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-coral-600 bg-coral-50 border border-coral-200 hover:bg-coral-100 transition shadow-xs"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold text-coral-600 bg-coral-50 border border-coral-200 hover:bg-coral-100 transition shadow-xs"
           >
             <Scale className="w-3.5 h-3.5 text-coral-500" />
             <span>Terms & Conditions</span>
