@@ -790,6 +790,34 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
             </div>
           </div>
 
+          {/* Acceptance of General Award Conditions */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs text-slate-700 space-y-2.5">
+            <div className="flex items-center space-x-2 font-bold text-emerald-900">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>Acceptance of General Award Conditions</span>
+            </div>
+            <p className="leading-relaxed">
+              By submitting this nomination, you acknowledge that you are competing in either the <strong>Professorial category</strong> or the <strong>Doctoral (PhD) category</strong>. In accordance with the official award governance, registration benefits and award allocations distribute <strong>70% directly to the beneficiary and 30% for ongoing research activities</strong>. In the event of natural disasters or travel restrictions affecting attendance, virtual participation options will be communicated approximately two months before the conference.
+            </p>
+            <div className="pt-1 flex items-center space-x-3 text-[11px]">
+              <button
+                type="button"
+                onClick={() => setActiveTab('terms', 'awards')}
+                className="text-emerald-700 font-bold hover:underline"
+              >
+                View General Award Conditions
+              </button>
+              <span className="text-slate-400">•</span>
+              <button
+                type="button"
+                onClick={() => setActiveTab('privacy')}
+                className="text-azure-700 font-bold hover:underline"
+              >
+                Privacy Policy (Bluespectrum Innovative Ltd)
+              </button>
+            </div>
+          </div>
+
           <div className="pt-4 border-t border-slate-100 flex justify-end">
             <button
               type="submit"

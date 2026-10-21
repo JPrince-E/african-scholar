@@ -1042,6 +1042,33 @@ export default function RegisterScholarPage({ setActiveTab }) {
                 </p>
               </div>
             </div>
+
+            {/* Acceptance of Terms Statement */}
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-2">
+              <div className="flex items-center space-x-2 font-bold text-slate-900">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>Acceptance of Terms & Policies</span>
+              </div>
+              <p className="leading-relaxed">
+                By completing the registration process, participants acknowledge that they have read, understood, and agreed to the applicable{' '}
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('terms')}
+                  className="font-bold text-coral-600 hover:underline"
+                >
+                  Terms and Conditions
+                </button>
+                {' '}(including the General Award Conditions and 70%/30% allocation) and the{' '}
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('privacy')}
+                  className="font-bold text-azure-600 hover:underline"
+                >
+                  Privacy Policy
+                </button>
+                {' '}provided by Bluespectrum Innovative Limited.
+              </p>
+            </div>
           </div>
         )}
 

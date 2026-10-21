@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Mail, Lock, Award, CheckCircle2, AlertCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export default function AuthModal() {
+export default function AuthModal({ setActiveTab }) {
   const { authModalOpen, authMode, closeAuth, login, register, openAuth } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -99,7 +99,7 @@ export default function AuthModal() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
+                  placeholder="••••••••"
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:border-azure-500 focus:ring-3 focus:ring-azure-100 transition"
                 />
               </div>
@@ -115,8 +115,35 @@ export default function AuthModal() {
             </button>
           </form>
 
+          {/* Legal Note */}
+          <p className="mt-3 text-[11px] text-center text-slate-500 leading-snug">
+            By continuing, you agree to African Scholar’s{' '}
+            <button
+              type="button"
+              onClick={() => {
+                closeAuth();
+                if (setActiveTab) setActiveTab('terms');
+              }}
+              className="text-slate-700 underline hover:text-coral-600 font-semibold"
+            >
+              Terms & Conditions
+            </button>{' '}
+            and{' '}
+            <button
+              type="button"
+              onClick={() => {
+                closeAuth();
+                if (setActiveTab) setActiveTab('privacy');
+              }}
+              className="text-slate-700 underline hover:text-azure-600 font-semibold"
+            >
+              Privacy Policy
+            </button>
+            .
+          </p>
+
           {/* Mode Switcher */}
-          <div className="mt-6 text-center text-xs text-slate-500">
+          <div className="mt-4 text-center text-xs text-slate-500">
             {authMode === 'login' ? (
               <p>
                 Not registered yet?{' '}

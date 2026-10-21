@@ -18,7 +18,8 @@ import {
   HelpCircle,
   Lock,
   Layers,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Scale
 } from 'lucide-react';
 import api from '../services/api';
 
@@ -425,6 +426,34 @@ export default function AdvertisementShowcase() {
             </div>
           );
         })}
+      </div>
+
+      {/* Advertising Terms and Conditions (T&Cs) Policy Banner */}
+      <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-soft-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-coral-500 text-white flex items-center justify-center font-bold shadow-md shadow-coral-500/20">
+              <Scale className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-coral-600">
+                Official Commercial Directive
+              </span>
+              <h3 className="text-lg font-black text-slate-900">
+                Advertising Terms and Conditions (T&Cs)
+              </h3>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full w-fit">
+            Applies to Sponsorships (S), Partnerships (P) & Advertisements (A)
+          </span>
+        </div>
+
+        <div className="rounded-2xl bg-slate-50 border border-slate-200/90 p-5 space-y-3">
+          <p className="text-sm text-slate-800 leading-relaxed font-serif italic">
+            “The T&Cs shall apply to all Sponsorships (S), Partnerships (P) and Advertisements (A) with African Scholar Platform. Any “S”, “P” and “A” with African Scholar Platform shall not be deemed to come into effect unless and until either confirmed in writing by African Scholar Platform or after signing an MOU and the first “S”, “P” and “A” appears in the relevant section of the platform. By contacting African Scholar with “S”, “P” and “A”, the Customer/Client agrees to be bound by these T&Cs and the Rates offered, even if it is acting as agent or buyer for the actual advertiser/organisation. For the avoidance of doubt, the Customer/Client’s standard terms and conditions of purchase (or any other standard terms and conditions) shall not be applicable.”
+          </p>
+        </div>
       </div>
 
       {/* Live Approved Business Advertisements */}
@@ -837,6 +866,11 @@ export default function AdvertisementShowcase() {
                     <strong className="block font-bold">Important Editorial Policy:</strong>
                     Once your payment is authorized, your submission will be held in the <strong>Admin Review Queue</strong>. The administrator will inspect your banner creative and landing page to ensure compliance before toggling the advertisement live.
                   </div>
+                </div>
+
+                {/* Advertising T&Cs Confirmation */}
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 leading-snug">
+                  By clicking proceed, you agree to the <strong>African Scholar Advertising Terms and Conditions (T&Cs)</strong>. Any Sponsorship (S), Partnership (P) and Advertisement (A) comes into effect upon written confirmation or signed MOU and platform appearance. Customer standard purchasing terms are expressly superseded.
                 </div>
 
                 {/* Actions */}
