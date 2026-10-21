@@ -89,27 +89,44 @@ exports.markAsRead = async (req, res) => {
     const userId = req.user?.id || null;
     const notification = await Notification.findByPk(id);
 
-    if (notification) {
-      if (notification.user_id && notification.user_id === userId) {
-        // Direct personal notification for this user
-        notification.is_read = true;
-        await notification.save();
-      } else if (userId) {
-        // Broadcast notification: record this user in read_by array so others remain unaffected
-        const existing = Array.isArray(notification.read_by) ? [...notification.read_by] : [];
-        if (!existing.includes(userId)) {
-          existing.push(userId);
-          notification.read_by = existing;
-          await notification.save();
-        }
-      } else {
-        notification.is_read = true;
+    if (!notification) {
+      return res.status(404).json({ success: false, message: 'Notification not found' });
+    }
+
+    if (notification.user_id && userId && notification.user_id === userId) {
+      // Direct personal notification for this user
+      notification.is_read = true;
+      await notification.save();
+    } else if (userId) {
+      // Broadcast notification: record this user in read_by array so others remain unaffected
+      let existing = [];
+      if (Array.isArray(notification.read_by)) {
+        existing = [...notification.read_by];
+      } else if (typeof notification.read_by === 'string') {
+        try { existing = JSON.parse(notification.read_by); } catch (_) { existing = []; }
+      }
+      if (!existing.includes(userId)) {
+        existing.push(userId);
+        notification.read_by = existing;
+        notification.changed('read_by', true);
         await notification.save();
       }
+    } else {
+      notification.is_read = true;
+      await notification.save();
     }
-    res.json({ success: true, notification });
+    
+    return res.json({
+      success: true,
+      message: 'Notification marked as read',
+      notification: {
+        ...(notification.toJSON ? notification.toJSON() : notification),
+        is_read: true
+      }
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Error in markAsRead:', error);
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -128,19 +145,26 @@ exports.markAllAsRead = async (req, res) => {
         where: { user_id: null }
       });
       for (const b of broadcasts) {
-        const existing = Array.isArray(b.read_by) ? [...b.read_by] : [];
+        let existing = [];
+        if (Array.isArray(b.read_by)) {
+          existing = [...b.read_by];
+        } else if (typeof b.read_by === 'string') {
+          try { existing = JSON.parse(b.read_by); } catch (_) { existing = []; }
+        }
         if (!existing.includes(userId)) {
           existing.push(userId);
           b.read_by = existing;
+          b.changed('read_by', true);
           await b.save();
         }
       }
     } else {
       await Notification.update({ is_read: true }, { where: {} });
     }
-    res.json({ success: true, message: 'All notifications marked as read' });
+    return res.json({ success: true, message: 'All notifications marked as read' });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Error in markAllAsRead:', error);
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 

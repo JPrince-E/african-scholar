@@ -97,6 +97,9 @@ exports.upsertProfile = async (req, res) => {
       include: [{ model: User, as: 'user', attributes: ['id', 'email', 'avatar_url', 'role'] }]
     });
 
+    // Invalidate directory cache so new/updated profile appears immediately in directory
+    directoryCache.clear();
+
     return res.json({
       success: true,
       message: isNewRegistration ? 'Scholar profile registered successfully!' : 'Scholar profile updated successfully.',
@@ -155,58 +158,71 @@ exports.getPublicDirectory = async (req, res) => {
       return res.json(cached.data);
     }
 
-    const where = {};
     const isPostgres = ScholarProfile.sequelize.getDialect() === 'postgres';
     const matchOp = isPostgres ? Op.iLike : Op.like;
+    const conditions = [];
 
-    if (country) {
-      where.country = country;
+    if (country && country.trim()) {
+      conditions.push({ country: { [matchOp]: `%${country.trim()}%` } });
     }
-    if (university) {
-      where.university_name = university;
+    if (university && university.trim()) {
+      conditions.push({ university_name: { [matchOp]: `%${university.trim()}%` } });
     }
-    if (discipline) {
-      where.discipline = { [matchOp]: `%${discipline}%` };
+    if (discipline && discipline.trim()) {
+      conditions.push({ discipline: { [matchOp]: `%${discipline.trim()}%` } });
     }
-    if (title) {
-      where.title = title;
+    if (title && title.trim()) {
+      conditions.push({ title: title.trim() });
     }
 
     if (citationTier === '10000') {
-      where.citations_count = { [Op.gte]: 10000 };
+      conditions.push({ citations_count: { [Op.gte]: 10000 } });
     } else if (citationTier === '5000') {
-      where.citations_count = { [Op.gte]: 5000 };
+      conditions.push({ citations_count: { [Op.gte]: 5000 } });
     } else if (citationTier === '1000') {
-      where.citations_count = { [Op.gte]: 1000 };
+      conditions.push({ citations_count: { [Op.gte]: 1000 } });
     } else if (citationTier === 'H20') {
-      where.google_h_index = { [Op.gte]: 20 };
+      conditions.push({ google_h_index: { [Op.gte]: 20 } });
     }
 
+    // Category filter: 'title' and 'highest_degree' are Postgres ENUM types
+    // Use Op.in with valid enum literals to prevent operator does not exist errors
     if (category === 'PROFESSORIAL') {
-      where.title = { [matchOp]: '%Prof%' };
+      conditions.push({
+        title: { [Op.in]: ['Full Prof', 'Associate Prof', 'Assistant Prof'] }
+      });
     } else if (category === 'DOCTORAL') {
-      where[Op.or] = [
-        { title: { [matchOp]: '%Dr%' } },
-        { highest_degree: { [matchOp]: '%PhD%' } }
-      ];
+      conditions.push({
+        [Op.or]: [
+          { title: 'Dr' },
+          { highest_degree: { [Op.in]: ['PhD', 'DSc'] } }
+        ]
+      });
     }
 
-    if (sdg) {
-      where[Op.or] = [
-        { discipline: { [matchOp]: `%${sdg}%` } },
-        { research_focus: { [matchOp]: `%${sdg}%` } }
-      ];
+    if (sdg && sdg.trim()) {
+      conditions.push({
+        [Op.or]: [
+          { discipline: { [matchOp]: `%${sdg.trim()}%` } },
+          { research_focus: { [matchOp]: `%${sdg.trim()}%` } }
+        ]
+      });
     }
 
-    if (search) {
-      where[Op.or] = [
-        { first_name: { [matchOp]: `%${search}%` } },
-        { surname: { [matchOp]: `%${search}%` } },
-        { university_name: { [matchOp]: `%${search}%` } },
-        { discipline: { [matchOp]: `%${search}%` } },
-        { research_focus: { [matchOp]: `%${search}%` } }
-      ];
+    if (search && search.trim()) {
+      const q = search.trim();
+      conditions.push({
+        [Op.or]: [
+          { first_name: { [matchOp]: `%${q}%` } },
+          { surname: { [matchOp]: `%${q}%` } },
+          { university_name: { [matchOp]: `%${q}%` } },
+          { discipline: { [matchOp]: `%${q}%` } },
+          { research_focus: { [matchOp]: `%${q}%` } }
+        ]
+      });
     }
+
+    const where = conditions.length > 0 ? { [Op.and]: conditions } : {};
 
     const offset = (Math.max(1, parseInt(page)) - 1) * parseInt(limit);
     const validSortFields = ['citations_count', 'publications_count', 'google_h_index', 'created_at'];

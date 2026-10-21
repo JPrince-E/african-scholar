@@ -363,6 +363,7 @@ export default function DirectoryPage() {
   };
 
   const handleResetFilters = () => {
+    directoryClientCache.clear();
     setSearch('');
     setCountry('');
     setUniversity('');

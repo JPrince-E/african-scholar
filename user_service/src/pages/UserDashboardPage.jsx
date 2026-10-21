@@ -72,7 +72,19 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
     }
   }, [user]);
 
-  const handleBulletinNavigation = (link) => {
+  const handleBulletinNavigation = async (item) => {
+    if (!item) return;
+    const link = typeof item === 'string' ? item : item.link;
+    const id = typeof item === 'object' ? item.id : null;
+
+    if (id) {
+      // Optimistically mark as read immediately
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+      api.put(`/notifications/${id}/read`).catch(err => {
+        console.warn('Error marking notification read:', err);
+      });
+    }
+
     if (!link) return;
     if (link.startsWith('http://') || link.startsWith('https://')) {
       window.open(link, '_blank');
@@ -91,8 +103,6 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
       if (setActiveTab) setActiveTab('register_scholar');
     } else if (setActiveTab) {
       setActiveTab(clean);
-    } else {
-      window.location.href = link;
     }
   };
 
@@ -326,7 +336,10 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
             {notifications.slice(0, 4).map((item) => (
               <div
                 key={item.id}
-                className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60 flex flex-col justify-between space-y-2 hover:border-slate-600 transition"
+                onClick={() => handleBulletinNavigation(item)}
+                className={`p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60 flex flex-col justify-between space-y-2 hover:border-slate-500 transition cursor-pointer ${
+                  !item.is_read ? 'ring-1 ring-orange-500/30' : 'opacity-85'
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-1">
@@ -337,14 +350,22 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
                       {new Date(item.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                  <h4 className="text-xs font-bold text-white leading-snug">{item.title}</h4>
+                  <h4 className="text-xs font-bold text-white leading-snug flex items-center justify-between">
+                    <span>{item.title}</span>
+                    {!item.is_read && (
+                      <span className="w-2 h-2 rounded-full bg-orange-400 shrink-0" title="Unread" />
+                    )}
+                  </h4>
                   <p className="text-[11px] text-slate-300 line-clamp-2 mt-1 leading-relaxed">{item.message}</p>
                 </div>
 
                 {item.link && (
                   <button
                     type="button"
-                    onClick={() => handleBulletinNavigation(item.link)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleBulletinNavigation(item);
+                    }}
                     className="inline-flex items-center text-[11px] font-bold text-orange-400 hover:text-orange-300 transition pt-1 cursor-pointer"
                   >
                     <span>View details</span>

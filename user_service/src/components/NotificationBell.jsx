@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Award, Users, Sparkles, Bell } from 'lucide-react';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://african-scholar-api.onrender.com/api' : 'http://localhost:5000/api');
+import api from '../services/api';
 
 const NotificationBell = ({ onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,17 +10,15 @@ const NotificationBell = ({ onNavigate }) => {
 
   const fetchNotifications = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/notifications`);
-      const data = await res.json();
-      if (data.success) {
-        setNotifications(data.notifications || []);
-        setUnreadCount(data.unreadCount || 0);
+      const res = await api.get('/notifications');
+      if (res.data.success) {
+        setNotifications(res.data.notifications || []);
+        setUnreadCount(res.data.unreadCount || 0);
       }
     } catch (err) {
       console.error('Failed to load notifications:', err);
     }
   };
-
 
   useEffect(() => {
     fetchNotifications();
@@ -42,7 +39,7 @@ const NotificationBell = ({ onNavigate }) => {
 
   const handleMarkAsRead = async (id, link) => {
     try {
-      await fetch(`${API_BASE_URL}/notifications/${id}/read`, { method: 'PUT' });
+      await api.put(`/notifications/${id}/read`);
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
       setUnreadCount(prev => Math.max(0, prev - 1));
       if (link) {
@@ -60,7 +57,7 @@ const NotificationBell = ({ onNavigate }) => {
 
   const handleMarkAllRead = async () => {
     try {
-      await fetch(`${API_BASE_URL}/notifications/read-all`, { method: 'POST' });
+      await api.post('/notifications/read-all');
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
       setUnreadCount(0);
     } catch (err) {
