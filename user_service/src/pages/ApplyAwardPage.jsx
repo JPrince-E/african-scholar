@@ -55,11 +55,21 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Requirement 15: Payment eligibility state (Free for 1st year, $1 thereafter)
   const [eligibility, setEligibility] = useState(null);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [paymentReference, setPaymentReference] = useState('');
   const [paying, setPaying] = useState(false);
+
+  // Close payment modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && paymentModalOpen) {
+        setPaymentModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [paymentModalOpen]);
 
   // Evidence inputs
   const [evidence, setEvidence] = useState({
@@ -962,8 +972,15 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
 
       {/* Requirement 15: Payment Modal for $1 Application Fee */}
       {paymentModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
-          <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 my-auto">
+            <button
+              type="button"
+              onClick={() => setPaymentModalOpen(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-xl transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
             <div className="text-center space-y-2">
               <div className="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center font-black">
                 <Award className="w-7 h-7 text-amber-600" />

@@ -146,6 +146,18 @@ export default function AdvertisementShowcase() {
 
   const [submittedAd, setSubmittedAd] = useState(null);
 
+  // Close modals on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (modalOpen) setModalOpen(false);
+        if (invoiceModalOpen) setInvoiceModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [modalOpen, invoiceModalOpen]);
+
   // Fetch approved active ads
   const fetchActiveAds = async () => {
     try {
@@ -387,7 +399,7 @@ export default function AdvertisementShowcase() {
             className="w-full md:w-auto px-5 py-3 rounded-2xl bg-coral-500 hover:bg-coral-600 text-white text-xs font-black transition flex items-center justify-center space-x-2 shrink-0 shadow-lg shadow-coral-500/25 cursor-pointer"
           >
             <FileText className="w-4 h-4" />
-            <span>Generate Corporate Pro-Forma Invoice</span>
+            <span>Download Sponsorship Quotation / Rate Card</span>
           </button>
         </div>
       </div>
@@ -582,7 +594,7 @@ export default function AdvertisementShowcase() {
       {/* AD BOOKING & PAYMENT MODAL */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-xl bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl my-8">
+          <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl my-auto">
             {/* Modal Header */}
             <div className="flex justify-between items-center border-b border-slate-200 pb-4">
               <div>

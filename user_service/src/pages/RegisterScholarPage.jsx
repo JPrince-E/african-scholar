@@ -252,8 +252,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
       if (res.data.success) {
         await fetchCurrentUser();
         if (isExistingProfile || !res.data.is_new_registration) {
-          // When updating profile, DO NOT reset trial, DO NOT pop up first-time modal
-          setSuccessMessage('Scholar profile & metrics updated successfully! Your 1-Year Free Trial countdown remains active and unaffected.');
+          setSuccessMessage('Scholar profile & metrics updated successfully!');
           setTimeout(() => {
             setActiveTab('dashboard');
           }, 1500);
@@ -313,7 +312,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           {isEditMode
-            ? 'Update your academic milestones, publications, and supervised degrees. (Your 1-year free trial countdown remains active and is never reset by profile updates).'
+            ? 'Update your academic milestones, publications, and supervised degrees.'
             : 'Complete the official fields specified for the African Scholar faculty registry and annual academic awards.'}
         </p>
 
@@ -329,7 +328,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
                 <strong>
                   {new Date(user.profile.trial_expires_at || (new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).getTime() + 365*24*60*60*1000)).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </strong>
-                . Saving updates will <span className="font-bold underline decoration-coral-500">not</span> reset your trial date.
+                .
               </span>
             </div>
             <span className="shrink-0 font-extrabold px-3 py-1 rounded-xl bg-emerald-600 text-white shadow-xs">
@@ -1129,12 +1128,12 @@ export default function RegisterScholarPage({ setActiveTab }) {
                       1-Year Free Trial Active: {user.profile.trial_days_remaining != null ? user.profile.trial_days_remaining : 365} Days Remaining
                     </p>
                     <p className="text-slate-400 mt-1">
-                      Your trial began on {new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} and remains valid until {new Date(user.profile.trial_expires_at || (new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).getTime() + 365*24*60*60*1000)).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}. Saving profile updates will not reset or reduce your remaining days.
+                      Your trial began on {new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} and remains valid until {new Date(user.profile.trial_expires_at || (new Date(user.profile.trial_started_at || user.profile.created_at || Date.now()).getTime() + 365*24*60*60*1000)).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}.
                     </p>
                   </div>
                 ) : (
                   <p className="leading-relaxed">
-                    The African Scholar board has waived all registration fees for the inaugural 2027 academic cycle. Your 1-Year Free Trial starts immediately upon registration and will remain active for 365 days regardless of future profile updates.
+                    The African Scholar board has waived all registration fees for the inaugural 2027 academic cycle. Your 1-Year Free Trial starts immediately upon registration and will remain active for 365 days.
                   </p>
                 )}
               </div>
@@ -1210,8 +1209,8 @@ export default function RegisterScholarPage({ setActiveTab }) {
 
       {/* 1-Year Free Trial Activation Modal (Persistent until user clicks OK) */}
       {showTrialNotificationModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-slate-100 shadow-2xl text-center space-y-6 relative animate-scale-up">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 border border-slate-100 shadow-2xl text-center space-y-6 relative animate-scale-up my-auto">
             <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-100 shadow-inner">
               <Sparkles className="w-8 h-8 text-emerald-500 animate-pulse" />
             </div>
@@ -1250,7 +1249,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
                 <span>Important Trial Information:</span>
               </div>
               <ul className="space-y-1.5 pl-6 list-disc text-slate-600">
-                <li>Your trial begins today upon registration and will <strong>never reset</strong> when you update your profile.</li>
+                <li>Your trial begins today upon registration.</li>
                 <li>You can track how many days you have left on your Scholar Dashboard at any time.</li>
                 <li>Automated academic evaluation for National, African & Global awards is active.</li>
                 <li>No payment, credit card, or renewal fee is required during this 1-year period.</li>

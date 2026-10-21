@@ -31,6 +31,11 @@ const Notification = sequelize.define('Notification', {
   is_read: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  read_by: {
+    type: DataTypes.JSON,
+    defaultValue: [],
+    comment: 'Array of user IDs who have marked this notification as read'
   }
 }, {
   timestamps: true,

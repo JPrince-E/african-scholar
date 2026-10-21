@@ -164,6 +164,17 @@ const UniversityLeaderboard = () => {
   const [loading, setLoading] = useState(false);
   const [selectedUni, setSelectedUni] = useState(null);
 
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && selectedUni) {
+        setSelectedUni(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedUni]);
+
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
@@ -301,7 +312,7 @@ const UniversityLeaderboard = () => {
       {/* University Faculty Breakdown Modal */}
       {selectedUni && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-6">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-slate-200 my-auto">
             {/* Header */}
             <div className="bg-slate-900 text-white p-6 sm:p-8 flex items-start justify-between">
               <div className="flex items-center space-x-4">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Mail, Lock, Award, CheckCircle2, AlertCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -8,6 +8,16 @@ export default function AuthModal({ setActiveTab }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Close modal when Escape key is pressed
+  useEffect(() => {
+    if (!authModalOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') closeAuth();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [authModalOpen, closeAuth]);
 
   if (!authModalOpen) return null;
 
@@ -38,8 +48,8 @@ export default function AuthModal({ setActiveTab }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
+      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-slate-100 my-auto">
         {/* Header decoration */}
         <div className="hero-solid-bg bg-dot-pattern p-6 text-white text-center relative">
           <button

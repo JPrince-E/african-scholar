@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trophy, Award, X, Printer, CheckCircle2, ShieldCheck, Sparkles, Share2, ExternalLink, Copy, Check } from 'lucide-react';
 
 export default function LaureateCertificateModal({ winner, laureateData, onClose }) {
   const [copied, setCopied] = useState(false);
+
+  // Close modal when Escape key is pressed
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   // Normalize data whether passed via winner object or laureateData object
   const data = laureateData || {};
@@ -47,7 +56,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto print:p-0 print:bg-white print:static">
-      <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden my-6 border border-slate-200 print:shadow-none print:border-none print:m-0 print:max-w-none">
+      <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl my-auto border border-slate-200 print:shadow-none print:border-none print:m-0 print:max-w-none print:max-h-none print:overflow-visible">
         
         {/* Top Control Bar (Hidden during print) */}
         <div className="bg-slate-900 text-white px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 print:hidden">

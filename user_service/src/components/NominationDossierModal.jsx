@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   X,
   Printer,
@@ -15,6 +15,15 @@ import {
 } from 'lucide-react';
 
 export default function NominationDossierModal({ app, profile, userEmail, onClose }) {
+  // Close modal when Escape key is pressed
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   if (!app) return null;
 
   const award = app.award || {};
@@ -64,7 +73,7 @@ export default function NominationDossierModal({ app, profile, userEmail, onClos
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-sm overflow-y-auto print:p-0 print:bg-white">
-      <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-6 print:m-0 print:border-none print:shadow-none print:w-full">
+      <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-slate-200 my-auto print:m-0 print:max-h-none print:overflow-visible print:border-none print:shadow-none print:w-full">
         {/* Top Action Bar (hidden on print) */}
         <div className="sticky top-0 z-20 bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800 print:hidden">
           <div className="flex items-center space-x-2">

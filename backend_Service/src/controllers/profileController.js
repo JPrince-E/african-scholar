@@ -126,6 +126,32 @@ exports.getMyProfile = async (req, res) => {
   }
 };
 
+// Directory in-memory caching for ultra-fast response times
+const directoryCache = new Map();
+const DIRECTORY_CACHE_TTL = 20 * 1000; // 20 seconds
+
+const DIRECTORY_ATTRIBUTES = [
+  'id',
+  'user_id',
+  'title',
+  'first_name',
+  'surname',
+  'other_names',
+  'university_name',
+  'country',
+  'discipline',
+  'department',
+  'highest_degree',
+  'citations_count',
+  'publications_count',
+  'google_h_index',
+  'google_i10_index',
+  'research_focus',
+  'trial_started_at',
+  'trial_expires_at',
+  'created_at'
+];
+
 // Public directory of scholars with search and filters
 exports.getPublicDirectory = async (req, res) => {
   try {
@@ -143,6 +169,12 @@ exports.getPublicDirectory = async (req, res) => {
       page = 1,
       limit = 12
     } = req.query;
+
+    const cacheKey = JSON.stringify({ search, country, university, discipline, title, category, citationTier, sdg, sortBy, order, page, limit });
+    const cached = directoryCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < DIRECTORY_CACHE_TTL) {
+      return res.json(cached.data);
+    }
 
     const where = {};
     const isPostgres = ScholarProfile.sequelize.getDialect() === 'postgres';
@@ -204,9 +236,12 @@ exports.getPublicDirectory = async (req, res) => {
 
     const { count, rows: scholars } = await ScholarProfile.findAndCountAll({
       where,
+      attributes: DIRECTORY_ATTRIBUTES,
       limit: parseInt(limit),
       offset,
       order: [[sortField, sortOrder]],
+      distinct: true,
+      col: 'id',
       include: [
         {
           model: User,
@@ -216,13 +251,22 @@ exports.getPublicDirectory = async (req, res) => {
       ]
     });
 
-    return res.json({
+    const responseData = {
       success: true,
       total: count,
       page: parseInt(page),
       totalPages: Math.ceil(count / parseInt(limit)),
       scholars: scholars.map(formatProfile)
-    });
+    };
+
+    directoryCache.set(cacheKey, { timestamp: Date.now(), data: responseData });
+    // Keep directory cache size reasonable
+    if (directoryCache.size > 200) {
+      const oldestKey = directoryCache.keys().next().value;
+      directoryCache.delete(oldestKey);
+    }
+
+    return res.json(responseData);
   } catch (error) {
     console.error('Error fetching directory:', error);
     return res.status(500).json({ success: false, message: error.message });
@@ -256,9 +300,17 @@ exports.getScholarById = async (req, res) => {
   }
 };
 
+let cachedFilterOptions = null;
+let cachedFilterOptionsTime = 0;
+const FILTER_OPTIONS_TTL = 10 * 60 * 1000; // 10 minutes
+
 // Summary metrics of professors by country and universities for directory filters
 exports.getFilterOptions = async (req, res) => {
   try {
+    if (cachedFilterOptions && Date.now() - cachedFilterOptionsTime < FILTER_OPTIONS_TTL) {
+      return res.json(cachedFilterOptions);
+    }
+
     const countries = await ScholarProfile.findAll({
       attributes: ['country'],
       group: ['country'],
@@ -277,12 +329,17 @@ exports.getFilterOptions = async (req, res) => {
       raw: true
     });
 
-    return res.json({
+    const result = {
       success: true,
       countries: countries.map(c => c.country).filter(Boolean),
       universities: universities.map(u => u.university_name).filter(Boolean),
       disciplines: disciplines.map(d => d.discipline).filter(Boolean)
-    });
+    };
+
+    cachedFilterOptions = result;
+    cachedFilterOptionsTime = Date.now();
+
+    return res.json(result);
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }

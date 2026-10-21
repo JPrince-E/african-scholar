@@ -37,18 +37,7 @@ export const isAcademicVerified = (email) => {
   return lower.includes('.edu') || lower.includes('.ac.') || lower.includes('.org') || lower.includes('.gov');
 };
 
-const AFRICAN_HUBS = [
-  'Nigeria',
-  'South Africa',
-  'Egypt',
-  'Kenya',
-  'Ghana',
-  'Uganda',
-  'Ethiopia',
-  'Morocco',
-  'Rwanda',
-  'Senegal'
-];
+const directoryClientCache = new Map();
 
 const CITATION_TIERS = [
   { id: '', label: 'All Citation Ranks' },
@@ -245,40 +234,89 @@ export default function DirectoryPage() {
   });
 
   const directoryTopRef = useRef(null);
+  const activeAbortControllerRef = useRef(null);
+  const isInitialMount = useRef(true);
+
+  // Close scholar modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && selectedScholar) {
+        setSelectedScholar(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedScholar]);
 
   const fetchScholars = async (targetPage = page) => {
+    const params = new URLSearchParams();
+    if (search.trim()) params.append('search', search.trim());
+    if (country) params.append('country', country);
+    if (university) params.append('university', university);
+    if (category && category !== 'ALL') params.append('category', category);
+    if (citationTier) params.append('citationTier', citationTier);
+    if (sortBy) params.append('sortBy', sortBy);
+    params.append('page', targetPage);
+    params.append('limit', limit);
+
+    const cacheKey = params.toString();
+    if (directoryClientCache.has(cacheKey)) {
+      const cached = directoryClientCache.get(cacheKey);
+      setScholars(cached.scholars || []);
+      setTotal(cached.total || 0);
+      setTotalPages(cached.totalPages || 1);
+      setPage(cached.page || 1);
+      setLoading(false);
+      return;
+    }
+
+    // Cancel previous in-flight request if user rapidly changed filters
+    if (activeAbortControllerRef.current) {
+      activeAbortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    activeAbortControllerRef.current = controller;
+
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (search.trim()) params.append('search', search.trim());
-      if (country) params.append('country', country);
-      if (university) params.append('university', university);
-      if (category && category !== 'ALL') params.append('category', category);
-      if (citationTier) params.append('citationTier', citationTier);
-      if (sortBy) params.append('sortBy', sortBy);
-      params.append('page', targetPage);
-      params.append('limit', limit);
-
-      const res = await api.get(`/profiles/directory?${params.toString()}`);
+      const res = await api.get(`/profiles/directory?${cacheKey}`, { signal: controller.signal });
       if (res.data.success) {
-        setScholars(res.data.scholars || []);
-        setTotal(res.data.total || 0);
-        setTotalPages(res.data.totalPages || 1);
-        setPage(res.data.page || 1);
+        const payload = {
+          scholars: res.data.scholars || [],
+          total: res.data.total || 0,
+          totalPages: res.data.totalPages || 1,
+          page: res.data.page || 1
+        };
+        directoryClientCache.set(cacheKey, payload);
+        // Limit client cache size
+        if (directoryClientCache.size > 100) {
+          const oldest = directoryClientCache.keys().next().value;
+          directoryClientCache.delete(oldest);
+        }
+
+        setScholars(payload.scholars);
+        setTotal(payload.total);
+        setTotalPages(payload.totalPages);
+        setPage(payload.page);
       }
     } catch (err) {
-      console.error('Error loading scholars:', err);
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error('Error loading scholars:', err);
+      }
     } finally {
-      setLoading(false);
+      if (activeAbortControllerRef.current === controller) {
+        setLoading(false);
+      }
     }
   };
 
   // Fetch filter options on mount
   useEffect(() => {
+    let isMounted = true;
     const fetchOptions = async () => {
       try {
         const res = await api.get('/profiles/filter-options');
-        if (res.data.success) {
+        if (res.data.success && isMounted) {
           setFilterOptions(res.data);
         }
       } catch (err) {
@@ -286,6 +324,7 @@ export default function DirectoryPage() {
       }
     };
     fetchOptions();
+    return () => { isMounted = false; };
   }, []);
 
   // Update universities when country changes
@@ -301,20 +340,18 @@ export default function DirectoryPage() {
     return () => { isMounted = false; };
   }, [country]);
 
-  // Refetch when filters or limit change (reset to page 1)
+  // Unified debounced fetch: instant on mount, 300ms debounce when user types search
   useEffect(() => {
-    setPage(1);
-    fetchScholars(1);
-  }, [country, university, category, citationTier, sortBy, limit]);
+    const delay = isInitialMount.current ? 0 : 300;
+    isInitialMount.current = false;
 
-  // Debounced search (350ms)
-  useEffect(() => {
     const timer = setTimeout(() => {
       setPage(1);
       fetchScholars(1);
-    }, 350);
+    }, delay);
+
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [country, university, category, citationTier, sortBy, limit, search]);
 
   const handlePageChange = (newPage) => {
     if (newPage < 1 || newPage > totalPages || newPage === page) return;
@@ -421,45 +458,6 @@ export default function DirectoryPage() {
               <X className="w-4 h-4" />
             </button>
           )}
-        </div>
-
-        {/* Pan-African Regional Geographic Hubs */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
-          <span className="text-[11px] font-bold text-slate-400 mr-1 flex items-center gap-1">
-            <Globe2 className="w-3.5 h-3.5 text-slate-400" />
-            <span>Top Hubs:</span>
-          </span>
-          <button
-            type="button"
-            onClick={() => { setCountry(''); setUniversity(''); }}
-            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition ${
-              country === ''
-                ? 'bg-slate-900 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            All Africa
-          </button>
-          {AFRICAN_HUBS.map((hub) => {
-            const active = country === hub;
-            return (
-              <button
-                key={hub}
-                type="button"
-                onClick={() => {
-                  setCountry(active ? '' : hub);
-                  setUniversity('');
-                }}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
-                  active
-                    ? 'bg-azure-600 text-white shadow-xs font-bold'
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-                }`}
-              >
-                {hub}
-              </button>
-            );
-          })}
         </div>
 
         {/* Category Switcher Tabs */}
@@ -876,7 +874,7 @@ export default function DirectoryPage() {
       {/* SCHOLAR PROFILE MODAL (With full document fields) */}
       {selectedScholar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-150">
-          <div className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-y-auto my-8">
+          <div className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-y-auto my-auto">
             {/* Modal Header */}
             <div className="sticky top-0 z-10 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
               <div className="flex items-center space-x-2">

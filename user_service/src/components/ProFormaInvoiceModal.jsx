@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   Printer,
@@ -12,11 +12,20 @@ import {
 } from 'lucide-react';
 
 export default function ProFormaInvoiceModal({ onClose }) {
-  const [companyName, setCompanyName] = useState('Standard Chartered Pan-Africa / Elsevier');
-  const [billingContact, setBillingContact] = useState('Dr. Marcus Eze');
-  const [billingEmail, setBillingEmail] = useState('corporate.partnerships@standardchartered.com');
+  const [companyName, setCompanyName] = useState('Partner Institution / Corporate Sponsor');
+  const [billingContact, setBillingContact] = useState('Corporate Partnerships Officer');
+  const [billingEmail, setBillingEmail] = useState('partnerships@sponsor-org.com');
   const [billingCountry, setBillingCountry] = useState('Nigeria');
   const [selectedTier, setSelectedTier] = useState('MONTHLY');
+
+  // Close modal when Escape key is pressed
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const invoiceNumber = `AS-INV-2027-${Math.floor(10000 + Math.random() * 90000)}`;
   const invoiceDate = new Date().toLocaleDateString('en-GB', {
@@ -47,13 +56,13 @@ export default function ProFormaInvoiceModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-sm overflow-y-auto print:p-0 print:bg-white">
-      <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-6 print:m-0 print:border-none print:shadow-none print:w-full">
+      <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-slate-200 my-auto print:m-0 print:max-h-none print:overflow-visible print:border-none print:shadow-none print:w-full">
         {/* Top Controls Bar (hidden during printing) */}
-        <div className="bg-slate-900 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 print:hidden">
+        <div className="bg-slate-900 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 print:hidden sticky top-0 z-20">
           <div className="flex items-center space-x-2">
             <FileText className="w-5 h-5 text-coral-400" />
             <span className="text-sm font-black tracking-wide">
-              Official Corporate Sponsorship Pro-Forma Invoice
+              Official Corporate Sponsorship Quotation & Rate Card (Pro-Forma)
             </span>
           </div>
 
