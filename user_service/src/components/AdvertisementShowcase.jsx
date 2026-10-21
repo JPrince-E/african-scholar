@@ -371,37 +371,6 @@ export default function AdvertisementShowcase() {
             Editorial Quality Guarantee
           </span>
         </div>
-
-        {/* Pan-African Reach Analytics & Pro-Forma Invoice Action */}
-        <div className="mt-4 p-5 rounded-3xl bg-slate-900 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 text-left">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center w-full md:w-auto flex-1">
-            <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
-              <span className="text-[10px] uppercase font-bold text-slate-400 block">Monthly Impressions</span>
-              <span className="text-lg font-black text-white font-mono">1,850,000+</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
-              <span className="text-[10px] uppercase font-bold text-coral-400 block">Avg. Academic CTR</span>
-              <span className="text-lg font-black text-coral-400 font-mono">3.8%</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
-              <span className="text-[10px] uppercase font-bold text-azure-400 block">African Institutions</span>
-              <span className="text-lg font-black text-azure-400 font-mono">280+ Unis</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
-              <span className="text-[10px] uppercase font-bold text-emerald-400 block">Verified Scholars</span>
-              <span className="text-lg font-black text-emerald-400 font-mono">45,000+</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setInvoiceModalOpen(true)}
-            className="w-full md:w-auto px-5 py-3 rounded-2xl bg-coral-500 hover:bg-coral-600 text-white text-xs font-black transition flex items-center justify-center space-x-2 shrink-0 shadow-lg shadow-coral-500/25 cursor-pointer"
-          >
-            <FileText className="w-4 h-4" />
-            <span>Download Sponsorship Quotation / Rate Card</span>
-          </button>
-        </div>
       </div>
 
       {/* Pricing Packages Grid */}
@@ -1007,9 +976,6 @@ export default function AdvertisementShowcase() {
         </div>
       )}
 
-      {invoiceModalOpen && (
-        <ProFormaInvoiceModal onClose={() => setInvoiceModalOpen(false)} />
-      )}
     </section>
   );
 }

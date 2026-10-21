@@ -130,27 +130,6 @@ exports.getMyProfile = async (req, res) => {
 const directoryCache = new Map();
 const DIRECTORY_CACHE_TTL = 20 * 1000; // 20 seconds
 
-const DIRECTORY_ATTRIBUTES = [
-  'id',
-  'user_id',
-  'title',
-  'first_name',
-  'surname',
-  'other_names',
-  'university_name',
-  'country',
-  'discipline',
-  'department',
-  'highest_degree',
-  'citations_count',
-  'publications_count',
-  'google_h_index',
-  'google_i10_index',
-  'research_focus',
-  'trial_started_at',
-  'trial_expires_at',
-  'created_at'
-];
 
 // Public directory of scholars with search and filters
 exports.getPublicDirectory = async (req, res) => {
@@ -236,12 +215,10 @@ exports.getPublicDirectory = async (req, res) => {
 
     const { count, rows: scholars } = await ScholarProfile.findAndCountAll({
       where,
-      attributes: DIRECTORY_ATTRIBUTES,
       limit: parseInt(limit),
       offset,
       order: [[sortField, sortOrder]],
       distinct: true,
-      col: 'id',
       include: [
         {
           model: User,
