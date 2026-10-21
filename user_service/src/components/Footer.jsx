@@ -1,13 +1,13 @@
 import React from 'react';
-import { Award, Globe2, Mail, ShieldCheck, ExternalLink, Heart } from 'lucide-react';
+import { Award, ExternalLink } from 'lucide-react';
 
 export default function Footer({ setActiveTab }) {
   return (
     <footer className="bg-[#041329] text-slate-400 pt-16 pb-12 border-t border-slate-800/80 mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 pb-12 border-b border-slate-800/80">
-          {/* Col 1 */}
-          <div className="space-y-4 sm:col-span-2 lg:col-span-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-slate-800/80">
+          {/* Col 1: Platform Overview */}
+          <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-xl bg-coral-500 flex items-center justify-center text-white shadow-md shadow-coral-500/25">
                 <Award className="w-5 h-5" />
@@ -17,13 +17,9 @@ export default function Footer({ setActiveTab }) {
             <p className="text-sm text-slate-400 leading-relaxed">
               The premier pan-African platform celebrating academic excellence, tracking research citations, and awarding university professors and doctoral scholars (Ph.D. / Dr.) across Africa.
             </p>
-            <div className="flex items-center space-x-2 text-xs text-emerald-400 font-medium bg-emerald-950/40 border border-emerald-800/50 px-3 py-1.5 rounded-full w-fit">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Independent Peer Review Standard</span>
-            </div>
           </div>
 
-          {/* Col 2 */}
+          {/* Col 2: Platform Services */}
           <div className="space-y-3">
             <h4 className="eyebrow-accent">Platform Services</h4>
             <ul className="space-y-2 text-sm">
@@ -50,7 +46,7 @@ export default function Footer({ setActiveTab }) {
             </ul>
           </div>
 
-          {/* Col 3 */}
+          {/* Col 3: Award Tiers */}
           <div className="space-y-3">
             <h4 className="eyebrow-accent">Award Tiers</h4>
             <ul className="space-y-2 text-sm">
@@ -109,23 +105,6 @@ export default function Footer({ setActiveTab }) {
                 </button>
               </li>
             </ul>
-          </div>
-
-          {/* Col 5: Administration */}
-          <div className="space-y-3 sm:col-span-2 lg:col-span-1">
-            <h4 className="eyebrow-accent">Administration</h4>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Accredited institutional reviewer or committee member? Access the administrative station.
-            </p>
-            <a
-              href={import.meta.env.VITE_ADMIN_URL || (import.meta.env.PROD ? "https://african-scholar-admin.vercel.app" : "http://localhost:3001")}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center space-x-2 text-sm font-semibold text-azure-400 hover:text-azure-300 bg-azure-950/60 hover:bg-azure-900/60 border border-azure-800/60 px-4 py-2 rounded-xl transition"
-            >
-              <span>Admin Station</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
           </div>
         </div>
 
