@@ -16,10 +16,39 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { PROFESSORIAL_AWARDS, DOCTORAL_AWARDS } from './AwardsPage';
+
+const parseJsonArray = (val) => {
+  if (!val) return [];
+  if (Array.isArray(val)) return val;
+  if (typeof val === 'string') {
+    try {
+      const parsed = JSON.parse(val);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+};
+
+const parseJsonObject = (val) => {
+  if (!val) return {};
+  if (typeof val === 'object' && val !== null) return val;
+  if (typeof val === 'string') {
+    try {
+      return JSON.parse(val);
+    } catch {
+      return {};
+    }
+  }
+  return {};
+};
 
 export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
   const { user, openAuth } = useAuth();
   const [awards, setAwards] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState('PROFESSORIAL'); // 'PROFESSORIAL' | 'DOCTORAL'
   const [currentAwardId, setCurrentAwardId] = useState(selectedAwardId || null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -207,18 +236,18 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
     });
   };
 
+  const fallbackAwards = [...PROFESSORIAL_AWARDS, ...DOCTORAL_AWARDS];
+  const allAwards = awards.length > 0 ? awards : fallbackAwards;
+
   useEffect(() => {
     const fetchAwards = async () => {
       try {
         const res = await api.get('/awards');
-        if (res.data.success) {
+        if (res.data.success && res.data.awards && res.data.awards.length > 0) {
           setAwards(res.data.awards);
-          if (!currentAwardId && res.data.awards.length > 0) {
-            setCurrentAwardId(res.data.awards[0].id);
-          }
         }
       } catch (err) {
-        console.error('Failed to load awards:', err);
+        console.error('Failed to load awards, using defaults:', err);
       } finally {
         setLoading(false);
       }
@@ -226,7 +255,22 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
     fetchAwards();
   }, []);
 
-  const selectedAward = awards.find((a) => a.id === parseInt(currentAwardId)) || awards[0];
+  useEffect(() => {
+    if (selectedAwardId && allAwards.length > 0) {
+      const found = allAwards.find(a => a.id === parseInt(selectedAwardId));
+      if (found) {
+        setCurrentAwardId(found.id);
+        if (found.category) {
+          setCategoryFilter(found.category);
+        }
+      }
+    } else if (!currentAwardId && allAwards.length > 0) {
+      setCurrentAwardId(allAwards[0].id);
+    }
+  }, [selectedAwardId, awards]);
+
+  const selectedAward = allAwards.find((a) => a.id === parseInt(currentAwardId)) || allAwards[0];
+  const filteredAwards = allAwards.filter(a => (a.category || 'PROFESSORIAL') === categoryFilter);
 
   const handleEvidenceChange = (e) => {
     const { name, value } = e.target;
@@ -398,33 +442,110 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
         </div>
       )}
 
-      {/* Select Award Tier */}
-      <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-soft-xl space-y-4">
-        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-          Select Award Category
-        </label>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {awards.map((a) => (
+      {/* Select Award Category & Tier */}
+      <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-soft-xl space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+              Select Award Category & Tier
+            </label>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Choose your nomination category: Professorial Category or Doctoral (Ph.D.) Category.
+            </p>
+          </div>
+          {/* Category Toggle */}
+          <div className="inline-flex p-1 rounded-xl bg-slate-100 border border-slate-200 shrink-0">
             <button
-              key={a.id}
               type="button"
-              onClick={() => setCurrentAwardId(a.id)}
-              className={`p-4 rounded-2xl text-left border transition ${
-                selectedAward?.id === a.id
-                  ? 'border-brand-500 bg-brand-50 text-brand-900 ring-2 ring-brand-200 font-bold'
-                  : 'border-slate-200 hover:border-slate-300 text-slate-700'
+              onClick={() => {
+                setCategoryFilter('PROFESSORIAL');
+                const firstProf = allAwards.find(a => (a.category || 'PROFESSORIAL') === 'PROFESSORIAL');
+                if (firstProf) setCurrentAwardId(firstProf.id);
+              }}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
+                categoryFilter === 'PROFESSORIAL'
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <span className="text-[10px] font-black uppercase text-brand-600 block">
-                {a.tier} TIER
-              </span>
-              <span className="text-sm font-bold block mt-1">{a.title}</span>
-              <span className="text-xs text-amber-600 font-black mt-2 block">
-                {a.award_value?.prize_amount}
-              </span>
+              Professorial Honors
             </button>
-          ))}
+            <button
+              type="button"
+              onClick={() => {
+                setCategoryFilter('DOCTORAL');
+                const firstDoc = allAwards.find(a => a.category === 'DOCTORAL');
+                if (firstDoc) setCurrentAwardId(firstDoc.id);
+              }}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
+                categoryFilter === 'DOCTORAL'
+                  ? 'bg-coral-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Doctoral (Ph.D.) Honors
+            </button>
+          </div>
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {filteredAwards.map((a) => {
+            const val = parseJsonObject(a.award_value);
+            const isSelected = selectedAward?.id === a.id;
+            return (
+              <button
+                key={a.id}
+                type="button"
+                onClick={() => setCurrentAwardId(a.id)}
+                className={`p-4 rounded-2xl text-left border transition ${
+                  isSelected
+                    ? (a.category === 'DOCTORAL' ? 'border-coral-500 bg-coral-50/80 text-coral-950 ring-2 ring-coral-300 font-bold' : 'border-brand-500 bg-brand-50 text-brand-900 ring-2 ring-brand-200 font-bold')
+                    : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-slate-50/50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-md ${
+                    a.category === 'DOCTORAL' ? 'bg-coral-100 text-coral-800' : 'bg-brand-100 text-brand-700'
+                  }`}>
+                    {a.tier} TIER
+                  </span>
+                  <span className="text-[10px] font-bold text-slate-400">
+                    {a.year || '2027'}
+                  </span>
+                </div>
+                <span className="text-sm font-bold block mt-2 leading-snug">{a.title}</span>
+                <span className="text-sm text-amber-600 font-black mt-2 block">
+                  {val.prize_amount || (a.category === 'DOCTORAL' ? (a.tier === 'NATIONAL' ? '$2,500' : a.tier === 'CONTINENTAL' ? '$7,500' : '$15,000') : '$5,000')}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Selected Award Summary & Key Evaluation Index Box */}
+        {selectedAward && (
+          <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-brand-600 shrink-0" />
+                <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  Evaluation Index Benchmarks ({selectedAward.category === 'DOCTORAL' ? 'Doctoral / Ph.D.' : 'Professorial'})
+                </span>
+              </div>
+              <span className="text-xs font-extrabold text-amber-700 bg-amber-100/80 px-2.5 py-0.5 rounded-full w-fit">
+                Award Amount: {parseJsonObject(selectedAward.award_value).prize_amount || (selectedAward.category === 'DOCTORAL' ? (selectedAward.tier === 'NATIONAL' ? '$2,500' : selectedAward.tier === 'CONTINENTAL' ? '$7,500' : '$15,000') : '$5,000')}
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-700 pt-1">
+              {parseJsonArray(selectedAward.evaluation_index).map((item, idx) => (
+                <div key={idx} className="flex items-start space-x-2 p-2 rounded-xl bg-white border border-slate-200/60 shadow-2xs">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <span className="leading-snug">{item.rule}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Immutability & Privacy Banner Notice */}
@@ -687,7 +808,7 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
 
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-              6. Doctoral & Masters Supervision Summary *
+              {selectedAward.category === 'DOCTORAL' ? '6. MSc / PhD Supervision Summary (Graduating PhDs is an Added Advantage) *' : '6. Doctoral & Masters Supervision Summary *'}
             </label>
             <input
               type="text"
@@ -695,7 +816,15 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
               name="supervision_graduates"
               value={evidence.supervision_graduates}
               onChange={handleEvidenceChange}
-              placeholder="e.g. 14 PhDs & 32 MSc graduates verified by Postgraduate School"
+              placeholder={
+                selectedAward.category === 'DOCTORAL'
+                  ? (selectedAward.tier === 'NATIONAL'
+                      ? 'e.g. At least 3 MSc supervised (graduating PhD/s is an added advantage)'
+                      : selectedAward.tier === 'CONTINENTAL'
+                      ? 'e.g. At least 5 MSc & 2 PhD graduates supervised'
+                      : 'e.g. At least 7 MSc & 5 PhD graduates supervised')
+                  : 'e.g. 14 PhDs & 32 MSc graduates verified by Postgraduate School'
+              }
               className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:border-brand-500 focus:outline-hidden"
             />
           </div>

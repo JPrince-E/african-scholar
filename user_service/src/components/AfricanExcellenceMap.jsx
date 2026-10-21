@@ -25,17 +25,19 @@ const AfricanExcellenceMap = () => {
     fetchStats();
   }, []);
 
+  const [metricFilter, setMetricFilter] = useState('ALL'); // 'ALL' | 'PROFESSORS' | 'PHDS'
+
   const countryData = stats?.countryStats || {
-    'Nigeria': { scholars: 380, applications: 84, laureates: 16, flagship: 'University of Ibadan', countryCode: 'NG' },
-    'South Africa': { scholars: 290, applications: 76, laureates: 18, flagship: 'University of Cape Town', countryCode: 'ZA' },
-    'Egypt': { scholars: 270, applications: 68, laureates: 15, flagship: 'Cairo University', countryCode: 'EG' },
-    'Kenya': { scholars: 210, applications: 52, laureates: 11, flagship: 'University of Nairobi', countryCode: 'KE' },
-    'Ghana': { scholars: 185, applications: 44, laureates: 10, flagship: 'KNUST', countryCode: 'GH' },
-    'Uganda': { scholars: 155, applications: 38, laureates: 9, flagship: 'Makerere University', countryCode: 'UG' },
-    'Senegal': { scholars: 120, applications: 28, laureates: 7, flagship: 'Cheikh Anta Diop University', countryCode: 'SN' },
-    'Ethiopia': { scholars: 140, applications: 32, laureates: 6, flagship: 'Addis Ababa University', countryCode: 'ET' },
-    'Rwanda': { scholars: 110, applications: 26, laureates: 5, flagship: 'University of Rwanda', countryCode: 'RW' },
-    'Morocco': { scholars: 130, applications: 30, laureates: 6, flagship: 'Mohammed V University', countryCode: 'MA' }
+    'Nigeria': { professors: '240,000+', phds: '180,000+', scholars: '420,000+', applications: 84, laureates: 17, flagship: 'University of Ibadan', countryCode: 'NG' },
+    'South Africa': { professors: '190,000+', phds: '160,000+', scholars: '350,000+', applications: 76, laureates: 28, flagship: 'University of Cape Town', countryCode: 'ZA' },
+    'Egypt': { professors: '170,000+', phds: '140,000+', scholars: '310,000+', applications: 68, laureates: 21, flagship: 'Cairo University', countryCode: 'EG' },
+    'Kenya': { professors: '68,000+', phds: '52,000+', scholars: '120,000+', applications: 52, laureates: 11, flagship: 'University of Nairobi', countryCode: 'KE' },
+    'Ghana': { professors: '54,000+', phds: '41,000+', scholars: '95,000+', applications: 44, laureates: 13, flagship: 'KNUST', countryCode: 'GH' },
+    'Uganda': { professors: '42,000+', phds: '33,000+', scholars: '75,000+', applications: 38, laureates: 14, flagship: 'Makerere University', countryCode: 'UG' },
+    'Senegal': { professors: '25,000+', phds: '20,000+', scholars: '45,000+', applications: 28, laureates: 7, flagship: 'Cheikh Anta Diop University', countryCode: 'SN' },
+    'Ethiopia': { professors: '31,000+', phds: '24,000+', scholars: '55,000+', applications: 32, laureates: 6, flagship: 'Addis Ababa University', countryCode: 'ET' },
+    'Rwanda': { professors: '19,000+', phds: '16,000+', scholars: '35,000+', applications: 26, laureates: 5, flagship: 'University of Rwanda', countryCode: 'RW' },
+    'Morocco': { professors: '34,000+', phds: '26,000+', scholars: '60,000+', applications: 30, laureates: 6, flagship: 'Mohammed V University', countryCode: 'MA' }
   };
 
   const countries = Object.keys(countryData);
@@ -47,17 +49,56 @@ const AfricanExcellenceMap = () => {
       <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-azure-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <div className="max-w-3xl mb-8 relative z-10">
-        <div className="inline-flex items-center gap-2 bg-coral-500/10 border border-coral-500/30 text-coral-400 text-xs font-bold uppercase tracking-widest px-3.5 py-1 rounded-full mb-3">
-          <Globe2 className="w-3.5 h-3.5" />
-          <span>Pan-African Excellence Radar</span>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 relative z-10">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 bg-coral-500/10 border border-coral-500/30 text-coral-400 text-xs font-bold uppercase tracking-widest px-3.5 py-1 rounded-full mb-3">
+            <Globe2 className="w-3.5 h-3.5" />
+            <span>Pan-African Excellence Radar</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Continental Academic Footprint
+          </h2>
+          <p className="text-slate-400 text-sm sm:text-base mt-2">
+            Mapping professors and doctoral (Ph.D.) scholars across Nigeria, Kenya, Ghana, and all 54 African nations.
+          </p>
         </div>
-        <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Continental Academic Footprint
-        </h2>
-        <p className="text-slate-400 text-sm sm:text-base mt-2">
-          Tracking laureate distribution, university citations, and cross-border research collaboration across 54 African member states.
-        </p>
+
+        {/* View Toggle: All Scholars vs Professors vs PhDs */}
+        <div className="inline-flex p-1 rounded-xl bg-slate-900 border border-slate-700/80 shrink-0">
+          <button
+            type="button"
+            onClick={() => setMetricFilter('ALL')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+              metricFilter === 'ALL'
+                ? 'bg-amber-500 text-slate-950 shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            All Scholars (1.5M+)
+          </button>
+          <button
+            type="button"
+            onClick={() => setMetricFilter('PROFESSORS')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+              metricFilter === 'PROFESSORS'
+                ? 'bg-blue-500 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Professors (850k+)
+          </button>
+          <button
+            type="button"
+            onClick={() => setMetricFilter('PHDS')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+              metricFilter === 'PHDS'
+                ? 'bg-emerald-500 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Ph.D. Scholars (650k+)
+          </button>
+        </div>
       </div>
 
       {/* Metrics Bar */}
@@ -66,17 +107,17 @@ const AfricanExcellenceMap = () => {
           <div className="text-2xl sm:text-3xl font-extrabold text-amber-400">54</div>
           <div className="text-xs text-slate-400 font-medium mt-0.5">African Nations</div>
         </div>
-        <div className="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400">1 M+</div>
-          <div className="text-xs text-slate-400 font-medium mt-0.5">Enrolled Scholars</div>
+        <div className={`bg-slate-800/70 border rounded-2xl p-4 text-center transition ${metricFilter === 'PROFESSORS' ? 'border-blue-400 bg-blue-950/40' : 'border-slate-700/60'}`}>
+          <div className="text-2xl sm:text-3xl font-extrabold text-blue-400">850k+</div>
+          <div className="text-xs text-slate-300 font-semibold mt-0.5">Professors Mapped</div>
+        </div>
+        <div className={`bg-slate-800/70 border rounded-2xl p-4 text-center transition ${metricFilter === 'PHDS' ? 'border-emerald-400 bg-emerald-950/40' : 'border-slate-700/60'}`}>
+          <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400">650k+</div>
+          <div className="text-xs text-slate-300 font-semibold mt-0.5">Ph.D. Scholars Mapped</div>
         </div>
         <div className="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-extrabold text-blue-400">25+</div>
-          <div className="text-xs text-slate-400 font-medium mt-0.5">Laureates Honored</div>
-        </div>
-        <div className="bg-slate-800/70 border border-slate-700/60 rounded-2xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-extrabold text-purple-400">$4.2M</div>
-          <div className="text-xs text-slate-400 font-medium mt-0.5">Grants Conferred</div>
+          <div className="text-2xl sm:text-3xl font-extrabold text-purple-400">1.5M+</div>
+          <div className="text-xs text-slate-400 font-medium mt-0.5">Total Enrolled Scholars</div>
         </div>
       </div>
 
@@ -226,14 +267,35 @@ const AfricanExcellenceMap = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 my-5">
-            <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3">
-              <div className="text-[10px] text-slate-400 uppercase font-semibold">Active Scholars</div>
-              <div className="text-lg font-bold text-white mt-0.5">{activeCountry.scholars}</div>
+          {/* Professorial vs Doctoral Census Breakdown */}
+          <div className="grid grid-cols-2 gap-3 my-4">
+            <div className={`p-3.5 rounded-xl border transition ${metricFilter === 'PROFESSORS' ? 'bg-blue-950/70 border-blue-400 ring-2 ring-blue-500/30' : 'bg-slate-800/60 border-slate-700/60'}`}>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-blue-300 uppercase font-black tracking-wider">Professors Mapped</span>
+                <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+              </div>
+              <div className="text-xl font-extrabold text-white mt-1">{activeCountry.professors || '—'}</div>
+              <span className="text-[10px] text-slate-400">Full & Assoc. Professors</span>
             </div>
-            <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3">
+
+            <div className={`p-3.5 rounded-xl border transition ${metricFilter === 'PHDS' ? 'bg-emerald-950/70 border-emerald-400 ring-2 ring-emerald-500/30' : 'bg-slate-800/60 border-slate-700/60'}`}>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-emerald-300 uppercase font-black tracking-wider">Doctoral (Ph.D.)</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              </div>
+              <div className="text-xl font-extrabold text-white mt-1">{activeCountry.phds || '—'}</div>
+              <span className="text-[10px] text-slate-400">Ph.D. Researchers & Fellows</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-3">
+              <div className="text-[10px] text-slate-400 uppercase font-semibold">Total Country Scholars</div>
+              <div className="text-base font-bold text-amber-300 mt-0.5">{activeCountry.scholars}</div>
+            </div>
+            <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-3">
               <div className="text-[10px] text-slate-400 uppercase font-semibold">Evaluated Dossiers</div>
-              <div className="text-lg font-bold text-white mt-0.5">{activeCountry.applications}</div>
+              <div className="text-base font-bold text-white mt-0.5">{activeCountry.applications}</div>
             </div>
           </div>
 

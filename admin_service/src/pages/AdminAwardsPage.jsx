@@ -27,9 +27,11 @@ export default function AdminAwardsPage() {
   // Modal / Form state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAward, setEditingAward] = useState(null);
+  const [categoryTab, setCategoryTab] = useState('ALL'); // 'ALL' | 'PROFESSORIAL' | 'DOCTORAL'
 
   const [formData, setFormData] = useState({
     title: '',
+    category: 'PROFESSORIAL',
     tier: 'NATIONAL',
     country: 'Nigeria',
     year: 2027,
@@ -67,6 +69,7 @@ export default function AdminAwardsPage() {
     setEditingAward(null);
     setFormData({
       title: '',
+      category: 'PROFESSORIAL',
       tier: 'NATIONAL',
       country: 'Nigeria',
       year: 2027,
@@ -90,6 +93,7 @@ export default function AdminAwardsPage() {
 
     setFormData({
       title: award.title || '',
+      category: award.category || 'PROFESSORIAL',
       tier: award.tier || 'NATIONAL',
       country: award.country || '',
       year: award.year || 2027,
@@ -143,6 +147,7 @@ export default function AdminAwardsPage() {
 
     const payload = {
       title: formData.title,
+      category: formData.category || 'PROFESSORIAL',
       tier: formData.tier,
       country: formData.tier === 'NATIONAL' ? formData.country : null,
       year: parseInt(formData.year) || 2027,
@@ -316,41 +321,71 @@ export default function AdminAwardsPage() {
         </div>
       ) : (
         <div className="space-y-6">
-          {awards.map((award) => {
-            const evalList = Array.isArray(award.evaluation_index) ? award.evaluation_index : [];
-            const awardVal = award.award_value || {};
-
-            return (
-              <div
-                key={award.id}
-                className={`bg-white rounded-3xl border transition-all overflow-hidden shadow-sm ${
-                  !award.is_active ? 'opacity-70 border-slate-200 bg-slate-50/50' : 'border-slate-200 hover:border-slate-300'
+          {/* Category Filter Tabs */}
+          <div className="flex items-center space-x-2 pb-2">
+            {[
+              { id: 'ALL', label: 'All Categories' },
+              { id: 'PROFESSORIAL', label: 'Professorial Category' },
+              { id: 'DOCTORAL', label: 'Doctoral Category (PhDs)' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setCategoryTab(tab.id)}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
+                  categoryTab === tab.id
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900'
                 }`}
               >
-                {/* Header Row */}
-                <div className="p-6 sm:p-8 bg-slate-900 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                  <div className="space-y-2 max-w-2xl">
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
-                        award.tier === 'NATIONAL'
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                          : award.tier === 'CONTINENTAL'
-                          ? 'bg-coral-500/20 text-coral-300 border border-coral-500/30'
-                          : 'bg-azure-500/20 text-azure-300 border border-azure-500/30'
-                      }`}>
-                        {award.tier} TIER
-                      </span>
-                      {award.country && (
-                        <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                          {award.country}
-                        </span>
-                      )}
-                      <span className="text-xs text-slate-400 font-medium">Cycle Year: {award.year}</span>
-                    </div>
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-                    <h3 className="text-xl sm:text-2xl font-black text-white">{award.title}</h3>
-                    <p className="text-xs text-slate-300 leading-relaxed">{award.description}</p>
-                  </div>
+          {awards
+            .filter((a) => categoryTab === 'ALL' || (a.category || 'PROFESSORIAL') === categoryTab)
+            .map((award) => {
+              const evalList = Array.isArray(award.evaluation_index) ? award.evaluation_index : [];
+              const awardVal = award.award_value || {};
+
+              return (
+                <div
+                  key={award.id}
+                  className={`bg-white rounded-3xl border transition-all overflow-hidden shadow-sm ${
+                    !award.is_active ? 'opacity-70 border-slate-200 bg-slate-50/50' : 'border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  {/* Header Row */}
+                  <div className="p-6 sm:p-8 bg-slate-900 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div className="space-y-2 max-w-2xl">
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
+                          award.category === 'DOCTORAL'
+                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                            : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                        }`}>
+                          {award.category || 'PROFESSORIAL'}
+                        </span>
+                        <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
+                          award.tier === 'NATIONAL'
+                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                            : award.tier === 'CONTINENTAL'
+                            ? 'bg-coral-500/20 text-coral-300 border border-coral-500/30'
+                            : 'bg-azure-500/20 text-azure-300 border border-azure-500/30'
+                        }`}>
+                          {award.tier} TIER
+                        </span>
+                        {award.country && (
+                          <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                            {award.country}
+                          </span>
+                        )}
+                        <span className="text-xs text-slate-400 font-medium">Cycle Year: {award.year}</span>
+                      </div>
+
+                      <h3 className="text-xl sm:text-2xl font-black text-white">{award.title}</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">{award.description}</p>
+                    </div>
 
                   <div className="flex flex-col md:items-end gap-3 shrink-0 w-full md:w-auto">
                     <div className="text-left md:text-right">
@@ -473,7 +508,7 @@ export default function AdminAwardsPage() {
 
             {/* Modal Form */}
             <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6 max-h-[75vh] overflow-y-auto">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
                     Award Category Title *
@@ -486,6 +521,20 @@ export default function AdminAwardsPage() {
                     placeholder="e.g. Continental Laureate in Agricultural Research & Food Security"
                     className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 outline-none"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
+                    Category Type *
+                  </label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 outline-none font-bold"
+                  >
+                    <option value="PROFESSORIAL">PROFESSORIAL (Professors)</option>
+                    <option value="DOCTORAL">DOCTORAL (PhDs / Dr.)</option>
+                  </select>
                 </div>
 
                 <div>

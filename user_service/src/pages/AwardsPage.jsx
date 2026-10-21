@@ -28,20 +28,197 @@ const parseJsonArray = (val) => {
   return [];
 };
 
+const parseJsonObject = (val) => {
+  if (!val) return {};
+  if (typeof val === 'object' && val !== null) return val;
+  if (typeof val === 'string') {
+    try {
+      return JSON.parse(val);
+    } catch {
+      return {};
+    }
+  }
+  return {};
+};
+
+export const PROFESSORIAL_AWARDS = [
+  {
+    id: 1,
+    category: 'PROFESSORIAL',
+    tier: 'NATIONAL',
+    title: 'National Professorial Scholar of the Year (Nigeria)',
+    country: 'Nigeria',
+    description: 'Recognizing outstanding academic output, high impact research, and national leadership across Nigerian universities.',
+    award_value: {
+      prize_amount: '$5,000',
+      plaque: 'National Academic Laureate Plaque',
+      icon_items: 'Gold Medal Pin of Excellence',
+      podcast_interview: 'Exclusive Feature on The African Scholar Podcast'
+    },
+    evaluation_index: [
+      { rule: 'Attended at least 3 conferences within Nigeria in the last 3 years (including evaluation year)', benchmark: '>= 3 Conferences', key: 'conferences_last_3_years' },
+      { rule: 'Cited by researchers across different regions (West, East, South, North Nigeria)', benchmark: 'All 4 Regional Citations', key: 'national_citation_spread' },
+      { rule: 'At least 25 total publications by evaluation year', benchmark: '>= 25 Publications', key: 'min_publications' },
+      { rule: 'At least 1 publication in Q1 journal OR at least 3 in Q2 in evaluation year', benchmark: '>= 1 Q1 or >= 3 Q2', key: 'q1_q2_journals' },
+      { rule: 'At least 2,500 citations by evaluation year', benchmark: '>= 2,500 Citations', key: 'min_citations' },
+      { rule: 'At least h-index of 15 by evaluation year', benchmark: '>= 15 h-index', key: 'min_h_index' },
+      { rule: 'Supervised at least 5 MSc and 3 PhD graduates', benchmark: '>= 5 MSc & 3 PhD', key: 'graduates_supervised' },
+      { rule: 'At least 1 local/national research collaboration within the last 5 years', benchmark: '>= 1 Collaboration', key: 'national_collaboration' },
+      { rule: 'At least 1 research grant within the last 5 years', benchmark: '>= 1 Grant', key: 'research_grants' }
+    ],
+    year: 2027
+  },
+  {
+    id: 2,
+    category: 'PROFESSORIAL',
+    tier: 'CONTINENTAL',
+    title: 'Continental Professorial Scholar of the Year (Africa)',
+    country: null,
+    description: 'The highest continental academic honour, celebrating pioneering research that addresses African development and cross-border innovation.',
+    award_value: {
+      prize_amount: '$15,000',
+      plaque: 'Pan-African Scholar Trophy',
+      icon_items: 'African Scholar Commemorative Insignia',
+      podcast_interview: 'Continental Broadcast & Documentary Feature'
+    },
+    evaluation_index: [
+      { rule: 'Attended at least 2 conferences on the African continent in the last 3 years', benchmark: '>= 2 Continental Conferences', key: 'continental_conferences' },
+      { rule: 'Cited by researchers from diverse African regions (West, East, South, North)', benchmark: 'Pan-African Regional Spread', key: 'continental_citations' },
+      { rule: 'At least 50 total publications by evaluation year', benchmark: '>= 50 Publications', key: 'min_publications' },
+      { rule: 'At least 2 publications in Q1 journal OR at least 5 in Q2 in evaluation year', benchmark: '>= 2 Q1 or >= 5 Q2', key: 'q1_q2_journals' },
+      { rule: 'At least 5,000 citations by evaluation year', benchmark: '>= 5,000 Citations', key: 'min_citations' },
+      { rule: 'At least h-index of 25 by evaluation year', benchmark: '>= 25 h-index', key: 'min_h_index' },
+      { rule: 'Supervised at least 10 MSc and 5 PhD graduates', benchmark: '>= 10 MSc & 5 PhD', key: 'graduates_supervised' },
+      { rule: 'At least 1 research grant (national/continental/international) in last 3 years', benchmark: '>= 1 Grant (3 yrs)', key: 'research_grants' },
+      { rule: 'At least 1 continental or international collaboration in last 3 years', benchmark: '>= 1 Continental Collab', key: 'continental_collaboration' }
+    ],
+    year: 2027
+  },
+  {
+    id: 3,
+    category: 'PROFESSORIAL',
+    tier: 'GLOBAL',
+    title: 'Global Professorial Scholar of the Year',
+    country: null,
+    description: 'Honouring an African scholar whose breakthrough contributions have gained definitive international acclaim and worldwide adoption.',
+    award_value: {
+      prize_amount: '$30,000',
+      plaque: 'Global Academic Laureate Plaque & Sash',
+      icon_items: 'Custom Diamond Lapel & Medal of Honour',
+      podcast_interview: 'Global Keynote Address & International Media Circuit'
+    },
+    evaluation_index: [
+      { rule: 'Attended conferences on at least 2 continents in the last 3 years', benchmark: '>= 2 Continents', key: 'global_conferences' },
+      { rule: 'Cited by researchers from all continents (Africa, Europe, Asia, Americas, Oceania)', benchmark: 'Worldwide Citations', key: 'global_citations' },
+      { rule: 'At least 75 total publications by evaluation year', benchmark: '>= 75 Publications', key: 'min_publications' },
+      { rule: 'At least 3 publications in Q1 journal OR at least 10 in Q2 in evaluation year', benchmark: '>= 3 Q1 or >= 10 Q2', key: 'q1_q2_journals' },
+      { rule: 'At least 2 publications in journals with Impact Factor (IF) > 10 in evaluation year', benchmark: '>= 2 IF > 10', key: 'high_impact_publications' },
+      { rule: 'At least 50,000 citations by evaluation year', benchmark: '>= 50,000 Citations', key: 'min_citations' },
+      { rule: 'At least h-index of 50 by evaluation year', benchmark: '>= 50 h-index', key: 'min_h_index' },
+      { rule: 'Supervised at least 10 MSc and 10 PhD graduates', benchmark: '>= 10 MSc & 10 PhD', key: 'graduates_supervised' },
+      { rule: 'At least 1 international collaboration in last 3 years', benchmark: '>= 1 Global Collab', key: 'international_collaboration' },
+      { rule: 'At least 2 research grants (national/continental/international) in last 3 years', benchmark: '>= 2 Major Grants', key: 'research_grants' }
+    ],
+    year: 2027
+  }
+];
+
+export const DOCTORAL_AWARDS = [
+  {
+    id: 4,
+    category: 'DOCTORAL',
+    tier: 'NATIONAL',
+    title: 'National Doctoral Scholar of the Year (Nigeria)',
+    country: 'Nigeria',
+    description: 'Recognizing emerging doctoral scholars and PhD researchers demonstrating outstanding citation velocity and national peer impact.',
+    award_value: {
+      prize_amount: '$2,500',
+      plaque: 'Plaque award',
+      icon_items: 'Icon item/s',
+      podcast_interview: 'Interview/Podcast session with doctoral person of the year'
+    },
+    evaluation_index: [
+      { rule: 'Attended at least one (1) conference within the country WITHIN the last three years (with the year of evaluation included)', benchmark: '>= 1 Conference within country (last 3 yrs)', key: 'conferences_last_3_years' },
+      { rule: 'At least 25 publications BY the year of the evaluation', benchmark: '>= 25 Publications', key: 'min_publications' },
+      { rule: 'At least one (1) publication in Q1 journal or at least three (3) publications in Q2 IN the year of the evaluation', benchmark: '>= 1 Q1 or >= 3 Q2 (eval year)', key: 'q1_q2_journals' },
+      { rule: 'At least 2000 citations BY the year of the evaluation', benchmark: '>= 2,000 Citations', key: 'min_citations' },
+      { rule: 'At least h-index 12 BY the year of the evaluation', benchmark: '>= 12 h-index', key: 'min_h_index' },
+      { rule: 'At least 3 MSc (graduating PhD/s is an added advantage) BY the year of the evaluation', benchmark: '>= 3 MSc (PhD added advantage)', key: 'graduates_supervised' },
+      { rule: 'At least one (1) collaboration (locally/national) WITHIN the last five years (with the year of evaluation included)', benchmark: '>= 1 Collaboration locally/national (last 5 yrs)', key: 'national_collaboration' }
+    ],
+    year: 2027
+  },
+  {
+    id: 5,
+    category: 'DOCTORAL',
+    tier: 'CONTINENTAL',
+    title: 'Continental Doctoral Scholar of the Year (Africa)',
+    country: null,
+    description: 'Celebrating high-caliber African doctoral researchers and PhD fellows whose cross-regional investigations address key African challenges.',
+    award_value: {
+      prize_amount: '$7,500',
+      plaque: 'Plaque award',
+      icon_items: 'Icon item/s',
+      podcast_interview: 'Interview/Podcast session with doctoral person of the year'
+    },
+    evaluation_index: [
+      { rule: 'Attended one (1) conference on the continent (Africa) WITHIN the last three years (with the year of evaluation included)', benchmark: '>= 1 Conference in Africa (last 3 yrs)', key: 'continental_conferences' },
+      { rule: 'Cited by researchers from different regions of Africa: west, east, south, north BY the year of the evaluation', benchmark: 'Cited by West, East, South & North Africa', key: 'continental_citations' },
+      { rule: 'At least 40 publications BY the year of the evaluation', benchmark: '>= 40 Publications', key: 'min_publications' },
+      { rule: 'At least one (1) publication in Q1 journal or at least three (3) publications in Q2 IN the year of the evaluation', benchmark: '>= 1 Q1 or >= 3 Q2 (eval year)', key: 'q1_q2_journals' },
+      { rule: 'At least 3500 citations BY the year of the evaluation', benchmark: '>= 3,500 Citations', key: 'min_citations' },
+      { rule: 'At least h-index 20 BY the year of the evaluation', benchmark: '>= 20 h-index', key: 'min_h_index' },
+      { rule: 'At least 5 MSc & 2 PhD BY the year of the evaluation', benchmark: '>= 5 MSc & 2 PhD', key: 'graduates_supervised' },
+      { rule: 'At least one (1) research grant (national/continental/international) WITHIN the last three years (with the year of evaluation included)', benchmark: '>= 1 Research Grant (last 3 yrs)', key: 'research_grants' }
+    ],
+    year: 2027
+  },
+  {
+    id: 6,
+    category: 'DOCTORAL',
+    tier: 'GLOBAL',
+    title: 'Global Doctoral Scholar of the Year',
+    country: null,
+    description: 'Honouring an extraordinary African doctoral scholar whose PhD discoveries and international collaborations achieve world-class recognition.',
+    award_value: {
+      prize_amount: '$15,000',
+      plaque: 'Plaque award',
+      icon_items: 'Icon item/s',
+      podcast_interview: 'Interview/Podcast session with doctoral person of the year'
+    },
+    evaluation_index: [
+      { rule: 'Attended conference on at least one (1) continent (Africa, Europe, Asia, South America, North America, Oceania) WITHIN the last three years (with the year of evaluation included)', benchmark: 'Conference on >= 1 Continent (last 3 yrs)', key: 'global_conferences' },
+      { rule: 'Cited by researchers from all the continents: Africa, Europe, Asia, South America, North America, Oceania BY the year of the evaluation', benchmark: 'Cited Across All Continents', key: 'global_citations' },
+      { rule: 'At least 60 publications BY the year of the evaluation', benchmark: '>= 60 Publications', key: 'min_publications' },
+      { rule: 'At least two (2) publications in Q1 journal or at least seven (7) publications in Q2 IN the year of the evaluation', benchmark: '>= 2 Q1 or >= 7 Q2 (eval year)', key: 'q1_q2_journals' },
+      { rule: 'At least one (1) publications in journal’s of impact factor (IF) >10 IN the year of the evaluation', benchmark: '>= 1 Publication in IF > 10 Journal', key: 'high_impact_publications' },
+      { rule: 'At least 10000 citations BY the year of the evaluation', benchmark: '>= 10,000 Citations', key: 'min_citations' },
+      { rule: 'At least h-index 35 BY the year of the evaluation', benchmark: '>= 35 h-index', key: 'min_h_index' },
+      { rule: 'At least 7 MSc & 5 PhD BY the year of the evaluation', benchmark: '>= 7 MSc & 5 PhD Supervised', key: 'graduates_supervised' },
+      { rule: 'At least one (1) international collaboration WITHIN the last three years (with the year of evaluation included)', benchmark: '>= 1 International Collaboration (last 3 yrs)', key: 'international_collaboration' },
+      { rule: 'At least one (1) research grant (national/continental/international) WITHIN the last three years (with the year of evaluation included)', benchmark: '>= 1 Research Grant (last 3 yrs)', key: 'research_grants' }
+    ],
+    year: 2027
+  }
+];
+
 export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
   const [awards, setAwards] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('PROFESSORIAL'); // 'PROFESSORIAL' or 'DOCTORAL'
   const [loading, setLoading] = useState(true);
-  const [expandedIndexId, setExpandedIndexId] = useState(null);
 
   useEffect(() => {
     const fetchAwards = async () => {
       try {
         const res = await api.get('/awards');
-        if (res.data.success) {
+        if (res.data.success && res.data.awards && res.data.awards.length > 0) {
           setAwards(res.data.awards);
+        } else {
+          setAwards([...PROFESSORIAL_AWARDS, ...DOCTORAL_AWARDS]);
         }
       } catch (err) {
-        console.error('Failed to load awards:', err);
+        console.error('Failed to load awards, using default benchmark dataset:', err);
+        setAwards([...PROFESSORIAL_AWARDS, ...DOCTORAL_AWARDS]);
       } finally {
         setLoading(false);
       }
@@ -54,10 +231,14 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
     setActiveTab('apply_award');
   };
 
+  // Filter awards by currently selected category
+  const activeAwards = awards.filter((a) => (a.category || 'PROFESSORIAL') === selectedCategory);
+  const displayedAwards = activeAwards.length > 0 ? activeAwards : (selectedCategory === 'PROFESSORIAL' ? PROFESSORIAL_AWARDS : DOCTORAL_AWARDS);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
       {/* Header */}
-      <div className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-3">
+      <div className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-4">
         <div className="inline-flex items-center space-x-2 text-xs font-extrabold text-coral-900 bg-coral-100 border-2 border-coral-300 px-4 py-2 rounded-full shadow-xs">
           <Award className="w-4 h-4 text-coral-600" />
           <span>African Scholar 2027 Honors & Laureate Series</span>
@@ -65,9 +246,49 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
           Pan-African Academic Awards
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed lg:whitespace-nowrap">
+        <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-3xl mx-auto font-medium">
           Rewarding academic integrity, high citation density, international peer esteem, and impactful doctoral mentorship across Africa.
         </p>
+
+        {/* Category Switcher Pill (Professorial vs Doctoral) */}
+        <div className="pt-2 flex justify-center">
+          <div className="bg-slate-200/80 p-1.5 rounded-2xl border border-slate-300 flex items-center gap-1.5 shadow-inner">
+            <button
+              onClick={() => setSelectedCategory('PROFESSORIAL')}
+              className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 ${
+                selectedCategory === 'PROFESSORIAL'
+                  ? 'bg-white text-slate-900 shadow-md border border-slate-200/80 font-black'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <span className={`w-2.5 h-2.5 rounded-full ${selectedCategory === 'PROFESSORIAL' ? 'bg-coral-500 ring-2 ring-coral-300' : 'bg-slate-400'}`}></span>
+              <span>Professorial Category (Professors)</span>
+            </button>
+            <button
+              onClick={() => setSelectedCategory('DOCTORAL')}
+              className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 ${
+                selectedCategory === 'DOCTORAL'
+                  ? 'bg-white text-slate-900 shadow-md border border-slate-200/80 font-black'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <span className={`w-2.5 h-2.5 rounded-full ${selectedCategory === 'DOCTORAL' ? 'bg-emerald-500 ring-2 ring-emerald-300' : 'bg-slate-400'}`}></span>
+              <span>Doctoral Category (PhDs / Dr.)</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Selected Category Highlights Notice */}
+        <div className="inline-flex items-center space-x-3 px-4 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-700">
+          <span className="font-bold text-slate-900">
+            {selectedCategory === 'PROFESSORIAL' ? 'Professorial Honors Pool' : 'Doctoral (PhD) Honors Pool'}:
+          </span>
+          <span>
+            {selectedCategory === 'PROFESSORIAL'
+              ? 'National: $5,000 • Continental: $15,000 • Global: $30,000'
+              : 'National: $2,500 • African: $7,500 • Global: $15,000'}
+          </span>
+        </div>
       </div>
 
       {/* Award Tiers Comparison */}
@@ -78,7 +299,7 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
         </div>
       ) : (
         <div className="space-y-10">
-          {awards.map((award) => {
+          {displayedAwards.map((award) => {
             const isContinental = award.tier === 'CONTINENTAL';
             const isGlobal = award.tier === 'GLOBAL';
 

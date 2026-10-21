@@ -21,6 +21,7 @@ import SponsorBanner from '../components/SponsorBanner';
 import AfricanExcellenceMap from '../components/AfricanExcellenceMap';
 import UniversityLeaderboard from '../components/UniversityLeaderboard';
 import AdvertisementShowcase from '../components/AdvertisementShowcase';
+import { PROFESSORIAL_AWARDS, DOCTORAL_AWARDS } from './AwardsPage';
 
 const LAUREATE_IMAGES = [
   {
@@ -76,6 +77,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
   const { user, openAuth } = useAuth();
   const [topScholars, setTopScholars] = useState([]);
   const [awards, setAwards] = useState([]);
+  const [awardCategory, setAwardCategory] = useState('PROFESSORIAL'); // 'PROFESSORIAL' | 'DOCTORAL'
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [stats, setStats] = useState({
     totalProfessors: 5,
@@ -304,10 +306,10 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
               <div className="inline-flex p-3 rounded-2xl bg-blue-600 text-white mb-3 shadow-md shadow-blue-500/30">
                 <Users className="w-6 h-6" />
               </div>
-              <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">1.5 M +</div>
-              <div className="text-xs font-black uppercase tracking-wider text-blue-900 mt-1">Professors & Ph.D. Scholars Mapped</div>
+              <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">850k+ Profs • 650k+ PhDs</div>
+              <div className="text-xs font-black uppercase tracking-wider text-blue-900 mt-1.5">1.5M+ Scholars Mapped Across Africa</div>
             </div>
-            <p className="text-xs text-slate-600 font-semibold mt-3 pt-3 border-t border-blue-200/60">Nigeria, Kenya, Ghana, S.A.</p>
+            <p className="text-xs text-slate-600 font-semibold mt-3 pt-3 border-t border-blue-200/60">Nigeria, Kenya, Ghana, S.A., Egypt</p>
           </div>
 
           {/* Container 2: Emerald / Mint Background */}
@@ -385,7 +387,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
         </div>
       </section>
 
-      {/* 5. 2027 ACADEMIC AWARD TIERS (Requirement 1) */}
+      {/* 5. 2027 ACADEMIC AWARD TIERS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-4">
           <div className="eyebrow-accent-dark inline-flex w-fit mx-auto">
@@ -400,14 +402,55 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
             </div>
           </div>
           <p className="text-slate-600 text-sm sm:text-base lg:whitespace-nowrap">
-            Benchmarked against verified publication indices, international citation spread, and youth mentorship.
+            Benchmarked against verified publication indices, international citation spread, and post-graduate mentorship.
           </p>
+
+          {/* Category Switcher Pill: Professorial vs Doctoral Honors */}
+          <div className="flex justify-center pt-2">
+            <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 border border-slate-200/80 shadow-inner">
+              <button
+                type="button"
+                onClick={() => setAwardCategory('PROFESSORIAL')}
+                className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center space-x-2 ${
+                  awardCategory === 'PROFESSORIAL'
+                    ? 'bg-slate-900 text-white shadow-md'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span>Professorial Category (Professors)</span>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                  awardCategory === 'PROFESSORIAL' ? 'bg-amber-400 text-slate-950' : 'bg-slate-200 text-slate-700'
+                }`}>
+                  Up to $30k
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setAwardCategory('DOCTORAL')}
+                className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center space-x-2 ${
+                  awardCategory === 'DOCTORAL'
+                    ? 'bg-coral-600 text-white shadow-md'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span>Doctoral Category (PhDs / Dr.)</span>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                  awardCategory === 'DOCTORAL' ? 'bg-white text-coral-600' : 'bg-slate-200 text-slate-700'
+                }`}>
+                  Up to $15k
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {awards.map((award) => {
+          {(awards.some(a => a.category === awardCategory)
+            ? awards.filter(a => a.category === awardCategory)
+            : (awardCategory === 'PROFESSORIAL' ? PROFESSORIAL_AWARDS : DOCTORAL_AWARDS)
+          ).map((award) => {
             const isContinental = award.tier === 'CONTINENTAL';
-            const isGlobal = award.tier === 'GLOBAL';
+            const awardVal = parseJsonObject(award.award_value);
 
             return (
               <div
@@ -438,7 +481,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
                       {award.tier} TIER
                     </span>
                     <span className="text-xl font-black text-slate-900">
-                      {parseJsonObject(award.award_value).prize_amount || '$5,000'}
+                      {awardVal.prize_amount || (award.category === 'DOCTORAL' ? (award.tier === 'NATIONAL' ? '$2,500' : award.tier === 'CONTINENTAL' ? '$7,500' : '$15,000') : '$5,000')}
                     </span>
                   </div>
 
@@ -449,11 +492,17 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
                     <span className="font-bold text-slate-800 block">Award Inclusions:</span>
                     <div className="flex items-center space-x-2 text-slate-600">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>{parseJsonObject(award.award_value).plaque || 'Academic Laureate Plaque'}</span>
+                      <span>{awardVal.plaque || 'Plaque award'}</span>
                     </div>
+                    {awardVal.icon_items && (
+                      <div className="flex items-center space-x-2 text-slate-600">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>{awardVal.icon_items || 'Icon item/s'}</span>
+                      </div>
+                    )}
                     <div className="flex items-center space-x-2 text-slate-600">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>{parseJsonObject(award.award_value).podcast_interview || 'Exclusive Media Feature'}</span>
+                      <span>{awardVal.podcast_interview || (award.category === 'DOCTORAL' ? 'Interview/Podcast session with doctoral person of the year' : 'Exclusive Feature on The African Scholar Podcast')}</span>
                     </div>
                   </div>
 
@@ -462,7 +511,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
                     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                       Key Benchmark Index
                     </span>
-                    {parseJsonArray(award.evaluation_index).slice(0, 4).map((rule, idx) => (
+                    {parseJsonArray(award.evaluation_index).slice(0, 5).map((rule, idx) => (
                       <div key={idx} className="flex items-start space-x-2 text-xs text-slate-700">
                         <div className="w-1.5 h-1.5 rounded-full bg-coral-500 mt-1.5 shrink-0"></div>
                         <span className="line-clamp-2">{rule.rule}</span>

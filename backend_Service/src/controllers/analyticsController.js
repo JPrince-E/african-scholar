@@ -116,26 +116,28 @@ exports.getContinentalStats = async (req, res) => {
       }
     ];
 
-    // 2. Continental Stats by Region/Country
+    // 2. Continental Stats by Region/Country with Professorial vs Doctoral Breakdown
     const countryStats = {
-      'Nigeria': { scholars: '420,000+', applications: 84, laureates: 17, flagship: 'University of Ibadan', countryCode: 'NG' },
-      'South Africa': { scholars: '350,000+', applications: 76, laureates: 28, flagship: 'University of Cape Town', countryCode: 'ZA' },
-      'Egypt': { scholars: '310,000+', applications: 68, laureates: 21, flagship: 'Cairo University', countryCode: 'EG' },
-      'Kenya': { scholars: '120,000+', applications: 52, laureates: 11, flagship: 'University of Nairobi', countryCode: 'KE' },
-      'Ghana': { scholars: '95,000+', applications: 44, laureates: 13, flagship: 'KNUST', countryCode: 'GH' },
-      'Uganda': { scholars: '75,000+', applications: 38, laureates: 14, flagship: 'Makerere University', countryCode: 'UG' },
-      'Senegal': { scholars: '45,000+', applications: 28, laureates: 7, flagship: 'Cheikh Anta Diop University', countryCode: 'SN' },
-      'Ethiopia': { scholars: '55,000+', applications: 32, laureates: 6, flagship: 'Addis Ababa University', countryCode: 'ET' },
-      'Rwanda': { scholars: '35,000+', applications: 26, laureates: 5, flagship: 'University of Rwanda', countryCode: 'RW' },
-      'Morocco': { scholars: '60,000+', applications: 30, laureates: 6, flagship: 'Mohammed V University', countryCode: 'MA' },
-      'Cameroon': { scholars: '40,000+', applications: 20, laureates: 4, flagship: 'University of Yaounde I', countryCode: 'CM' },
-      'Tanzania': { scholars: '38,000+', applications: 18, laureates: 3, flagship: 'University of Dar es Salaam', countryCode: 'TZ' }
+      'Nigeria': { professors: '240,000+', phds: '180,000+', scholars: '420,000+', applications: 84, laureates: 17, flagship: 'University of Ibadan', countryCode: 'NG' },
+      'South Africa': { professors: '190,000+', phds: '160,000+', scholars: '350,000+', applications: 76, laureates: 28, flagship: 'University of Cape Town', countryCode: 'ZA' },
+      'Egypt': { professors: '170,000+', phds: '140,000+', scholars: '310,000+', applications: 68, laureates: 21, flagship: 'Cairo University', countryCode: 'EG' },
+      'Kenya': { professors: '68,000+', phds: '52,000+', scholars: '120,000+', applications: 52, laureates: 11, flagship: 'University of Nairobi', countryCode: 'KE' },
+      'Ghana': { professors: '54,000+', phds: '41,000+', scholars: '95,000+', applications: 44, laureates: 13, flagship: 'KNUST', countryCode: 'GH' },
+      'Uganda': { professors: '42,000+', phds: '33,000+', scholars: '75,000+', applications: 38, laureates: 14, flagship: 'Makerere University', countryCode: 'UG' },
+      'Senegal': { professors: '25,000+', phds: '20,000+', scholars: '45,000+', applications: 28, laureates: 7, flagship: 'Cheikh Anta Diop University', countryCode: 'SN' },
+      'Ethiopia': { professors: '31,000+', phds: '24,000+', scholars: '55,000+', applications: 32, laureates: 6, flagship: 'Addis Ababa University', countryCode: 'ET' },
+      'Rwanda': { professors: '19,000+', phds: '16,000+', scholars: '35,000+', applications: 26, laureates: 5, flagship: 'University of Rwanda', countryCode: 'RW' },
+      'Morocco': { professors: '34,000+', phds: '26,000+', scholars: '60,000+', applications: 30, laureates: 6, flagship: 'Mohammed V University', countryCode: 'MA' },
+      'Cameroon': { professors: '22,000+', phds: '18,000+', scholars: '40,000+', applications: 20, laureates: 4, flagship: 'University of Yaounde I', countryCode: 'CM' },
+      'Tanzania': { professors: '21,000+', phds: '17,000+', scholars: '38,000+', applications: 18, laureates: 3, flagship: 'University of Dar es Salaam', countryCode: 'TZ' }
     };
 
     return res.json({
       success: true,
       summary: {
-        totalScholarsEnrolled: '1M+',
+        totalProfessorsMapped: '850,000+',
+        totalPhdsMapped: '650,000+',
+        totalScholarsEnrolled: '1.5M+',
         totalApplicationsEvaluated: '580+',
         totalLaureatesHonored: '25+',
         africanNationsRepresented: 54,

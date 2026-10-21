@@ -7,6 +7,11 @@ const Award = sequelize.define('Award', {
     autoIncrement: true,
     primaryKey: true
   },
+  category: {
+    type: DataTypes.ENUM('PROFESSORIAL', 'DOCTORAL'),
+    allowNull: false,
+    defaultValue: 'PROFESSORIAL'
+  },
   tier: {
     type: DataTypes.ENUM('NATIONAL', 'CONTINENTAL', 'GLOBAL'),
     allowNull: false

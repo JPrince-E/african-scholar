@@ -15,8 +15,14 @@ const formatAward = (award) => {
 // List active awards
 exports.listAwards = async (req, res) => {
   try {
+    const { category } = req.query;
+    const whereClause = { is_active: true };
+    if (category) {
+      whereClause.category = category.toUpperCase();
+    }
+
     const awards = await Award.findAll({
-      where: { is_active: true },
+      where: whereClause,
       order: [['id', 'ASC']]
     });
 
@@ -212,7 +218,7 @@ exports.getAllAwardsAdmin = async (req, res) => {
 // Admin: Create new award
 exports.createAward = async (req, res) => {
   try {
-    const { tier, title, country, description, award_value, evaluation_index, year, is_active } = req.body;
+    const { category, tier, title, country, description, award_value, evaluation_index, year, is_active } = req.body;
 
     if (!tier || !title || !evaluation_index) {
       return res.status(400).json({
@@ -222,6 +228,7 @@ exports.createAward = async (req, res) => {
     }
 
     const award = await Award.create({
+      category: category || 'PROFESSORIAL',
       tier,
       title,
       country: country || null,
@@ -247,13 +254,14 @@ exports.createAward = async (req, res) => {
 exports.updateAward = async (req, res) => {
   try {
     const { id } = req.params;
-    const { tier, title, country, description, award_value, evaluation_index, year, is_active } = req.body;
+    const { category, tier, title, country, description, award_value, evaluation_index, year, is_active } = req.body;
 
     const award = await Award.findByPk(id);
     if (!award) {
       return res.status(404).json({ success: false, message: 'Award not found.' });
     }
 
+    if (category) award.category = category;
     if (tier) award.tier = tier;
     if (title) award.title = title;
     if (country !== undefined) award.country = country;
