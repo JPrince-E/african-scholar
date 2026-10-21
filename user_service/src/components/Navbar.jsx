@@ -13,7 +13,6 @@ export default function Navbar({ activeTab, setActiveTab }) {
     { id: 'landing', label: 'Home' },
     { id: 'directory', label: 'Scholars Directory' },
     { id: 'awards', label: 'Academic Awards' },
-    { id: 'hall_of_fame', label: 'Hall of Fame' },
     { id: 'register_scholar', label: 'Profile Registration' },
   ];
 
