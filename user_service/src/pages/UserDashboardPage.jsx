@@ -26,7 +26,7 @@ import NominationDossierModal from '../components/NominationDossierModal';
 import { ShieldCheck, Send, Check } from 'lucide-react';
 
 export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [myApplications, setMyApplications] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +71,39 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
       fetchNotifications();
     }
   }, [user]);
+
+  const handleBulletinNavigation = (link) => {
+    if (!link) return;
+    if (link.startsWith('http://') || link.startsWith('https://')) {
+      window.open(link, '_blank');
+      return;
+    }
+    const clean = link.replace(/^\//, '');
+    if (clean === 'dashboard') {
+      if (setActiveTab) setActiveTab('dashboard');
+    } else if (clean === 'awards') {
+      if (setActiveTab) setActiveTab('awards');
+    } else if (clean === 'awards/apply' || clean === 'apply') {
+      if (setActiveTab) setActiveTab('awards_apply');
+    } else if (clean === 'directory') {
+      if (setActiveTab) setActiveTab('directory');
+    } else if (clean.includes('register')) {
+      if (setActiveTab) setActiveTab('register_scholar');
+    } else if (setActiveTab) {
+      setActiveTab(clean);
+    } else {
+      window.location.href = link;
+    }
+  };
+
+  if (authLoading) {
+    return (
+      <div className="max-w-xl mx-auto my-16 p-8 bg-white rounded-3xl border border-slate-200 shadow-soft-xl text-center space-y-3">
+        <div className="w-8 h-8 border-3 border-coral-500 border-t-transparent rounded-full animate-spin mx-auto" />
+        <p className="text-xs font-semibold text-slate-500">Verifying scholar credentials...</p>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
@@ -195,7 +228,7 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
                   <strong className="text-emerald-300">
                     {new Date(profile.trial_expires_at || (new Date(profile.trial_started_at || profile.created_at || Date.now()).getTime() + 365*24*60*60*1000)).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                   </strong>
-                  . Updating your academic profile or publications does <span className="underline decoration-coral-500 underline-offset-2 font-bold text-slate-100">not</span> reset this countdown.
+                  .
                 </p>
               </div>
 
@@ -309,13 +342,14 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
                 </div>
 
                 {item.link && (
-                  <a
-                    href={item.link}
-                    className="inline-flex items-center text-[11px] font-bold text-orange-400 hover:text-orange-300 transition pt-1"
+                  <button
+                    type="button"
+                    onClick={() => handleBulletinNavigation(item.link)}
+                    className="inline-flex items-center text-[11px] font-bold text-orange-400 hover:text-orange-300 transition pt-1 cursor-pointer"
                   >
                     <span>View details</span>
                     <ArrowRight className="w-3 h-3 ml-1" />
-                  </a>
+                  </button>
                 )}
               </div>
             ))}
