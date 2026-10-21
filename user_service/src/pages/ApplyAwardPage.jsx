@@ -426,8 +426,9 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
                 FREE ($0.00)
               </span>
             ) : paymentReference ? (
-              <span className="inline-block px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-sm">
-                ✓ Fee Paid ($1.00)
+              <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-sm">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Fee Paid ($1.00)</span>
               </span>
             ) : (
               <button

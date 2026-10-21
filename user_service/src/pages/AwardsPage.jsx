@@ -406,8 +406,9 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
                           </h4>
                         </div>
                       </div>
-                      <div className="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-xs text-amber-300 font-extrabold shrink-0 text-center shadow-xs">
-                        ★ {parseJsonArray(award.evaluation_index).length} Mandatory Verification Milestones
+                      <div className="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-xs text-amber-300 font-extrabold shrink-0 text-center shadow-xs flex items-center justify-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                        <span>{parseJsonArray(award.evaluation_index).length} Mandatory Verification Milestones</span>
                       </div>
                     </div>
 

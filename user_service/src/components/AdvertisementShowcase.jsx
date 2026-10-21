@@ -406,8 +406,9 @@ export default function AdvertisementShowcase() {
             >
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  <span className="px-3.5 py-1 rounded-full bg-brand-600 text-white font-black text-[10px] uppercase tracking-wider shadow-md whitespace-nowrap inline-block">
-                    ★ Most Popular
+                  <span className="px-3.5 py-1 rounded-full bg-brand-600 text-white font-black text-[10px] uppercase tracking-wider shadow-md whitespace-nowrap inline-flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-amber-300" />
+                    <span>Most Popular</span>
                   </span>
                 </div>
               )}

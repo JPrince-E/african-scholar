@@ -136,6 +136,7 @@ exports.getPublicDirectory = async (req, res) => {
       discipline = '',
       title = '',
       category = '',
+      citationTier = '',
       sdg = '',
       sortBy = 'citations_count',
       order = 'DESC',
@@ -158,6 +159,16 @@ exports.getPublicDirectory = async (req, res) => {
     }
     if (title) {
       where.title = title;
+    }
+
+    if (citationTier === '10000') {
+      where.citations_count = { [Op.gte]: 10000 };
+    } else if (citationTier === '5000') {
+      where.citations_count = { [Op.gte]: 5000 };
+    } else if (citationTier === '1000') {
+      where.citations_count = { [Op.gte]: 1000 };
+    } else if (citationTier === 'H20') {
+      where.google_h_index = { [Op.gte]: 20 };
     }
 
     if (category === 'PROFESSORIAL') {

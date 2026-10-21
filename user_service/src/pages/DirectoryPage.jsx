@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Search,
   Filter,
@@ -10,6 +10,8 @@ import {
   Sparkles,
   ExternalLink,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   X,
   GraduationCap,
   Briefcase,
@@ -17,7 +19,12 @@ import {
   Mail,
   CheckCircle2,
   ShieldCheck,
-  TrendingUp
+  TrendingUp,
+  LayoutGrid,
+  List,
+  SlidersHorizontal,
+  ArrowUpDown,
+  RotateCcw
 } from 'lucide-react';
 import api from '../services/api';
 import SponsorBanner from '../components/SponsorBanner';
@@ -29,6 +36,27 @@ export const isAcademicVerified = (email) => {
   const lower = email.toLowerCase();
   return lower.includes('.edu') || lower.includes('.ac.') || lower.includes('.org') || lower.includes('.gov');
 };
+
+const AFRICAN_HUBS = [
+  'Nigeria',
+  'South Africa',
+  'Egypt',
+  'Kenya',
+  'Ghana',
+  'Uganda',
+  'Ethiopia',
+  'Morocco',
+  'Rwanda',
+  'Senegal'
+];
+
+const CITATION_TIERS = [
+  { id: '', label: 'All Citation Ranks' },
+  { id: '10000', label: '10,000+ Citations (Elite)' },
+  { id: '5000', label: '5,000+ Citations' },
+  { id: '1000', label: '1,000+ Citations' },
+  { id: 'H20', label: 'H-Index 20+ High Impact' }
+];
 
 function TrajectoryChart({ citations = 0, publications = 0 }) {
   const years = [2022, 2023, 2024, 2025, 2026];
@@ -106,26 +134,84 @@ function TrajectoryChart({ citations = 0, publications = 0 }) {
           })}
 
           <path d={areaD} fill="url(#citGrad)" />
-          <path d={pathD} fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
+          <path d={pathD} fill="none" stroke="#f97316" strokeWidth="2.5" />
 
           {citCoords.map((pt, i) => (
             <g key={i}>
               <circle cx={pt.x} cy={pt.y} r="4" fill="#041329" stroke="#f97316" strokeWidth="2" />
-              <text x={pt.x} y={height - 4} textAnchor="middle" fill="#94a3b8" fontSize="10" fontWeight="bold">
-                {years[i]}
+              <text
+                x={pt.x}
+                y={pt.y - 8}
+                fill="#cbd5e1"
+                fontSize="9"
+                fontWeight="bold"
+                textAnchor="middle"
+              >
+                {pt.val >= 1000 ? `${(pt.val / 1000).toFixed(1)}k` : pt.val}
               </text>
-              <text x={pt.x} y={pt.y - 8} textAnchor="middle" fill="#f8fafc" fontSize="9" fontWeight="bold">
-                {pt.val.toLocaleString()}
+              <text
+                x={pt.x}
+                y={height - 5}
+                fill="#64748b"
+                fontSize="9"
+                fontWeight="bold"
+                textAnchor="middle"
+              >
+                {years[i]}
               </text>
             </g>
           ))}
         </svg>
       </div>
+    </div>
+  );
+}
 
-      <div className="flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-800 pt-2">
-        <span>Crossref DOI & Institutional Verification Index</span>
-        <span className="text-emerald-400 font-bold">▲ Rapid Academic Velocity</span>
+function DirectorySkeleton({ viewMode }) {
+  if (viewMode === 'list') {
+    return (
+      <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden divide-y divide-slate-100 shadow-soft-xl animate-pulse">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="p-4 flex items-center justify-between gap-4">
+            <div className="flex items-center space-x-3 flex-1 min-w-0">
+              <div className="w-12 h-12 rounded-xl bg-slate-200 shrink-0"></div>
+              <div className="space-y-2 flex-1">
+                <div className="h-4 bg-slate-200 rounded-md w-1/3"></div>
+                <div className="h-3 bg-slate-100 rounded-md w-1/2"></div>
+              </div>
+            </div>
+            <div className="hidden sm:flex space-x-6 text-right">
+              <div className="h-4 bg-slate-200 rounded-md w-16"></div>
+              <div className="h-4 bg-slate-200 rounded-md w-16"></div>
+            </div>
+            <div className="w-24 h-8 bg-slate-200 rounded-xl shrink-0"></div>
+          </div>
+        ))}
       </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="bg-white rounded-3xl p-6 border border-slate-200 shadow-soft-xl space-y-4">
+          <div className="flex items-start space-x-4">
+            <div className="w-16 h-16 rounded-2xl bg-slate-200 shrink-0"></div>
+            <div className="flex-1 space-y-2">
+              <div className="h-4 bg-slate-200 rounded-md w-1/2"></div>
+              <div className="h-4 bg-slate-200 rounded-md w-3/4"></div>
+              <div className="h-3 bg-slate-100 rounded-md w-2/3"></div>
+            </div>
+          </div>
+          <div className="h-14 bg-slate-100 rounded-xl"></div>
+          <div className="grid grid-cols-4 gap-2 pt-2">
+            {[...Array(4)].map((_, j) => (
+              <div key={j} className="h-10 bg-slate-100 rounded-xl"></div>
+            ))}
+          </div>
+          <div className="h-10 bg-slate-200 rounded-xl"></div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -136,12 +222,19 @@ export default function DirectoryPage() {
   const [selectedScholar, setSelectedScholar] = useState(null);
   const [countryUniversities, setCountryUniversities] = useState([]);
 
-  // Filters
+  // Pagination & Volume Controls
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
+
+  // Filters (Priority Themes completely removed)
   const [search, setSearch] = useState('');
   const [country, setCountry] = useState('');
   const [university, setUniversity] = useState('');
   const [category, setCategory] = useState('ALL'); // 'ALL' | 'PROFESSORIAL' | 'DOCTORAL'
-  const [sdg, setSdg] = useState('');
+  const [citationTier, setCitationTier] = useState(''); // '' | '1000' | '5000' | '10000' | 'H20'
   const [sortBy, setSortBy] = useState('citations_count');
 
   // Filter options from API
@@ -151,20 +244,27 @@ export default function DirectoryPage() {
     disciplines: []
   });
 
-  const fetchScholars = async () => {
+  const directoryTopRef = useRef(null);
+
+  const fetchScholars = async (targetPage = page) => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (search) params.append('search', search);
+      if (search.trim()) params.append('search', search.trim());
       if (country) params.append('country', country);
       if (university) params.append('university', university);
       if (category && category !== 'ALL') params.append('category', category);
-      if (sdg) params.append('sdg', sdg);
+      if (citationTier) params.append('citationTier', citationTier);
       if (sortBy) params.append('sortBy', sortBy);
+      params.append('page', targetPage);
+      params.append('limit', limit);
 
       const res = await api.get(`/profiles/directory?${params.toString()}`);
       if (res.data.success) {
-        setScholars(res.data.scholars);
+        setScholars(res.data.scholars || []);
+        setTotal(res.data.total || 0);
+        setTotalPages(res.data.totalPages || 1);
+        setPage(res.data.page || 1);
       }
     } catch (err) {
       console.error('Error loading scholars:', err);
@@ -173,6 +273,7 @@ export default function DirectoryPage() {
     }
   };
 
+  // Fetch filter options on mount
   useEffect(() => {
     const fetchOptions = async () => {
       try {
@@ -187,6 +288,7 @@ export default function DirectoryPage() {
     fetchOptions();
   }, []);
 
+  // Update universities when country changes
   useEffect(() => {
     let isMounted = true;
     if (country) {
@@ -199,13 +301,28 @@ export default function DirectoryPage() {
     return () => { isMounted = false; };
   }, [country]);
 
+  // Refetch when filters or limit change (reset to page 1)
   useEffect(() => {
-    fetchScholars();
-  }, [country, university, category, sdg, sortBy]);
+    setPage(1);
+    fetchScholars(1);
+  }, [country, university, category, citationTier, sortBy, limit]);
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    fetchScholars();
+  // Debounced search (350ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPage(1);
+      fetchScholars(1);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages || newPage === page) return;
+    setPage(newPage);
+    fetchScholars(newPage);
+    if (directoryTopRef.current) {
+      directoryTopRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const handleResetFilters = () => {
@@ -213,65 +330,141 @@ export default function DirectoryPage() {
     setCountry('');
     setUniversity('');
     setCategory('ALL');
-    setSdg('');
+    setCitationTier('');
     setSortBy('citations_count');
+    setPage(1);
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      {/* Header */}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8" ref={directoryTopRef}>
+      {/* Directory Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
           <div className="inline-flex items-center space-x-2 text-xs font-extrabold text-azure-900 bg-azure-100 px-4 py-1.5 rounded-full mb-2 border-2 border-azure-300 shadow-xs">
             <Users className="w-3.5 h-3.5 text-azure-700" />
-            <span>Pan-African Academic Faculty</span>
+            <span>Pan-African Academic Registry</span>
           </div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             Scholars, Ph.D. (Dr.) & Professors Directory
           </h1>
           <p className="text-sm font-semibold text-slate-700 mt-1.5 leading-relaxed">
-            Browse verified top academic researchers (Ph.D. & Professors) across Nigeria, Kenya, Ghana, South Africa, and all African universities.
+            Browse verified academic researchers, department heads, and faculty chairs across African universities.
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <span className="text-xs font-bold text-slate-500">Sorted by:</span>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 focus:outline-hidden focus:border-azure-500"
-          >
-            <option value="citations_count">Highest Citations</option>
-            <option value="publications_count">Total Publications</option>
-            <option value="google_h_index">Google H-Index</option>
-          </select>
+        <div className="flex items-center space-x-3">
+          {/* View Mode Toggle: Grid vs Compact List */}
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              title="Card Grid View"
+              className={`p-2 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 ${
+                viewMode === 'grid'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span className="hidden sm:inline">Grid</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              title="Compact Table / List View"
+              className={`p-2 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 ${
+                viewMode === 'list'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <List className="w-4 h-4" />
+              <span className="hidden sm:inline">Compact</span>
+            </button>
+          </div>
+
+          {/* Sort By Dropdown */}
+          <div className="flex items-center space-x-2">
+            <span className="text-xs font-bold text-slate-500">Sort:</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 focus:outline-hidden focus:border-azure-500"
+            >
+              <option value="citations_count">Highest Citations</option>
+              <option value="publications_count">Total Publications</option>
+              <option value="google_h_index">Google H-Index</option>
+              <option value="created_at">Recently Registered</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* Search & Filter Bar */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-soft-xl space-y-4">
-        <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search className="w-5 h-5 text-azure-500 absolute left-3.5 top-3.5" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search scholar by name, university, or research keyword..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:border-azure-500 focus:ring-2 focus:ring-azure-100"
-            />
-          </div>
+      {/* Search & Fast Filter Command Bar */}
+      <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-soft-xl space-y-4">
+        {/* Search Input with Instant Debounce */}
+        <div className="relative">
+          <Search className="w-5 h-5 text-azure-500 absolute left-3.5 top-3.5" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search scholar by name, university, or research keyword..."
+            className="w-full pl-10 pr-10 py-3 rounded-2xl border border-slate-200 text-sm focus:outline-hidden focus:border-azure-500 focus:ring-2 focus:ring-azure-100"
+          />
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Pan-African Regional Geographic Hubs */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
+          <span className="text-[11px] font-bold text-slate-400 mr-1 flex items-center gap-1">
+            <Globe2 className="w-3.5 h-3.5 text-slate-400" />
+            <span>Top Hubs:</span>
+          </span>
           <button
-            type="submit"
-            className="btn-coral px-6 py-2.5 text-sm"
+            type="button"
+            onClick={() => { setCountry(''); setUniversity(''); }}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition ${
+              country === ''
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
           >
-            Filter Directory
+            All Africa
           </button>
-        </form>
+          {AFRICAN_HUBS.map((hub) => {
+            const active = country === hub;
+            return (
+              <button
+                key={hub}
+                type="button"
+                onClick={() => {
+                  setCountry(active ? '' : hub);
+                  setUniversity('');
+                }}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
+                  active
+                    ? 'bg-azure-600 text-white shadow-xs font-bold'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                {hub}
+              </button>
+            );
+          })}
+        </div>
 
         {/* Category Switcher Tabs */}
-        <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100">
-          <span className="text-xs font-bold text-slate-500 mr-1">Faculty Category:</span>
+        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
+          <span className="text-xs font-bold text-slate-500 mr-1">Rank / Category:</span>
           {[
             { id: 'ALL', label: 'All Faculty', icon: Users },
             { id: 'PROFESSORIAL', label: 'Professors (Full / Assoc.)', icon: Award },
@@ -297,40 +490,36 @@ export default function DirectoryPage() {
           })}
         </div>
 
-        {/* SDG Priority Themes */}
+        {/* Academic Citation Metric Tiers */}
         <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
-          <span className="text-[11px] font-bold text-slate-400 mr-1">Priority Themes:</span>
-          {[
-            { id: '', label: 'All Priorities' },
-            { id: 'Renewable Energy', label: '⚡ Clean Energy & Power' },
-            { id: 'Tropical Medicine', label: '🩺 Tropical Medicine & Health' },
-            { id: 'Agritech', label: '🌾 Agritech & Food Security' },
-            { id: 'AI & Data', label: '🧠 AI & Data Science' },
-            { id: 'Climate & Ecology', label: '🌍 Climate & Blue Economy' },
-          ].map((theme) => {
-            const active = sdg === theme.id;
+          <span className="text-[11px] font-bold text-slate-400 mr-1 flex items-center gap-1">
+            <TrendingUp className="w-3.5 h-3.5 text-slate-400" />
+            <span>Metric Tiers:</span>
+          </span>
+          {CITATION_TIERS.map((tier) => {
+            const active = citationTier === tier.id;
             return (
               <button
-                key={theme.id}
+                key={tier.id}
                 type="button"
-                onClick={() => setSdg(theme.id)}
+                onClick={() => setCitationTier(active ? '' : tier.id)}
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
                   active
-                    ? 'bg-azure-600 text-white shadow-xs'
+                    ? 'bg-emerald-600 text-white shadow-xs font-bold'
                     : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
-                {theme.label}
+                {tier.label}
               </button>
             );
           })}
         </div>
 
-        {/* Dropdowns */}
+        {/* Specific Dropdowns */}
         <div className="flex flex-wrap items-center gap-3 pt-2 text-xs border-t border-slate-100">
-          <div className="flex items-center space-x-2 text-slate-500 font-bold">
+          <div className="flex items-center space-x-1.5 text-slate-500 font-bold">
             <Filter className="w-4 h-4 text-azure-600" />
-            <span>Refine by:</span>
+            <span>Refine Institution:</span>
           </div>
 
           <select
@@ -360,42 +549,149 @@ export default function DirectoryPage() {
             ))}
           </select>
 
-          {(country || university || search || category !== 'ALL' || sdg) && (
+          {(country || university || search || category !== 'ALL' || citationTier) && (
             <button
               onClick={handleResetFilters}
               className="px-3 py-2 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 font-semibold transition flex items-center space-x-1 border border-rose-200"
             >
-              <X className="w-3.5 h-3.5" />
-              <span>Reset Filters</span>
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset All Filters</span>
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Results Toolbar: Count, Per-Page Selector, View Indicator */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-1 text-xs text-slate-600">
+        <div>
+          {loading ? (
+            <span className="font-semibold text-slate-400">Loading faculty records...</span>
+          ) : (
+            <span>
+              Showing <strong className="text-slate-900">{total > 0 ? (page - 1) * limit + 1 : 0}</strong>–<strong className="text-slate-900">{Math.min(page * limit, total)}</strong> of <strong className="text-brand-600 font-extrabold">{total.toLocaleString()}</strong> verified scholars across Africa
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center space-x-3">
+          <span className="text-slate-400 font-semibold">Per page:</span>
+          {[12, 24, 48].map((size) => (
+            <button
+              key={size}
+              type="button"
+              onClick={() => setLimit(size)}
+              className={`px-2 py-0.5 rounded-md font-bold transition ${
+                limit === size
+                  ? 'bg-slate-900 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {size}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Directory Content with Sidebar Layout */}
       <div className="flex flex-col lg:flex-row items-start gap-8">
         {/* Main Scholars Area */}
-        <div className="flex-1 min-w-0 w-full">
+        <div className="flex-1 min-w-0 w-full space-y-6">
           {loading ? (
-            <div className="py-20 text-center space-y-3">
-              <div className="w-10 h-10 border-3 border-coral-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-              <p className="text-sm font-semibold text-slate-500">Querying faculty database...</p>
-            </div>
+            <DirectorySkeleton viewMode={viewMode} />
           ) : scholars.length === 0 ? (
             <div className="py-16 text-center bg-white rounded-3xl border border-slate-200 p-8 space-y-3">
               <Users className="w-12 h-12 text-slate-300 mx-auto" />
               <h3 className="text-lg font-bold text-slate-800">No Scholars Found</h3>
               <p className="text-xs text-slate-500 max-w-md mx-auto">
-                No doctoral scholars or professors matched your search criteria. Try removing filters or searching by a broader term.
+                No doctoral scholars or professors matched your criteria. Try adjusting your country, university, or metric filters.
               </p>
               <button
                 onClick={handleResetFilters}
                 className="px-4 py-2 rounded-xl bg-azure-50 text-azure-700 font-bold text-xs"
               >
-                Clear Filters
+                Clear All Filters
               </button>
             </div>
+          ) : viewMode === 'list' ? (
+            /* COMPACT LIST / TABLE VIEW (Fast Scanning for Voluminous Records) */
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-soft-xl overflow-hidden divide-y divide-slate-100">
+              <div className="bg-slate-50/80 px-5 py-3 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider grid grid-cols-12 gap-3 items-center">
+                <div className="col-span-12 sm:col-span-5">Scholar & Institution</div>
+                <div className="hidden sm:block col-span-3">Discipline</div>
+                <div className="hidden sm:block col-span-2 text-right">Metrics</div>
+                <div className="hidden sm:block col-span-2 text-right">Action</div>
+              </div>
+
+              {scholars.map((scholar) => (
+                <div
+                  key={scholar.id}
+                  className="px-5 py-3.5 hover:bg-slate-50/80 transition grid grid-cols-12 gap-3 items-center group"
+                >
+                  {/* Scholar Identity */}
+                  <div className="col-span-12 sm:col-span-5 flex items-center space-x-3 min-w-0">
+                    <img
+                      src={scholar.user?.avatar_url || '/default-avatar.svg'}
+                      alt={scholar.surname}
+                      loading="lazy"
+                      onError={(e) => { e.currentTarget.src = '/default-avatar.svg'; }}
+                      className="w-11 h-11 rounded-xl object-cover border border-slate-200 shrink-0 bg-slate-900"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center space-x-1.5 truncate">
+                        <span className="font-bold text-slate-900 text-sm truncate group-hover:text-azure-700 transition">
+                          {scholar.first_name} {scholar.surname}
+                        </span>
+                        <span className="text-[10px] font-semibold text-slate-500 shrink-0">
+                          ({scholar.title})
+                        </span>
+                        {isAcademicVerified(scholar.official_email || scholar.user?.email) && (
+                          <ShieldCheck className="w-3.5 h-3.5 text-amber-500 shrink-0" title="Verified Institutional Email" />
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-500 truncate mt-0.5">
+                        {scholar.university_name} • <span className="font-medium text-slate-600">{scholar.country}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Discipline */}
+                  <div className="hidden sm:block col-span-3 min-w-0">
+                    <p className="text-xs font-semibold text-slate-800 truncate">{scholar.discipline || '—'}</p>
+                    <p className="text-[11px] text-slate-400 truncate">{scholar.research_focus || '—'}</p>
+                  </div>
+
+                  {/* Metrics Badges */}
+                  <div className="hidden sm:flex col-span-2 items-center justify-end space-x-3 text-right">
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-bold block">Citations</span>
+                      <span className="text-xs font-extrabold text-slate-900">
+                        {scholar.citations_count?.toLocaleString()}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-bold block">H-Index</span>
+                      <span className="text-xs font-extrabold text-brand-600">
+                        {scholar.google_h_index || 0}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Action */}
+                  <div className="col-span-12 sm:col-span-2 text-right">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedScholar(scholar)}
+                      className="w-full sm:w-auto px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-700 text-xs font-bold transition inline-flex items-center justify-center space-x-1"
+                    >
+                      <span>View Profile</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
+            /* GRID CARD VIEW */
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {scholars.map((scholar) => (
                 <div
@@ -408,7 +704,9 @@ export default function DirectoryPage() {
                       <img
                         src={scholar.user?.avatar_url || '/default-avatar.svg'}
                         alt={scholar.surname}
-                        className="w-16 h-16 rounded-2xl object-cover border-2 border-azure-100 shadow-md group-hover:scale-105 transition bg-slate-900"
+                        loading="lazy"
+                        onError={(e) => { e.currentTarget.src = '/default-avatar.svg'; }}
+                        className="w-16 h-16 rounded-2xl object-cover border-2 border-azure-100 shadow-md group-hover:scale-105 transition bg-slate-900 shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-1.5 mb-1">
@@ -487,6 +785,67 @@ export default function DirectoryPage() {
               ))}
             </div>
           )}
+
+          {/* Server-Side Pagination Bar */}
+          {totalPages > 1 && (
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-soft-xl flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+              <div className="text-xs text-slate-500">
+                Page <strong className="text-slate-900">{page}</strong> of <strong className="text-slate-900">{totalPages}</strong>
+              </div>
+
+              <div className="flex items-center space-x-1.5">
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page <= 1}
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center space-x-1"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Prev</span>
+                </button>
+
+                {/* Numbered Page Buttons */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, idx) => {
+                  let pNum;
+                  if (totalPages <= 5) {
+                    pNum = idx + 1;
+                  } else if (page <= 3) {
+                    pNum = idx + 1;
+                  } else if (page >= totalPages - 2) {
+                    pNum = totalPages - 4 + idx;
+                  } else {
+                    pNum = page - 2 + idx;
+                  }
+
+                  const active = pNum === page;
+                  return (
+                    <button
+                      key={pNum}
+                      type="button"
+                      onClick={() => handlePageChange(pNum)}
+                      className={`w-8 h-8 rounded-xl text-xs font-bold transition ${
+                        active
+                          ? 'bg-slate-900 text-white shadow-xs'
+                          : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
+                      }`}
+                    >
+                      {pNum}
+                    </button>
+                  );
+                })}
+
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page >= totalPages}
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center space-x-1"
+                >
+                  <span>Next</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Dedicated Sticky Sidebar for Sidebar Placements */}
@@ -504,8 +863,8 @@ export default function DirectoryPage() {
               Every listed faculty member undergoes institutional verification to showcase academic excellence across 54 African countries.
             </p>
             <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-600">
-              <span>Visible Records</span>
-              <span className="font-black text-brand-600">{scholars.length} Faculty</span>
+              <span>Total in Database</span>
+              <span className="font-black text-brand-600">{total.toLocaleString()} Faculty</span>
             </div>
           </div>
         </aside>
@@ -540,7 +899,8 @@ export default function DirectoryPage() {
                 <img
                   src={selectedScholar.user?.avatar_url || '/default-avatar.svg'}
                   alt={selectedScholar.surname}
-                  className="w-24 h-24 rounded-3xl object-cover border-4 border-brand-100 shadow-xl bg-slate-900"
+                  onError={(e) => { e.currentTarget.src = '/default-avatar.svg'; }}
+                  className="w-24 h-24 rounded-3xl object-cover border-4 border-brand-100 shadow-xl bg-slate-900 shrink-0"
                 />
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
