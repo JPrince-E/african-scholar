@@ -189,7 +189,7 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-soft-xl text-center">
-            <span className="text-[10px] uppercase font-bold text-amber-500 block">Supervised PhDs</span>
+            <span className="text-[10px] font-bold text-amber-600 block tracking-wide">Supervised Ph.D.s</span>
             <span className="text-2xl font-black text-amber-700 mt-1 block">
               {profile.phd_count}
             </span>

@@ -28,6 +28,8 @@ export default function RegisterScholarPage({ setActiveTab }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [externalUniversities, setExternalUniversities] = useState([]);
   const [loadingUniversities, setLoadingUniversities] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [showTrialNotificationModal, setShowTrialNotificationModal] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -54,21 +56,21 @@ export default function RegisterScholarPage({ setActiveTab }) {
     // Positions
     past_positions: [''],
     present_positions: [''],
-    // Academic metrics
-    mentees_count: 0,
-    postdocs_count: 0,
-    phd_count: 0,
-    msc_count: 0,
-    honours_count: 0,
-    conferences_count: 0,
-    publications_count: 0,
-    citations_count: 0,
-    google_h_index: 0,
-    google_i10_index: 0,
+    // Academic metrics (initialized as empty string so no stubborn zero)
+    mentees_count: '',
+    postdocs_count: '',
+    phd_count: '',
+    msc_count: '',
+    honours_count: '',
+    conferences_count: '',
+    publications_count: '',
+    citations_count: '',
+    google_h_index: '',
+    google_i10_index: '',
     // Milestones
-    awards_count: 0,
-    grants_count: 0,
-    patents_count: 0,
+    awards_count: '',
+    grants_count: '',
+    patents_count: '',
     // Community impact
     community_impact_activities: [''],
     fee_paid: true,
@@ -99,22 +101,22 @@ export default function RegisterScholarPage({ setActiveTab }) {
         nationality: p.nationality || 'Nigeria',
         hobbies: p.hobbies || '',
         bio: p.bio || '',
-        avatar_url: (user.avatar_url && !user.avatar_url.includes('unsplash')) ? user.avatar_url : '/default-avatar.svg',
+        avatar_url: user.avatar_url || '/default-avatar.svg',
         past_positions: Array.isArray(p.past_positions) && p.past_positions.length ? p.past_positions : [''],
         present_positions: Array.isArray(p.present_positions) && p.present_positions.length ? p.present_positions : [''],
-        mentees_count: p.mentees_count || 0,
-        postdocs_count: p.postdocs_count || 0,
-        phd_count: p.phd_count || 0,
-        msc_count: p.msc_count || 0,
-        honours_count: p.honours_count || 0,
-        conferences_count: p.conferences_count || 0,
-        publications_count: p.publications_count || 0,
-        citations_count: p.citations_count || 0,
-        google_h_index: p.google_h_index || 0,
-        google_i10_index: p.google_i10_index || 0,
-        awards_count: p.awards_count || 0,
-        grants_count: p.grants_count || 0,
-        patents_count: p.patents_count || 0,
+        mentees_count: p.mentees_count != null ? String(p.mentees_count) : '',
+        postdocs_count: p.postdocs_count != null ? String(p.postdocs_count) : '',
+        phd_count: p.phd_count != null ? String(p.phd_count) : '',
+        msc_count: p.msc_count != null ? String(p.msc_count) : '',
+        honours_count: p.honours_count != null ? String(p.honours_count) : '',
+        conferences_count: p.conferences_count != null ? String(p.conferences_count) : '',
+        publications_count: p.publications_count != null ? String(p.publications_count) : '',
+        citations_count: p.citations_count != null ? String(p.citations_count) : '',
+        google_h_index: p.google_h_index != null ? String(p.google_h_index) : '',
+        google_i10_index: p.google_i10_index != null ? String(p.google_i10_index) : '',
+        awards_count: p.awards_count != null ? String(p.awards_count) : '',
+        grants_count: p.grants_count != null ? String(p.grants_count) : '',
+        patents_count: p.patents_count != null ? String(p.patents_count) : '',
         community_impact_activities: Array.isArray(p.community_impact_activities) && p.community_impact_activities.length ? p.community_impact_activities : [''],
         fee_paid: true,
         paystack_reference: p.paystack_reference || 'PROMO-2027-WAIVED'
@@ -123,7 +125,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
       setFormData(prev => ({
         ...prev,
         official_email: user.email,
-        avatar_url: (user.avatar_url && !user.avatar_url.includes('unsplash')) ? user.avatar_url : '/default-avatar.svg'
+        avatar_url: user.avatar_url || '/default-avatar.svg'
       }));
     }
   }, [user]);
@@ -154,7 +156,9 @@ export default function RegisterScholarPage({ setActiveTab }) {
 
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: parseInt(value) || 0 }));
+    // Allow digits only; blank string when cleared so no stubborn zero remains
+    const cleanValue = value.replace(/\D/g, '');
+    setFormData(prev => ({ ...prev, [name]: cleanValue }));
   };
 
   // Dynamic Array handlers
@@ -181,6 +185,11 @@ export default function RegisterScholarPage({ setActiveTab }) {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Immediately display preview with zero delay
+    const localPreview = URL.createObjectURL(file);
+    setFormData(prev => ({ ...prev, avatar_url: localPreview }));
+    setUploadingAvatar(true);
+
     const data = new FormData();
     data.append('file', file);
 
@@ -188,17 +197,19 @@ export default function RegisterScholarPage({ setActiveTab }) {
       const res = await api.post('/uploads', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      if (res.data.success) {
+      if (res.data.success && res.data.file_url) {
         setFormData(prev => ({ ...prev, avatar_url: res.data.file_url }));
       }
     } catch (err) {
-      console.error('Upload failed:', err);
-      // Fallback preview
+      console.error('Upload failed, falling back to local Base64:', err);
+      // Fallback base64 so profile save still persists the image
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData(prev => ({ ...prev, avatar_url: reader.result }));
       };
       reader.readAsDataURL(file);
+    } finally {
+      setUploadingAvatar(false);
     }
   };
 
@@ -214,9 +225,21 @@ export default function RegisterScholarPage({ setActiveTab }) {
     setSuccessMessage('');
 
     try {
-      // Clean up empty strings in arrays
+      // Clean up empty strings in arrays & parse string counts to clean numbers
       const cleanedData = {
         ...formData,
+        publications_count: parseInt(formData.publications_count, 10) || 0,
+        citations_count: parseInt(formData.citations_count, 10) || 0,
+        google_h_index: parseInt(formData.google_h_index, 10) || 0,
+        google_i10_index: parseInt(formData.google_i10_index, 10) || 0,
+        phd_count: parseInt(formData.phd_count, 10) || 0,
+        msc_count: parseInt(formData.msc_count, 10) || 0,
+        mentees_count: parseInt(formData.mentees_count, 10) || 0,
+        postdocs_count: parseInt(formData.postdocs_count, 10) || 0,
+        conferences_count: parseInt(formData.conferences_count, 10) || 0,
+        honours_count: parseInt(formData.honours_count, 10) || 0,
+        grants_count: parseInt(formData.grants_count, 10) || 0,
+        patents_count: parseInt(formData.patents_count, 10) || 0,
         past_positions: formData.past_positions.filter(p => p.trim() !== ''),
         present_positions: formData.present_positions.filter(p => p.trim() !== ''),
         community_impact_activities: formData.community_impact_activities.filter(a => a.trim() !== '')
@@ -226,9 +249,8 @@ export default function RegisterScholarPage({ setActiveTab }) {
       if (res.data.success) {
         setSuccessMessage('Scholar registration (Ph.D. & Professor) saved successfully!');
         await fetchCurrentUser();
-        setTimeout(() => {
-          setActiveTab('dashboard');
-        }, 1500);
+        // Show 1-Year Free Trial notification modal which stays until the user clicks OK
+        setShowTrialNotificationModal(true);
       }
     } catch (err) {
       setErrorMessage(err.response?.data?.message || err.message || 'Failed to save profile');
@@ -337,17 +359,23 @@ export default function RegisterScholarPage({ setActiveTab }) {
 
             {/* Avatar Upload */}
             <div className="flex items-center space-x-6">
-              <div className="relative">
+              <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-coral-500 shadow-md bg-slate-900 flex items-center justify-center shrink-0">
                 <img
-                  src={(formData.avatar_url && !formData.avatar_url.includes('unsplash')) ? formData.avatar_url : '/default-avatar.svg'}
+                  src={formData.avatar_url || '/default-avatar.svg'}
                   alt="avatar"
-                  onError={(e) => { e.target.src = '/default-avatar.svg'; }}
-                  className="w-20 h-20 rounded-2xl object-cover border-2 border-coral-500 shadow-md bg-slate-900"
+                  onError={(e) => { e.currentTarget.src = '/default-avatar.svg'; }}
+                  className="w-full h-full object-cover"
                 />
+                {uploadingAvatar && (
+                  <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-xs flex flex-col items-center justify-center text-white">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mb-1"></div>
+                    <span className="text-[9px] font-bold tracking-tight">Uploading...</span>
+                  </div>
+                )}
               </div>
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Profile Photo (Cloudinary)
+                <label className="block text-xs font-bold text-slate-700 tracking-wider">
+                  Profile Photo (Faculty Portrait)
                 </label>
                 <div className="flex flex-wrap items-center gap-2">
                   <input
@@ -790,12 +818,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Publications Count *
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   required
                   name="publications_count"
                   value={formData.publications_count}
@@ -805,12 +835,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Citations Count *
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   required
                   name="citations_count"
                   value={formData.citations_count}
@@ -820,12 +852,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Google H-Index *
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   required
                   name="google_h_index"
                   value={formData.google_h_index}
@@ -835,12 +869,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Google i10-Index *
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   required
                   name="google_i10_index"
                   value={formData.google_i10_index}
@@ -852,12 +888,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  PhDs Supervised *
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
+                  Ph.D.s Supervised *
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   name="phd_count"
                   value={formData.phd_count}
                   onChange={handleNumberChange}
@@ -866,12 +904,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  MScs Supervised *
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
+                  M.Sc.s Supervised *
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   name="msc_count"
                   value={formData.msc_count}
                   onChange={handleNumberChange}
@@ -880,12 +920,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Academic Mentees
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   name="mentees_count"
                   value={formData.mentees_count}
                   onChange={handleNumberChange}
@@ -894,12 +936,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Postdoctoral Fellows
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   name="postdocs_count"
                   value={formData.postdocs_count}
                   onChange={handleNumberChange}
@@ -910,12 +954,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Conferences / Workshops
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   name="conferences_count"
                   value={formData.conferences_count}
                   onChange={handleNumberChange}
@@ -924,12 +970,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Academic Honours
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   name="honours_count"
                   value={formData.honours_count}
                   onChange={handleNumberChange}
@@ -938,12 +986,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Research Grants Won
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   name="grants_count"
                   value={formData.grants_count}
                   onChange={handleNumberChange}
@@ -952,12 +1002,14 @@ export default function RegisterScholarPage({ setActiveTab }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-700 tracking-wide mb-1">
                   Patents Granted
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
                   name="patents_count"
                   value={formData.patents_count}
                   onChange={handleNumberChange}
@@ -1106,6 +1158,56 @@ export default function RegisterScholarPage({ setActiveTab }) {
           )}
         </div>
       </form>
+
+      {/* 1-Year Free Trial Activation Modal (Persistent until user clicks OK) */}
+      {showTrialNotificationModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-slate-100 shadow-2xl text-center space-y-6 relative animate-scale-up">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-100 shadow-inner">
+              <Sparkles className="w-8 h-8 text-emerald-500 animate-pulse" />
+            </div>
+
+            <div className="space-y-2">
+              <span className="inline-block px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800">
+                Inaugural Benefit Active
+              </span>
+              <h3 className="text-2xl font-black text-slate-900">
+                1-Year Free Trial Activated!
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
+                Welcome to the African Scholar Registry. As an inaugural scholar, your annual membership fee of <span className="font-semibold line-through text-slate-400">$1.00</span> has been <span className="font-bold text-emerald-600">100% waived ($0.00)</span> for your first year.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-left space-y-2.5 text-xs text-slate-700">
+              <div className="flex items-center space-x-2 font-bold text-slate-900">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>What's unlocked for you:</span>
+              </div>
+              <ul className="space-y-1.5 pl-6 list-disc text-slate-600">
+                <li>Official scholar profile listed in the continental Directory</li>
+                <li>Automated academic evaluation for National, African & Global awards</li>
+                <li>Inclusion in the African Scholar of the Year ranking</li>
+                <li>No payment or credit card required for the entire year</li>
+              </ul>
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowTrialNotificationModal(false);
+                  setActiveTab('dashboard');
+                }}
+                className="w-full py-3.5 px-6 rounded-xl bg-coral-600 hover:bg-coral-700 text-white font-extrabold text-sm shadow-lg hover:shadow-xl transition transform active:scale-98 flex items-center justify-center space-x-2"
+              >
+                <span>OK, Proceed to Dashboard</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -24,7 +24,7 @@ const User = sequelize.define('User', {
     defaultValue: 'SCHOLAR'
   },
   avatar_url: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true,
     defaultValue: '/default-avatar.svg'
   },

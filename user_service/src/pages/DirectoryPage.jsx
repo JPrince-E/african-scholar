@@ -600,11 +600,11 @@ export default function DirectoryPage() {
 
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center pt-2">
                   <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[9px] uppercase font-bold text-slate-400 block">PhDs Graduated</span>
+                    <span className="text-[9px] font-bold text-slate-500 block tracking-tight">Ph.D.s Graduated</span>
                     <span className="text-sm font-bold text-slate-900">{selectedScholar.phd_count || 0}</span>
                   </div>
                   <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                    <span className="text-[9px] uppercase font-bold text-slate-400 block">MScs Graduated</span>
+                    <span className="text-[9px] font-bold text-slate-500 block tracking-tight">M.Sc.s Graduated</span>
                     <span className="text-sm font-bold text-slate-900">{selectedScholar.msc_count || 0}</span>
                   </div>
                   <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
