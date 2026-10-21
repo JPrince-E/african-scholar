@@ -1,0 +1,19 @@
+{
+  "name": "African Scholar — Pan-African Academic Excellence Registry",
+  "short_name": "African Scholar",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#041329",
+  "theme_color": "#041329",
+  "description": "Pan-African Registry of Academic Excellence, Professorial & Doctoral Awards, and Scholars Directory across 54 African countries.",
+  "categories": ["education", "research", "academia"],
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

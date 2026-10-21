@@ -34,6 +34,11 @@ export default function Footer({ setActiveTab }) {
                 </button>
               </li>
               <li>
+                <button onClick={() => setActiveTab('hall_of_fame')} className="text-left block text-amber-400 hover:text-amber-300 font-bold transition">
+                  Hall of Fame & Laureates
+                </button>
+              </li>
+              <li>
                 <button onClick={() => setActiveTab('register_scholar')} className="text-left block hover:text-white transition">
                   Academic Metric Registration
                 </button>

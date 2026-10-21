@@ -82,6 +82,8 @@ exports.getPublicDirectory = async (req, res) => {
       university = '',
       discipline = '',
       title = '',
+      category = '',
+      sdg = '',
       sortBy = 'citations_count',
       order = 'DESC',
       page = 1,
@@ -89,6 +91,8 @@ exports.getPublicDirectory = async (req, res) => {
     } = req.query;
 
     const where = {};
+    const isPostgres = ScholarProfile.sequelize.getDialect() === 'postgres';
+    const matchOp = isPostgres ? Op.iLike : Op.like;
 
     if (country) {
       where.country = country;
@@ -97,19 +101,35 @@ exports.getPublicDirectory = async (req, res) => {
       where.university_name = university;
     }
     if (discipline) {
-      where.discipline = { [Op.like]: `%${discipline}%` };
+      where.discipline = { [matchOp]: `%${discipline}%` };
     }
     if (title) {
       where.title = title;
     }
 
+    if (category === 'PROFESSORIAL') {
+      where.title = { [matchOp]: '%Prof%' };
+    } else if (category === 'DOCTORAL') {
+      where[Op.or] = [
+        { title: { [matchOp]: '%Dr%' } },
+        { highest_degree: { [matchOp]: '%PhD%' } }
+      ];
+    }
+
+    if (sdg) {
+      where[Op.or] = [
+        { discipline: { [matchOp]: `%${sdg}%` } },
+        { research_focus: { [matchOp]: `%${sdg}%` } }
+      ];
+    }
+
     if (search) {
       where[Op.or] = [
-        { first_name: { [Op.like]: `%${search}%` } },
-        { surname: { [Op.like]: `%${search}%` } },
-        { university_name: { [Op.like]: `%${search}%` } },
-        { discipline: { [Op.like]: `%${search}%` } },
-        { research_focus: { [Op.like]: `%${search}%` } }
+        { first_name: { [matchOp]: `%${search}%` } },
+        { surname: { [matchOp]: `%${search}%` } },
+        { university_name: { [matchOp]: `%${search}%` } },
+        { discipline: { [matchOp]: `%${search}%` } },
+        { research_focus: { [matchOp]: `%${search}%` } }
       ];
     }
 

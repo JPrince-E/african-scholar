@@ -11,6 +11,7 @@ import ApplyAwardPage from './pages/ApplyAwardPage';
 import UserDashboardPage from './pages/UserDashboardPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import HallOfFamePage from './pages/HallOfFamePage';
 
 export default function App() {
   const getInitialTab = () => {
@@ -19,6 +20,7 @@ export default function App() {
     if (path.startsWith('/dashboard')) return 'dashboard';
     if (path.startsWith('/directory')) return 'directory';
     if (path.startsWith('/awards')) return 'awards';
+    if (path.startsWith('/hall_of_fame') || path.startsWith('/laureates')) return 'hall_of_fame';
     if (path.startsWith('/terms')) return 'terms';
     if (path.startsWith('/privacy')) return 'privacy';
     return 'landing';
@@ -69,6 +71,8 @@ export default function App() {
         return <RegisterScholarPage setActiveTab={handleTabChange} />;
       case 'awards':
         return <AwardsPage setActiveTab={handleTabChange} setSelectedAwardId={setSelectedAwardId} />;
+      case 'hall_of_fame':
+        return <HallOfFamePage setActiveTab={handleTabChange} />;
       case 'apply_award':
         return <ApplyAwardPage selectedAwardId={selectedAwardId} setActiveTab={handleTabChange} />;
       case 'dashboard':
