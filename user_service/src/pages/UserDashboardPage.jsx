@@ -70,6 +70,10 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
       fetchMyApplications();
       fetchNotifications();
     }
+
+    const handleSync = () => fetchNotifications();
+    window.addEventListener('notifications-updated', handleSync);
+    return () => window.removeEventListener('notifications-updated', handleSync);
   }, [user]);
 
   const handleBulletinNavigation = async (item) => {
@@ -83,6 +87,7 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
       api.put(`/notifications/${id}/read`).catch(err => {
         console.warn('Error marking notification read:', err);
       });
+      window.dispatchEvent(new CustomEvent('notifications-updated'));
     }
 
     if (!link) return;

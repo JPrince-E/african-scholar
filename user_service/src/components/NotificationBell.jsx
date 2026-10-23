@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Award, Users, Sparkles, Bell } from 'lucide-react';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const NotificationBell = ({ onNavigate }) => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -22,9 +24,15 @@ const NotificationBell = ({ onNavigate }) => {
 
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000); // 30s polling
-    return () => clearInterval(interval);
-  }, []);
+    const interval = setInterval(fetchNotifications, 30000); // 30s background sync
+    const handleUpdate = () => fetchNotifications();
+    window.addEventListener('notifications-updated', handleUpdate);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('notifications-updated', handleUpdate);
+    };
+  }, [user]);
 
   // Close when clicking outside
   useEffect(() => {
@@ -39,9 +47,14 @@ const NotificationBell = ({ onNavigate }) => {
 
   const handleMarkAsRead = async (id, link) => {
     try {
-      await api.put(`/notifications/${id}/read`);
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
-      setUnreadCount(prev => Math.max(0, prev - 1));
+      const target = notifications.find(n => n.id === id);
+      if (target && !target.is_read) {
+        // Optimistically update badge and state only if it was unread
+        setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+        setUnreadCount(prev => Math.max(0, prev - 1));
+        api.put(`/notifications/${id}/read`).catch(err => console.error(err));
+        window.dispatchEvent(new CustomEvent('notifications-updated'));
+      }
       if (link) {
         setIsOpen(false);
         if (onNavigate) {
@@ -57,9 +70,10 @@ const NotificationBell = ({ onNavigate }) => {
 
   const handleMarkAllRead = async () => {
     try {
-      await api.post('/notifications/read-all');
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
       setUnreadCount(0);
+      await api.post('/notifications/read-all');
+      window.dispatchEvent(new CustomEvent('notifications-updated'));
     } catch (err) {
       console.error('Error marking all as read:', err);
     }

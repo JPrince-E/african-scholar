@@ -1,17 +1,13 @@
 const { Notification } = require('../models');
+const { Op } = require('sequelize');
 
 exports.getNotifications = async (req, res) => {
   try {
     const userId = req.user?.id || null;
 
-    let notifications = await Notification.findAll({
-      where: userId ? { user_id: [userId, null] } : {},
-      order: [['createdAt', 'DESC']],
-      limit: 20
-    });
-
-    // If none exist in database, seed realistic initial alerts
-    if (notifications.length === 0) {
+    // Seed realistic initial alerts ONLY if the database table itself is completely empty
+    const totalCount = await Notification.count();
+    if (totalCount === 0) {
       const initialAlerts = [
         {
           user_id: null,
@@ -45,22 +41,37 @@ exports.getNotifications = async (req, res) => {
       for (const alert of initialAlerts) {
         await Notification.create(alert);
       }
-
-      notifications = await Notification.findAll({
-        order: [['createdAt', 'DESC']],
-        limit: 10
-      });
     }
+
+    // Query notifications:
+    // Logged-in user: get direct personal notifications for this user OR broadcast notifications (user_id is NULL)
+    // Guest: only get broadcast notifications (user_id is NULL)
+    const where = userId
+      ? { [Op.or]: [{ user_id: userId }, { user_id: null }] }
+      : { user_id: null };
+
+    const notifications = await Notification.findAll({
+      where,
+      order: [['createdAt', 'DESC']],
+      limit: 20
+    });
 
     // Format notifications with personalized is_read status for this specific user
     const formatted = notifications.map(n => {
       const item = n.toJSON ? n.toJSON() : { ...n };
-      const readList = Array.isArray(item.read_by) ? item.read_by : [];
+      let readList = [];
+      if (Array.isArray(item.read_by)) {
+        readList = item.read_by;
+      } else if (typeof item.read_by === 'string') {
+        try { readList = JSON.parse(item.read_by); } catch (_) { readList = []; }
+      }
       
       let isReadForThisUser = false;
-      if (item.user_id && item.user_id === userId) {
+      if (item.user_id && userId && item.user_id === userId) {
+        // Direct personal notification
         isReadForThisUser = Boolean(item.is_read);
       } else if (userId && readList.includes(userId)) {
+        // Broadcast notification read by this user
         isReadForThisUser = true;
       }
 
@@ -72,14 +83,14 @@ exports.getNotifications = async (req, res) => {
 
     const unreadCount = formatted.filter(n => !n.is_read).length;
 
-    res.json({
+    return res.json({
       success: true,
       unreadCount,
       notifications: formatted
     });
   } catch (error) {
     console.error('Notifications fetch error:', error);
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -158,8 +169,6 @@ exports.markAllAsRead = async (req, res) => {
           await b.save();
         }
       }
-    } else {
-      await Notification.update({ is_read: true }, { where: {} });
     }
     return res.json({ success: true, message: 'All notifications marked as read' });
   } catch (error) {
