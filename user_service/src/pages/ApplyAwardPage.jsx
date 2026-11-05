@@ -650,6 +650,12 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
                 type="text"
                 value={doiInput}
                 onChange={(e) => setDoiInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleVerifyDoi();
+                  }
+                }}
                 placeholder="e.g. 10.1038/s41586-020-2649-2 or https://doi.org/..."
                 className="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-brand-500 font-mono placeholder:text-slate-400"
               />
@@ -719,6 +725,12 @@ export default function ApplyAwardPage({ selectedAwardId, setActiveTab }) {
                 type="text"
                 value={orcidInput}
                 onChange={(e) => setOrcidInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleVerifyOrcid();
+                  }
+                }}
                 placeholder="e.g. 0000-0002-1825-0097 or https://orcid.org/..."
                 className="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-emerald-500 font-mono placeholder:text-slate-400"
               />

@@ -9,8 +9,9 @@ exports.lookupDoi = async (req, res) => {
 
     // Clean DOI: strip common prefixes
     doi = doi.trim();
-    doi = doi.replace(/^https?:\/\/doi\.org\//i, '');
+    doi = doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i, '');
     doi = doi.replace(/^doi:\s*/i, '');
+    doi = doi.replace(/^\/+|\/+$/g, '');
     doi = doi.trim();
 
     if (!doi) {
@@ -108,6 +109,9 @@ exports.lookupDoi = async (req, res) => {
       quartile = 'Q1';
       estimatedIF = '5.4';
     }
+
+    // Build standard formatted academic citation
+    const citation = `${authorsFormatted} (${year}). ${title}. ${journal}${volume ? `, ${volume}` : ''}${issue ? `(${issue})` : ''}. https://doi.org/${doi}`;
 
     return res.json({
       success: true,
