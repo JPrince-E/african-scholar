@@ -86,7 +86,7 @@ const AD_PRICING_PLANS = [
     subtitle: '30 days flagship presence + email newsletter spot',
     bestFor: 'EdTech platforms, scientific equipment & journals',
     popular: true,
-    badgeColor: 'bg-brand-600 text-white border-brand-600',
+    badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-300',
     features: [
       '30 days priority rotation across all 54 African countries',
       'Spotlight placement in monthly scholar newsletter',
