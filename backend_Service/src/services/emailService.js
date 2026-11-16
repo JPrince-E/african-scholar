@@ -36,7 +36,7 @@ const sendMail = async ({ to, subject, html }) => {
     }
 
     const info = await transporter.sendMail({
-      from: `"African Scholar Awards" <${process.env.SMTP_USER || 'no-reply@africanscholar.org'}>`,
+      from: `"Pan-African Scholars Awards" <${process.env.SMTP_USER || 'no-reply@panafricanscholars.com'}>`,
       to,
       subject,
       html
@@ -54,7 +54,7 @@ const sendMail = async ({ to, subject, html }) => {
 const emailHeader = (title) => `
   <div style="background: linear-gradient(135deg, #091e3a 0%, #1e3a8a 100%); padding: 36px 28px; border-radius: 16px 16px 0 0; text-align: center;">
     <div style="display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 999px; margin-bottom: 14px;">
-      <span style="color: #fbbf24; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">African Scholar Initiative</span>
+      <span style="color: #fbbf24; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">Pan-African Scholars Initiative</span>
     </div>
     <h1 style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
       ${title}
@@ -64,8 +64,8 @@ const emailHeader = (title) => `
 
 const emailFooter = () => `
   <div style="background: #f8fafc; padding: 24px; border-radius: 0 0 16px 16px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #64748b; font-family: sans-serif;">
-    <p style="margin: 0 0 8px;">African Scholar — Celebrating & Elevating Academic Excellence Across Africa</p>
-    <p style="margin: 0;">This official communication was issued by the African Scholar Academic Directorate.</p>
+    <p style="margin: 0 0 8px;">Pan-African Scholars — Celebrating & Elevating Academic Excellence Across Africa</p>
+    <p style="margin: 0;">This official communication was issued by the Pan-African Scholars Academic Directorate.</p>
   </div>
 `;
 
@@ -73,16 +73,16 @@ exports.sendWelcomeEmail = async ({ email, name, title }) => {
   const greeting = title && name ? `${title} ${name}` : (name || 'Esteemed Scholar');
   const html = `
     <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.05); overflow: hidden;">
-      ${emailHeader('Welcome to African Scholar')}
+      ${emailHeader('Welcome to Pan-African Scholars')}
       <div style="padding: 32px 28px; color: #1e293b; line-height: 1.6;">
         <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 0;">Welcome, ${greeting}!</h2>
         <p style="font-size: 14px; color: #475569;">
-          Your academic registration on the <strong>African Scholar Pan-African Registry</strong> has been successfully created.
+          Your academic registration on the <strong>Pan-African Scholars Registry</strong> has been successfully created.
         </p>
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 16px 20px; margin: 24px 0;">
           <h4 style="margin: 0 0 6px; color: #166534; font-size: 13px; font-weight: 700;">✓ Verified Academic Profile Active</h4>
           <p style="margin: 0; font-size: 12px; color: #15803d;">
-            You can now showcase research publications, index metrics, and submit nominations for official African Scholar Awards.
+            You can now showcase research publications, index metrics, and submit nominations for official Pan-African Scholars Awards.
           </p>
         </div>
         <p style="font-size: 13px; color: #475569;">
@@ -100,7 +100,7 @@ exports.sendWelcomeEmail = async ({ email, name, title }) => {
 
   return sendMail({
     to: email,
-    subject: 'Welcome to African Scholar — Academic Excellence Registry',
+    subject: 'Welcome to Pan-African Scholars — Academic Excellence Registry',
     html
   });
 };
@@ -120,7 +120,7 @@ exports.sendApplicationSubmittedEmail = async ({ email, name, awardTitle, tier, 
           <div style="font-size: 12px;"><span style="color: #64748b;">Current Status:</span> <span style="background: #dbeafe; color: #1e40af; font-weight: 700; padding: 2px 8px; border-radius: 6px; font-size: 11px;">SUBMITTED</span></div>
         </div>
         <p style="font-size: 13px; color: #475569;">
-          Your submitted publications, citation spread, and doctoral supervisions are currently queued for evaluation by the African Scholar Academic Benchmark Committee.
+          Your submitted publications, citation spread, and doctoral supervisions are currently queued for evaluation by the Pan-African Scholars Academic Benchmark Committee.
         </p>
         <div style="text-align: center; margin: 28px 0;">
           <a href="${process.env.USER_CLIENT_URL || 'http://localhost:3000'}/dashboard" style="background: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 10px; font-size: 13px; font-weight: 700; display: inline-block;">
@@ -134,7 +134,7 @@ exports.sendApplicationSubmittedEmail = async ({ email, name, awardTitle, tier, 
 
   return sendMail({
     to: email,
-    subject: `[African Scholar] Nomination Received: ${awardTitle}`,
+    subject: `[Pan-African Scholars] Nomination Received: ${awardTitle}`,
     html
   });
 };
@@ -164,7 +164,7 @@ exports.sendApplicationVerdictEmail = async ({ email, name, awardTitle, tier, st
       <div style="padding: 32px 28px; color: #1e293b; line-height: 1.6;">
         <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 0;">Dear ${name || 'Colleague'},</h2>
         <p style="font-size: 14px; color: #475569;">
-          The African Scholar Review Committee has reviewed your application for <strong>${awardTitle}</strong>.
+          The Pan-African Scholars Review Committee has reviewed your application for <strong>${awardTitle}</strong>.
         </p>
 
         <div style="background: ${statusBg}; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
@@ -197,7 +197,7 @@ exports.sendApplicationVerdictEmail = async ({ email, name, awardTitle, tier, st
 
   return sendMail({
     to: email,
-    subject: `[African Scholar Review Verdict] ${awardTitle}: ${status}`,
+    subject: `[Pan-African Scholars Review Verdict] ${awardTitle}: ${status}`,
     html
   });
 };
@@ -216,7 +216,7 @@ exports.sendLaureateAwardEmail = async ({ email, name, awardTitle, tier, prizeAm
       <div style="padding: 32px 28px; color: #1e293b; line-height: 1.6;">
         <h2 style="font-size: 20px; font-weight: 900; color: #0f172a; margin-top: 0; text-align: center;">${name}</h2>
         <p style="font-size: 14px; text-align: center; color: #475569; margin-bottom: 24px;">
-          The Board of Trustees and Academic Review Directorate of <strong>African Scholar</strong> are profoundly honored to declare you as the Winner of:
+          The Board of Trustees and Academic Review Directorate of <strong>Pan-African Scholars</strong> are profoundly honored to declare you as the Winner of:
         </p>
 
         <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 14px; padding: 22px; margin: 20px 0; text-align: center;">
@@ -255,7 +255,7 @@ exports.sendLaureateAwardEmail = async ({ email, name, awardTitle, tier, prizeAm
 
   return sendMail({
     to: email,
-    subject: `★ Official Laureate Announcement ★: ${awardTitle} — African Scholar 2027`,
+    subject: `★ Official Laureate Announcement ★: ${awardTitle} — Pan-African Scholars 2027`,
     html
   });
 };
@@ -276,7 +276,7 @@ exports.sendRefereeInvitationEmail = async ({
           Dear <strong>${refereeName || 'Distinguished Scholar'}</strong>,
         </p>
         <p style="font-size: 14px; line-height: 1.6; color: #475569;">
-          You have been nominated by <strong>${candidateName}</strong> as a confidential academic referee for the <strong>${awardTitle || 'African Scholar Continental Honors'}</strong>.
+          You have been nominated by <strong>${candidateName}</strong> as a confidential academic referee for the <strong>${awardTitle || 'Pan-African Scholars Continental Honors'}</strong>.
         </p>
 
         <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 20px; margin: 24px 0;">
@@ -306,7 +306,7 @@ exports.sendRefereeInvitationEmail = async ({
 
   return sendMail({
     to: refereeEmail,
-    subject: `Confidential Academic Endorsement Request: ${candidateName} — African Scholar 2027`,
+    subject: `Confidential Academic Endorsement Request: ${candidateName} — Pan-African Scholars 2027`,
     html
   });
 };

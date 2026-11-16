@@ -1,6 +1,6 @@
-# 🚀 African Scholar Deployment Guide (Railway & Docker)
+# 🚀 Pan-African Scholars Deployment Guide (Railway & Docker)
 
-This guide walks you through deploying the complete African Scholar ecosystem:
+This guide walks you through deploying the complete Pan-African Scholars ecosystem:
 1. **MySQL Database**
 2. **Backend API Service** (`backend_Service`)
 3. **User Public Portal** (`user_service`)
@@ -22,7 +22,7 @@ npx @railway/cli login
 ---
 
 ### Step 2: Initialize or Link Your Project
-Create a new Railway project for African Scholar:
+Create a new Railway project for Pan-African Scholars:
 ```powershell
 npx @railway/cli init
 ```

@@ -98,7 +98,7 @@ export default function AdminAnalyticsDashboard() {
               </div>
             </div>
             <div className="text-3xl font-black text-slate-900">{analytics?.totalProfessors || 0}</div>
-            <p className="text-[11px] text-emerald-700 font-semibold">↑ Verified African Scholars (PhD & Prof)</p>
+            <p className="text-[11px] text-emerald-700 font-semibold">↑ Verified Pan-African Scholars (PhD & Prof)</p>
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-soft-xl space-y-2">

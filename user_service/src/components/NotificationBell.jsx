@@ -181,7 +181,7 @@ const NotificationBell = ({ onNavigate }) => {
           {/* Footer */}
           <div className="p-2.5 bg-slate-800/50 border-t border-slate-700/80 text-center">
             <span className="text-[10px] text-slate-500">
-              African Scholar Academic Notification Center
+              Pan-African Scholars Academic Notification Center
             </span>
           </div>
         </div>

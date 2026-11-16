@@ -60,7 +60,7 @@ export default function PrivacyPolicyPage({ setActiveTab }) {
             Privacy Policy
           </h1>
           <p className="text-sm text-slate-600">
-            How African Scholar and Bluespectrum Innovative Limited collect, process, protect, and manage your personal data across our pan-African scholarly index.
+            How Pan-African Scholars and Bluespectrum Innovative Limited collect, process, protect, and manage your personal data across our pan-African scholarly index.
           </p>
         </div>
 
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage({ setActiveTab }) {
             Bluespectrum Innovative Limited
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            This contains the privacy policy (“policy”) for African Scholar which is run and provided by Bluespectrum Innovative Limited (we, us and our). We will only use the personal data gathered over this platform as set out in this policy as outlined below with what control and information rights you may have.
+            This contains the privacy policy (“policy”) for Pan-African Scholars which is run and provided by Bluespectrum Innovative Limited (we, us and our). We will only use the personal data gathered over this platform as set out in this policy as outlined below with what control and information rights you may have.
           </p>
         </div>
 

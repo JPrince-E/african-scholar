@@ -49,7 +49,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
   };
 
   const handleShareOnX = () => {
-    const text = `I am deeply honored to be named an African Academic Laureate for 2027 by the African Scholar Initiative! Verify my credential: ${verifyUrl} #AfricanScholar #AcademicExcellence`;
+    const text = `I am deeply honored to be named an African Academic Laureate for 2027 by the Pan-African Scholars Initiative! Verify my credential: ${verifyUrl} #PanAfricanScholars #AcademicExcellence`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     window.open(twitterUrl, '_blank');
   };
@@ -133,7 +133,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
               <div className="space-y-2">
                 <div className="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-amber-100/80 border border-amber-300 text-amber-900 text-[10px] font-extrabold uppercase tracking-widest">
                   <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>African Scholar Academic Directorate</span>
+                  <span>Pan-African Scholars Academic Directorate</span>
                 </div>
                 <h1 className="text-2xl sm:text-4xl font-serif font-black tracking-tight text-slate-900 uppercase">
                   Certificate of Academic Laureate

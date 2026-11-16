@@ -305,7 +305,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
       <div className="mb-8">
         <div className="flex items-center space-x-2 text-xs font-bold text-azure-700 bg-azure-50 border border-azure-200/80 px-3 py-1 rounded-full w-fit mb-2">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>{isEditMode ? 'Faculty Profile & Metrics Editor' : 'African Scholar Registration Wizard'}</span>
+          <span>{isEditMode ? 'Faculty Profile & Metrics Editor' : 'Pan-African Scholars Registration Wizard'}</span>
         </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
           {isEditMode ? 'Update Scholar Metrics & Faculty Profile' : 'Scholar Metrics & Profile Registration (Ph.D. & Professors)'}
@@ -313,7 +313,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
         <p className="text-sm text-slate-500 mt-1">
           {isEditMode
             ? 'Update your academic milestones, publications, and supervised degrees.'
-            : 'Complete the official fields specified for the African Scholar faculty registry and annual academic awards.'}
+            : 'Complete the official fields specified for the Pan-African Scholars faculty registry and annual academic awards.'}
         </p>
 
         {/* Active Free Trial Status for Existing Profile */}
@@ -1133,7 +1133,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
                   </div>
                 ) : (
                   <p className="leading-relaxed">
-                    The African Scholar board has waived all registration fees for the inaugural 2027 academic cycle. Your 1-Year Free Trial starts immediately upon registration and will remain active for 365 days.
+                    The Pan-African Scholars board has waived all registration fees for the inaugural 2027 academic cycle. Your 1-Year Free Trial starts immediately upon registration and will remain active for 365 days.
                   </p>
                 )}
               </div>
@@ -1223,7 +1223,7 @@ export default function RegisterScholarPage({ setActiveTab }) {
                 1-Year Free Trial Activated!
               </h3>
               <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
-                Welcome to the African Scholar Registry. As an inaugural scholar, your annual membership fee of <span className="font-semibold line-through text-slate-400">$1.00</span> has been <span className="font-bold text-emerald-600">100% waived ($0.00)</span> for your first year.
+                Welcome to the Pan-African Scholars Registry. As an inaugural scholar, your annual membership fee of <span className="font-semibold line-through text-slate-400">$1.00</span> has been <span className="font-bold text-emerald-600">100% waived ($0.00)</span> for your first year.
               </p>
             </div>
 

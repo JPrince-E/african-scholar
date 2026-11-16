@@ -134,11 +134,11 @@ export default function ProFormaInvoiceModal({ onClose }) {
           <div className="flex flex-col sm:flex-row justify-between items-start gap-6 border-b-2 border-slate-900 pb-6">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 rounded-2xl bg-slate-900 text-coral-500 flex items-center justify-center font-black text-2xl shadow-lg border-2 border-coral-500 shrink-0">
-                AS
+                PAS
               </div>
               <div>
                 <h1 className="text-2xl font-black uppercase tracking-tight text-slate-900">
-                  African Scholar Platform
+                  Pan-African Scholars Platform
                 </h1>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Corporate Sponsorship & Partnerships Directorate
@@ -163,10 +163,10 @@ export default function ProFormaInvoiceModal({ onClose }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-xs">
             <div className="space-y-1.5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
               <span className="font-extrabold uppercase text-slate-400 text-[10px] block">Issued By:</span>
-              <h4 className="font-black text-slate-900 text-sm">African Scholar Platform Ltd</h4>
+              <h4 className="font-black text-slate-900 text-sm">Pan-African Scholars Platform Ltd</h4>
               <p className="text-slate-600">Directorate of Continental Partnerships & Media</p>
               <p className="text-slate-600">Lagos • Nairobi • Accra • Cape Town</p>
-              <p className="text-slate-600 font-mono text-[11px]">partnerships@africanscholar.org</p>
+              <p className="text-slate-600 font-mono text-[11px]">partnerships@panafricanscholars.com</p>
             </div>
 
             <div className="space-y-1.5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
@@ -230,7 +230,7 @@ export default function ProFormaInvoiceModal({ onClose }) {
                 <span>Option A: Electronic Settlement (Paystack)</span>
               </h5>
               <p className="text-slate-600">Direct Paystack Instant Payment Gateway</p>
-              <p className="font-mono text-slate-800">Merchant: African Scholar Platform</p>
+              <p className="font-mono text-slate-800">Merchant: Pan-African Scholars Platform</p>
               <p className="font-mono text-slate-800">Payment Reference: {invoiceNumber}</p>
             </div>
 
@@ -249,7 +249,7 @@ export default function ProFormaInvoiceModal({ onClose }) {
           <div className="pt-4 border-t border-slate-200 text-[11px] text-slate-500 space-y-1">
             <p className="font-bold text-slate-700">Advertising & Partnership Governance Notice:</p>
             <p className="leading-relaxed">
-              Subject to African Scholar Advertising Terms and Conditions (T&Cs). All sponsorships (S), partnerships (P), and advertisements (A) are subject to written confirmation or signed MOU, and Editorial Board compliance. Rates are non-refundable after commencement of banner rotation.
+              Subject to Pan-African Scholars Advertising Terms and Conditions (T&Cs). All sponsorships (S), partnerships (P), and advertisements (A) are subject to written confirmation or signed MOU, and Editorial Board compliance. Rates are non-refundable after commencement of banner rotation.
             </p>
           </div>
         </div>

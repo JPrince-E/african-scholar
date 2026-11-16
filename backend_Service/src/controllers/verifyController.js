@@ -84,10 +84,10 @@ exports.verifyCertificate = async (req, res) => {
           category: 'Physical & Mathematical Sciences',
           citation: 'For groundbreaking contributions to quantum photonic computing across African scientific institutions and transformative leadership in continental research capacity building.',
           dateConferred: 'September 5, 2027',
-          conferredBy: 'African Scholar Academic Council & Board of Trustees',
+          conferredBy: 'Pan-African Scholars Academic Council & Board of Trustees',
           signatories: [
             { name: 'Prof. Adebayo Ogunlesi', role: 'Continental Jury Chair' },
-            { name: 'Dr. Amina Touré', role: 'Secretary General, African Scholar Council' }
+            { name: 'Dr. Amina Touré', role: 'Secretary General, Pan-African Scholars Council' }
           ],
           blockchainStamp: '0x7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069'
         }
@@ -101,7 +101,7 @@ exports.verifyCertificate = async (req, res) => {
     
     const institution = profile?.primary_affiliation || 'Distinguished African University';
     const country = profile?.nationality || 'Continental Africa';
-    const awardTitle = app.award?.title || 'African Scholar Academic Excellence Award';
+    const awardTitle = app.award?.title || 'Pan-African Scholars Academic Excellence Award';
     const category = app.award?.category || 'STEM & Continental Research';
 
     const evidence = app.supporting_evidence || {};
@@ -123,10 +123,10 @@ exports.verifyCertificate = async (req, res) => {
         category,
         citation,
         dateConferred: app.updatedAt ? new Date(app.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'September 5, 2027',
-        conferredBy: 'African Scholar Academic Council & Board of Trustees',
+        conferredBy: 'Pan-African Scholars Academic Council & Board of Trustees',
         signatories: [
           { name: 'Prof. Adebayo Ogunlesi', role: 'Continental Jury Chair' },
-          { name: 'Dr. Amina Touré', role: 'Secretary General, African Scholar Council' }
+          { name: 'Dr. Amina Touré', role: 'Secretary General, Pan-African Scholars Council' }
         ],
         blockchainStamp: `0x${Buffer.from(cleanCode + scholarName).toString('hex').slice(0, 32)}`
       }

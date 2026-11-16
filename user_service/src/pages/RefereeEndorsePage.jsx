@@ -112,7 +112,7 @@ const RefereeEndorsePage = ({ setActiveTab }) => {
             onClick={() => setActiveTab ? setActiveTab('landing') : window.location.assign('/')}
             className="inline-block px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-sm font-semibold transition"
           >
-            Return to African Scholar
+            Return to Pan-African Scholars
           </button>
         </div>
       </div>
@@ -188,7 +188,7 @@ const RefereeEndorsePage = ({ setActiveTab }) => {
               onClick={() => setActiveTab ? setActiveTab('landing') : window.location.assign('/')}
               className="inline-block px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-sm font-semibold transition"
             >
-              Visit African Scholar Portal
+              Visit Pan-African Scholars Portal
             </button>
           </div>
         ) : (

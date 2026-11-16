@@ -37,7 +37,7 @@ export default function UserDashboardPage({ setActiveTab, setSelectedAwardId }) 
   const handleSendReminder = (refEmail, refName) => {
     setRemindedReferees((prev) => ({ ...prev, [refEmail]: true }));
     setTimeout(() => {
-      alert(`Automated reminder notification successfully dispatched to ${refName} (${refEmail}) from the African Scholar evaluation bot.`);
+      alert(`Automated reminder notification successfully dispatched to ${refName} (${refEmail}) from the Pan-African Scholars evaluation bot.`);
     }, 200);
   };
 

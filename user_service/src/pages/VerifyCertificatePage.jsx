@@ -42,7 +42,7 @@ const VerifyCertificatePage = ({ setActiveTab }) => {
       }
     } catch (err) {
       console.error('Verification query failed:', err);
-      setError('Unable to connect to the African Scholar Academic Registry. Please try again.');
+      setError('Unable to connect to the Pan-African Scholars Academic Registry. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ const VerifyCertificatePage = ({ setActiveTab }) => {
             Academic Laureate & Credential Verification
           </h1>
           <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Verify the authenticity of African Scholar honors, laureate degrees, and institutional peer-review citations issued by the Continental Academic Council.
+            Verify the authenticity of Pan-African Scholars honors, laureate degrees, and institutional peer-review citations issued by the Continental Academic Council.
           </p>
 
           {/* Verification Search Bar */}

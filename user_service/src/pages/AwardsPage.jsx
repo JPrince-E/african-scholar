@@ -53,7 +53,7 @@ export const PROFESSORIAL_AWARDS = [
       prize_amount: '$5,000',
       plaque: 'National Academic Laureate Plaque',
       icon_items: 'Gold Medal Pin of Excellence',
-      podcast_interview: 'Exclusive Feature on The African Scholar Podcast'
+      podcast_interview: 'Exclusive Feature on The Pan-African Scholars Podcast'
     },
     evaluation_index: [
       { rule: 'Attended at least 3 conferences within Nigeria in the last 3 years (including evaluation year)', benchmark: '>= 3 Conferences', key: 'conferences_last_3_years' },
@@ -78,7 +78,7 @@ export const PROFESSORIAL_AWARDS = [
     award_value: {
       prize_amount: '$15,000',
       plaque: 'Pan-African Scholar Trophy',
-      icon_items: 'African Scholar Commemorative Insignia',
+      icon_items: 'Pan-African Scholars Commemorative Insignia',
       podcast_interview: 'Continental Broadcast & Documentary Feature'
     },
     evaluation_index: [
@@ -241,7 +241,7 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
       <div className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-4">
         <div className="inline-flex items-center space-x-2 text-xs font-extrabold text-coral-900 bg-coral-100 border-2 border-coral-300 px-4 py-2 rounded-full shadow-xs">
           <Award className="w-4 h-4 text-coral-600" />
-          <span>African Scholar 2027 Honors & Laureate Series</span>
+          <span>Pan-African Scholars 2027 Honors & Laureate Series</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
           Pan-African Academic Awards
@@ -457,7 +457,7 @@ export default function AwardsPage({ setActiveTab, setSelectedAwardId }) {
               General Award Conditions
             </h2>
             <p className="text-sm text-slate-600">
-              Essential conditions, eligibility categories, and participant rights for the African Scholar Honours series.
+              Essential conditions, eligibility categories, and participant rights for the Pan-African Scholars Honours series.
             </p>
           </div>
 

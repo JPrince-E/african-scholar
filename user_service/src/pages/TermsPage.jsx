@@ -35,7 +35,7 @@ export default function TermsPage({ setActiveTab, initialSection = 'all' }) {
         <div className="space-y-1">
           <div className="inline-flex items-center space-x-2 text-xs font-bold text-coral-600 bg-coral-50 border border-coral-200 px-3 py-1 rounded-full">
             <Scale className="w-3.5 h-3.5 text-coral-500" />
-            <span>African Scholar Legal & Regulatory Framework</span>
+            <span>Pan-African Scholars Legal & Regulatory Framework</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
             Terms & Conditions
@@ -126,7 +126,7 @@ export default function TermsPage({ setActiveTab, initialSection = 'all' }) {
               <span>Official Enforceable Policy</span>
             </div>
             <p className="text-base sm:text-lg leading-relaxed text-slate-100 font-medium font-serif italic">
-              “The T&Cs shall apply to all Sponsorships (S), Partnerships (P) and Advertisements (A) with African Scholar Platform. Any “S”, “P” and “A” with African Scholar Platform shall not be deemed to come into effect unless and until either confirmed in writing by African Scholar Platform or after signing an MOU and the first “S”, “P” and “A” appears in the relevant section of the platform. By contacting African Scholar with “S”, “P” and “A”, the Customer/Client agrees to be bound by these T&Cs and the Rates offered, even if it is acting as agent or buyer for the actual advertiser/organisation. For the avoidance of doubt, the Customer/Client’s standard terms and conditions of purchase (or any other standard terms and conditions) shall not be applicable.”
+              “The T&Cs shall apply to all Sponsorships (S), Partnerships (P) and Advertisements (A) with Pan-African Scholars Platform. Any “S”, “P” and “A” with Pan-African Scholars Platform shall not be deemed to come into effect unless and until either confirmed in writing by Pan-African Scholars Platform or after signing an MOU and the first “S”, “P” and “A” appears in the relevant section of the platform. By contacting Pan-African Scholars with “S”, “P” and “A”, the Customer/Client agrees to be bound by these T&Cs and the Rates offered, even if it is acting as agent or buyer for the actual advertiser/organisation. For the avoidance of doubt, the Customer/Client’s standard terms and conditions of purchase (or any other standard terms and conditions) shall not be applicable.”
             </p>
           </div>
 
@@ -143,7 +143,7 @@ export default function TermsPage({ setActiveTab, initialSection = 'all' }) {
               </div>
               <h3 className="font-bold text-slate-900 text-sm">Scope of Application</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Applies comprehensively to all commercial bookings, institutional sponsorship packages, academic foundation partnerships, conference banners, and sponsored profiles published across the African Scholar web and mobile ecosystem.
+                Applies comprehensively to all commercial bookings, institutional sponsorship packages, academic foundation partnerships, conference banners, and sponsored profiles published across the Pan-African Scholars web and mobile ecosystem.
               </p>
             </div>
 
@@ -155,7 +155,7 @@ export default function TermsPage({ setActiveTab, initialSection = 'all' }) {
               </div>
               <h3 className="font-bold text-slate-900 text-sm">Effective Commencement</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                No agreement enters into legal effect until written confirmation is executed by African Scholar Platform or an official Memorandum of Understanding (MOU) is bilateral signed, followed by the first placement appearing live on the platform.
+                No agreement enters into legal effect until written confirmation is executed by Pan-African Scholars Platform or an official Memorandum of Understanding (MOU) is bilateral signed, followed by the first placement appearing live on the platform.
               </p>
             </div>
 
@@ -167,7 +167,7 @@ export default function TermsPage({ setActiveTab, initialSection = 'all' }) {
               </div>
               <h3 className="font-bold text-slate-900 text-sm">Agency & Representative Liability</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Any media agency, PR firm, or broker contacting African Scholar on behalf of a third-party brand or academic organization is fully and jointly bound by these T&Cs and the officially quoted billing rates.
+                Any media agency, PR firm, or broker contacting Pan-African Scholars on behalf of a third-party brand or academic organization is fully and jointly bound by these T&Cs and the officially quoted billing rates.
               </p>
             </div>
 
@@ -179,7 +179,7 @@ export default function TermsPage({ setActiveTab, initialSection = 'all' }) {
               </div>
               <h3 className="font-bold text-slate-900 text-sm">Supersession of Customer Terms</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                For the avoidance of any doubt, all boilerplate terms of purchase or standard vendor terms originating from the client or agency are expressly negated and inapplicable to African Scholar engagements.
+                For the avoidance of any doubt, all boilerplate terms of purchase or standard vendor terms originating from the client or agency are expressly negated and inapplicable to Pan-African Scholars engagements.
               </p>
             </div>
           </div>

@@ -59,7 +59,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    platform: 'African Scholar API',
+    platform: 'Pan-African Scholars API',
     timestamp: new Date().toISOString()
   });
 });
@@ -101,7 +101,7 @@ const startServer = async () => {
     console.log('✅ Database models synchronized.');
 
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 African Scholar API running on http://0.0.0.0:${PORT}`);
+      console.log(`🚀 Pan-African Scholars API running on http://0.0.0.0:${PORT}`);
     });
   } catch (error) {
     console.error('❌ Failed to start backend server:', error);

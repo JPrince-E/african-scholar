@@ -105,7 +105,7 @@ export default function NominationDossierModal({ app, profile, userEmail, onClos
           {/* Subtle Watermark Stamp */}
           <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
             <span className="text-9xl font-black rotate-[-25deg] uppercase tracking-widest text-slate-900">
-              AFRICAN SCHOLAR
+              PAN-AFRICAN SCHOLARS
             </span>
           </div>
 
@@ -113,11 +113,11 @@ export default function NominationDossierModal({ app, profile, userEmail, onClos
           <div className="border-b-2 border-slate-900 pb-6 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center space-x-4 text-center sm:text-left">
               <div className="w-16 h-16 rounded-2xl bg-slate-900 text-coral-500 flex items-center justify-center font-black text-2xl shadow-lg border-2 border-coral-500 shrink-0">
-                AS
+                PAS
               </div>
               <div>
                 <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">
-                  African Scholar Platform
+                  Pan-African Scholars Platform
                 </h1>
                 <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   Registry of Academic Excellence & Independent Peer Review Standard
@@ -311,7 +311,7 @@ export default function NominationDossierModal({ app, profile, userEmail, onClos
           <div className="pt-6 border-t-2 border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-500">
             <div className="space-y-1 text-center sm:text-left">
               <p className="font-bold text-slate-800">
-                African Scholar Platform Academic Evaluation Committee
+                Pan-African Scholars Platform Academic Evaluation Committee
               </p>
               <p className="text-[11px]">
                 Autonomous Peer-Review Verification & Citation Authenticity Guarantee

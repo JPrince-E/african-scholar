@@ -361,7 +361,7 @@ export default function AdvertisementShowcase() {
           <div className="flex items-start gap-2.5">
             <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold text-slate-900 block">How Advertising Works on African Scholar:</span>
+              <span className="font-bold text-slate-900 block">How Advertising Works on Pan-African Scholars:</span>
               <span className="text-slate-600">
                 1. Select your preferred ad duration &bull; 2. Complete secure payment &bull; 3. Admin Board reviews & approves before broadcast goes live.
               </span>
@@ -467,7 +467,7 @@ export default function AdvertisementShowcase() {
 
         <div className="rounded-2xl bg-slate-50 border border-slate-200/90 p-5 space-y-3">
           <p className="text-sm text-slate-800 leading-relaxed font-serif italic">
-            “The T&Cs shall apply to all Sponsorships (S), Partnerships (P) and Advertisements (A) with African Scholar Platform. Any “S”, “P” and “A” with African Scholar Platform shall not be deemed to come into effect unless and until either confirmed in writing by African Scholar Platform or after signing an MOU and the first “S”, “P” and “A” appears in the relevant section of the platform. By contacting African Scholar with “S”, “P” and “A”, the Customer/Client agrees to be bound by these T&Cs and the Rates offered, even if it is acting as agent or buyer for the actual advertiser/organisation. For the avoidance of doubt, the Customer/Client’s standard terms and conditions of purchase (or any other standard terms and conditions) shall not be applicable.”
+            “The T&Cs shall apply to all Sponsorships (S), Partnerships (P) and Advertisements (A) with Pan-African Scholars Platform. Any “S”, “P” and “A” with Pan-African Scholars Platform shall not be deemed to come into effect unless and until either confirmed in writing by Pan-African Scholars Platform or after signing an MOU and the first “S”, “P” and “A” appears in the relevant section of the platform. By contacting Pan-African Scholars with “S”, “P” and “A”, the Customer/Client agrees to be bound by these T&Cs and the Rates offered, even if it is acting as agent or buyer for the actual advertiser/organisation. For the avoidance of doubt, the Customer/Client’s standard terms and conditions of purchase (or any other standard terms and conditions) shall not be applicable.”
           </p>
         </div>
       </div>
@@ -481,10 +481,10 @@ export default function AdvertisementShowcase() {
               <span>Live Approved Advertisements</span>
             </div>
             <h3 className="text-xl sm:text-2xl font-extrabold text-white mt-1">
-              Currently Running Campaigns on African Scholar
+              Currently Running Campaigns on Pan-African Scholars
             </h3>
             <p className="text-xs text-slate-400 mt-1">
-              All campaigns featured here have been reviewed and approved by the African Scholar Admin Board.
+              All campaigns featured here have been reviewed and approved by the Pan-African Scholars Admin Board.
             </p>
           </div>
           <button
@@ -568,7 +568,7 @@ export default function AdvertisementShowcase() {
             <div className="flex justify-between items-center border-b border-slate-200 pb-4">
               <div>
                 <span className="text-[10px] font-black uppercase text-brand-600 tracking-wider">
-                  African Scholar Advertising Desk
+                  Pan-African Scholars Advertising Desk
                 </span>
                 <h3 className="text-lg font-bold text-slate-900 mt-0.5">
                   {modalStep === 'FORM' && '1. Campaign Creative & Details'}
@@ -886,7 +886,7 @@ export default function AdvertisementShowcase() {
 
                 {/* Advertising T&Cs Confirmation */}
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 leading-snug">
-                  By clicking proceed, you agree to the <strong>African Scholar Advertising Terms and Conditions (T&Cs)</strong>. Any Sponsorship (S), Partnership (P) and Advertisement (A) comes into effect upon written confirmation or signed MOU and platform appearance. Customer standard purchasing terms are expressly superseded.
+                  By clicking proceed, you agree to the <strong>Pan-African Scholars Advertising Terms and Conditions (T&Cs)</strong>. Any Sponsorship (S), Partnership (P) and Advertisement (A) comes into effect upon written confirmation or signed MOU and platform appearance. Customer standard purchasing terms are expressly superseded.
                 </div>
 
                 {/* Actions */}
@@ -956,7 +956,7 @@ export default function AdvertisementShowcase() {
                 </div>
 
                 <p className="text-[11px] text-slate-600 leading-relaxed">
-                  Per African Scholar standards, all advertisements are held in review until approved by an administrator in the Admin Portal. Once approved, your banner will go live across all 54 African countries automatically.
+                  Per Pan-African Scholars standards, all advertisements are held in review until approved by an administrator in the Admin Portal. Once approved, your banner will go live across all 54 African countries automatically.
                 </p>
 
                 <div className="pt-2">

@@ -43,10 +43,10 @@ exports.inviteReferee = async (req, res) => {
     const candidateProfile = application.applicant?.profile;
     const candidateName = candidateProfile
       ? `${candidateProfile.title || 'Prof.'} ${candidateProfile.first_name} ${candidateProfile.surname}`
-      : 'African Scholar Candidate';
+      : 'Pan-African Scholar Candidate';
     
     const candidateInstitution = candidateProfile?.primary_affiliation || 'Academic Institution';
-    const awardTitle = application.award?.title || 'African Scholar Honors';
+    const awardTitle = application.award?.title || 'Pan-African Scholars Honors';
     const clientBaseUrl = process.env.USER_CLIENT_URL || 'http://localhost:3000';
     const endorsementUrl = `${clientBaseUrl}/endorse/${token}`;
 
@@ -113,7 +113,7 @@ exports.getEndorsementByToken = async (req, res) => {
     const profile = app?.applicant?.profile;
     const candidateName = profile
       ? `${profile.title || 'Prof.'} ${profile.first_name} ${profile.surname}, ${profile.highest_degree || 'PhD'}`
-      : 'African Scholar Candidate';
+      : 'Pan-African Scholar Candidate';
 
     return res.json({
       success: true,

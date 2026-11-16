@@ -41,7 +41,7 @@ export default function AdminWinnersPage() {
     <div className="space-y-8 pb-12">
       <AdminHeader
         title="Official Laureates & Award Winners"
-        subtitle="Manage declared winners, prize disbursement records, and African Scholar podcast interview schedules."
+        subtitle="Manage declared winners, prize disbursement records, and Pan-African Scholars podcast interview schedules."
         onRefresh={fetchWinners}
       />
 

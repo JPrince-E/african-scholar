@@ -41,7 +41,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
             </div>
             <div>
               <span className="text-xl font-extrabold tracking-tight text-slate-900 font-display">
-                African Scholar
+                Pan-African Scholars
               </span>
               <span className="block text-[10px] uppercase font-bold tracking-widest text-coral-500">
                 Academic Excellence

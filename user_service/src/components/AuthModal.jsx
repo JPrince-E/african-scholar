@@ -62,7 +62,7 @@ export default function AuthModal({ setActiveTab }) {
             <Award className="w-6 h-6 text-white" />
           </div>
           <h3 className="text-xl font-bold">
-            {authMode === 'login' ? 'Scholar Portal Login' : 'Join African Scholar'}
+            {authMode === 'login' ? 'Scholar Portal Login' : 'Join Pan-African Scholars'}
           </h3>
           <p className="text-xs text-coral-200 mt-1">
             {authMode === 'login'
@@ -127,7 +127,7 @@ export default function AuthModal({ setActiveTab }) {
 
           {/* Legal Note */}
           <p className="mt-3 text-[11px] text-center text-slate-500 leading-snug">
-            By continuing, you agree to African Scholar’s{' '}
+            By continuing, you agree to Pan-African Scholars’{' '}
             <button
               type="button"
               onClick={() => {

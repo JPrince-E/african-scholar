@@ -33,7 +33,7 @@ const seedDatabase = async () => {
           prize_amount: '$5,000',
           plaque: 'National Academic Laureate Plaque',
           icon_items: 'Gold Medal Pin of Excellence',
-          podcast_interview: 'Exclusive Feature on The African Scholar Podcast'
+          podcast_interview: 'Exclusive Feature on The Pan-African Scholars Podcast'
         },
         evaluation_index: [
           { rule: 'Attended at least 3 conferences within Nigeria in the last 3 years (including evaluation year)', benchmark: '>= 3 Conferences', key: 'conferences_last_3_years' },
@@ -58,7 +58,7 @@ const seedDatabase = async () => {
         award_value: {
           prize_amount: '$15,000',
           plaque: 'Pan-African Scholar Trophy',
-          icon_items: 'African Scholar Commemorative Insignia',
+          icon_items: 'Pan-African Scholars Commemorative Insignia',
           podcast_interview: 'Continental Broadcast & Documentary Feature'
         },
         evaluation_index: [

@@ -8,7 +8,7 @@
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || 'sk_test_e880f6f7bd7668bf342fc2da2d4fb9b60e425ade';
 const PAYSTACK_PUBLIC_KEY = process.env.PAYSTACK_PUBLIC_KEY || 'pk_test_11ff0e7b42868c73b40b597d35418bd5c2bc034b';
 
-const USD_TO_NGN_RATE = 1500; // Standard reference exchange rate for African Scholar
+const USD_TO_NGN_RATE = 1500; // Standard reference exchange rate for Pan-African Scholars
 
 // Helper: Get payment configuration
 exports.getPaymentConfig = (req, res) => {

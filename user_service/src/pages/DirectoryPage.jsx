@@ -851,7 +851,7 @@ export default function DirectoryPage() {
         <aside className="w-full lg:w-80 shrink-0 space-y-6 sticky top-24">
           <SidebarSponsorBanner placement="SIDEBAR" />
 
-          {/* Quick African Scholar Fast-Facts Card */}
+          {/* Quick Pan-African Scholars Fast-Facts Card */}
           <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-soft-xl space-y-4">
             <div className="flex items-center space-x-2 text-brand-700 font-bold text-xs uppercase tracking-wider">
               <Sparkles className="w-4 h-4 text-brand-500" />
@@ -880,7 +880,7 @@ export default function DirectoryPage() {
             <div className="sticky top-0 z-10 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-brand-600">
-                  Verified African Scholar Record
+                  Verified Pan-African Scholar Record
                 </span>
               </div>
               <button

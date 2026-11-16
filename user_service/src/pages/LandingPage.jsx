@@ -26,7 +26,7 @@ import { PROFESSORIAL_AWARDS, DOCTORAL_AWARDS } from './AwardsPage';
 const LAUREATE_IMAGES = [
   {
     url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80",
-    title: "Celebrating African Scholar, Ph.D. & Professor of the Year",
+    title: "Celebrating Pan-African Scholars, Ph.D. & Professor of the Year",
     subtitle: "Rewarding scientific breakthrough & youth mentorship"
   },
   {
@@ -502,7 +502,7 @@ export default function LandingPage({ setActiveTab, setSelectedAwardId }) {
                     )}
                     <div className="flex items-center space-x-2 text-slate-600">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>{awardVal.podcast_interview || (award.category === 'DOCTORAL' ? 'Interview/Podcast session with doctoral person of the year' : 'Exclusive Feature on The African Scholar Podcast')}</span>
+                      <span>{awardVal.podcast_interview || (award.category === 'DOCTORAL' ? 'Interview/Podcast session with doctoral person of the year' : 'Exclusive Feature on The Pan-African Scholars Podcast')}</span>
                     </div>
                   </div>
 

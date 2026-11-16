@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
             <Award className="w-7 h-7" />
           </div>
           <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-            African Scholar
+            Pan-African Scholars
           </h2>
           <span className="inline-block text-[11px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-200">
             Administrative Station Subdomain

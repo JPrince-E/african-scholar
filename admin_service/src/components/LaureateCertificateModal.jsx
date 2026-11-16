@@ -125,7 +125,7 @@ export default function LaureateCertificateModal({ winner, laureateData, onClose
               <div className="space-y-2">
                 <div className="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-amber-100/80 border border-amber-300 text-amber-900 text-[10px] font-extrabold uppercase tracking-widest">
                   <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>African Scholar Academic Directorate</span>
+                  <span>Pan-African Scholars Academic Directorate</span>
                 </div>
                 <h1 className="text-2xl sm:text-4xl font-serif font-black tracking-tight text-slate-900 uppercase">
                   Certificate of Academic Laureate

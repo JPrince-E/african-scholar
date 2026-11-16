@@ -12,7 +12,7 @@ export default function Footer({ setActiveTab }) {
               <div className="w-10 h-10 rounded-xl bg-coral-500 flex items-center justify-center text-white shadow-md shadow-coral-500/25">
                 <Award className="w-5 h-5" />
               </div>
-              <span className="text-xl font-bold text-white tracking-tight">African Scholar</span>
+              <span className="text-xl font-bold text-white tracking-tight">Pan-African Scholars</span>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">
               The premier pan-African platform celebrating academic excellence, tracking research citations, and awarding university professors and doctoral scholars (Ph.D. / Dr.) across Africa.
@@ -109,7 +109,7 @@ export default function Footer({ setActiveTab }) {
         </div>
 
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© 2027 African Scholar Platform. All rights reserved.</p>
+          <p>© 2027 Pan-African Scholars Platform. All rights reserved.</p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-slate-400">
             <button

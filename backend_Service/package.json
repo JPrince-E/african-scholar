@@ -1,7 +1,7 @@
 {
   "name": "african-scholar-backend",
   "version": "1.0.0",
-  "description": "African Scholar Backend API Service",
+  "description": "Pan-African Scholars Backend API Service",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

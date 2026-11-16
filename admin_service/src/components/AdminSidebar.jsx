@@ -38,7 +38,7 @@ export default function AdminSidebar({ activeTab, setActiveTab }) {
             </div>
             <div>
               <span className="font-extrabold text-base tracking-tight text-slate-900 block">
-                African Scholar
+                Pan-African Scholars
               </span>
               <span className="text-[10px] uppercase font-bold tracking-widest text-brand-600 block">
                 Admin Station
